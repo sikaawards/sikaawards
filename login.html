@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion -- SIKA AWARDS</title>
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css?v=5">
+  <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-bg-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-heading);
+      font-size: 30vw;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.02);
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 0;
+    }
+
+    .login-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 60px 40px;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .login-logo {
+      height: 60px;
+      margin-bottom: 40px;
+    }
+
+    .login-title {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .login-subtitle {
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 16px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-google:hover {
+      background: #e6e6e6;
+      transform: translateY(-2px);
+    }
+
+    .btn-google img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .login-error {
+      color: var(--primary);
+      margin-top: 20px;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .back-link {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      color: var(--text-muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      font-weight: 700;
+      z-index: 10;
+      transition: 0.3s;
+    }
+    .back-link:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="index.html" class="back-link">← Retour à l'accueil</a>
+
+  <div class="login-container">
+    <div class="login-bg-text">SIKA</div>
+    
+    <div class="login-box">
+      <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards" class="login-logo">
+      <h1 class="login-title">Connexion</h1>
+      <p class="login-subtitle">Connectez-vous pour voter pour vos artistes préférés ou accéder à l'administration.</p>
+      
+      <button class="btn-google" id="btn-login-google">
+        <svg viewBox="0 0 48 48" style="width:24px;height:24px;">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continuer avec Google
+      </button>
+
+      <div style="margin: 30px 0; display: flex; align-items: center; gap: 15px; opacity: 0.3;">
+        <div style="flex:1; height:1px; background:#fff;"></div>
+        <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">OU</span>
+        <div style="flex:1; height:1px; background:#fff;"></div>
+      </div>
+
+      <form id="email-login-form" style="text-align: left;">
+        <div style="margin-bottom: 20px;">
+          <input type="email" id="login-email" placeholder="Email" required 
+                 style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 16px; color: #fff; font-family: 'Inter', sans-serif;">
+        </div>
+        <div style="margin-bottom: 30px;">
+          <input type="password" id="login-password" placeholder="Mot de passe" required 
+                 style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 16px; color: #fff; font-family: 'Inter', sans-serif;">
+        </div>
+        <button type="submit" class="btn-google" style="background: var(--primary); color: #fff;">
+          Se connecter
+        </button>
+      </form>
+
+      <p class="login-error" id="error-msg"></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, provider, signInWithPopup, signOut, signInWithEmailAndPassword, ADMIN_EMAILS } from './scripts/firebase-config.js';
+
+    const btnGoogle = document.getElementById('btn-login-google');
+    const emailForm = document.getElementById('email-login-form');
+    const errorMsg = document.getElementById('error-msg');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = urlParams.get('redirect') || 'index.html';
+
+    async function handleAuthSuccess(user) {
+      if (redirectUrl.includes('admin.html')) {
+        if (!ADMIN_EMAILS.includes(user.email)) {
+          errorMsg.textContent = "Accès refusé : vous n'êtes pas administrateur.";
+          errorMsg.style.display = 'block';
+          await signOut(auth);
+          return false;
+        }
+      }
+      window.location.href = redirectUrl;
+      return true;
+    }
+
+    // Login Google
+    btnGoogle.addEventListener('click', async () => {
+      try {
+        btnGoogle.disabled = true;
+        btnGoogle.style.opacity = '0.5';
+        const result = await signInWithPopup(auth, provider);
+        await handleAuthSuccess(result.user);
+      } catch (error) {
+        console.error(error);
+        errorMsg.textContent = "Erreur de connexion Google.";
+        errorMsg.style.display = 'block';
+        btnGoogle.disabled = false;
+        btnGoogle.style.opacity = '1';
+      }
+    });
+
+    // Login Email
+    emailForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-password').value;
+      const btn = emailForm.querySelector('button');
+
+      try {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        errorMsg.style.display = 'none';
+
+        const result = await signInWithEmailAndPassword(auth, email, pass);
+        await handleAuthSuccess(result.user);
+      } catch (error) {
+        console.error(error);
+        errorMsg.textContent = "Email ou mot de passe incorrect. Assurez-vous d'avoir activé ce mode dans Firebase.";
+        errorMsg.style.display = 'block';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
+    });
+  </script>
+</body>
+</html>

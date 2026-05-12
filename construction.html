@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>En Construction -- SIKA AWARDS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css?v=3">
+  <style>
+    body {
+      background: #000 url('assets/nominees/Fond-Rideaux1.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow-x: hidden;
+      font-family: 'Outfit', sans-serif;
+      padding: 40px 20px;
+    }
+
+    .construction-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .construction-title {
+      font-size: clamp(2.5rem, 15vw, 10rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      font-style: italic;
+      line-height: 0.9;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+      opacity: 1;
+      -webkit-animation: fadeInUp 1s ease both;
+      animation: fadeInUp 1s ease both;
+    }
+
+    .construction-sub {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      color: var(--primary);
+      margin-bottom: 40px;
+      opacity: 1;
+      -webkit-animation: fadeInUp 1s ease both 0.3s;
+      animation: fadeInUp 1s ease both 0.3s;
+    }
+
+    .btn-back {
+      display: inline-block;
+      padding: 15px 40px;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: 0.3s;
+      opacity: 1;
+      -webkit-animation: fadeInUp 1s ease both 0.6s;
+      animation: fadeInUp 1s ease both 0.6s;
+    }
+
+    .btn-back:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .bg-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 40vw;
+      font-weight: 900;
+      color: rgba(255,255,255,0.02);
+      pointer-events: none;
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @-webkit-keyframes fadeInUp {
+      from { opacity: 0; -webkit-transform: translateY(30px); }
+      to { opacity: 1; -webkit-transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-text">SIKA</div>
+
+  <div class="construction-content">
+    <div class="construction-sub">Bientôt disponible</div>
+    <h1 class="construction-title">En<br>Construction</h1>
+    <a href="index.html" class="btn-back">Retour à l'accueil</a>
+  </div>
+
+</body>
+</html>

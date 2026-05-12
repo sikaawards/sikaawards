@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories -- SIKA AWARDS</title>
+  <meta name="description" content="Decouvrez toutes les categories des Sika Awards et les nomines de chaque prix.">
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="styles/main.css?v=3" as="style">
+  <link rel="stylesheet" href="styles/main.css?v=3">
+  <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
+  <style>
+    .categories-hero {
+      min-height: 75vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: #000;
+      padding-top: 80px;
+    }
+    
+    .hero-bg-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-heading);
+      font-size: 40vw;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.02);
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 0;
+    }
+    
+    .hero-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--primary);
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      font-style: italic;
+      line-height: 0.85;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Ajustement de la liste pour ne pas être collée */
+    #categories-container {
+      padding-bottom: 100px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav-links">
+        <a href="index.html">Accueil</a>
+        <a href="categories.html" style="color:var(--text)">Catégories</a>
+        <div class="header-logo-wrap">
+          <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards">
+        </div>
+        <a href="construction.html">Playlist</a>
+        <a href="construction.html">La Cérémonie</a>
+      </nav>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <a href="index.html">Accueil</a>
+    <a href="index.html#about">À Propos</a>
+    <a href="categories.html" style="color:var(--primary)">Catégories</a>
+    <a href="#">Playlist</a>
+    <a href="#">La Cérémonie</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
+
+  <!-- HERO CATEGORIES -->
+  <section class="categories-hero">
+    <div class="container">
+      <div class="hero-label">Sika Awards 2026</div>
+      <h1 class="hero-main-title">Les<br>Categories</h1>
+      <p class="hero-sub">Explorez les differentes recompenses et decouvrez les artistes qui ont faconne l'industrie cette annee.</p>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <main id="categories-container">
+    <!-- Generé dynamiquement par JS -->
+    <div style="padding: 100px; text-align: center; color: var(--text-muted);">Chargement des categories...</div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-row">
+        <div class="footer-social">
+          <a href="#">Instagram</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Youtube</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Twitter</a>
+          <span class="footer-sep">|</span>
+          <a href="#">TikTok</a>
+        </div>
+        <div class="footer-legal">
+          <a href="#">CGU</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Cookies</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Legal</a>
+        </div>
+        <div class="footer-logo">
+          <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js"></script>
+  <script type="module">
+    import { db, collection, getDocs } from './scripts/firebase-config.js';
+
+    async function loadCategories() {
+      try {
+        const snap = await getDocs(collection(db, "categories"));
+        const categories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+        // Trier par numéro
+        categories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
+        applyAdminData({ categories });
+      } catch (err) {
+        console.error("Erreur chargement catégories:", err);
+      }
+    }
+
+    function applyAdminData(adminData) {
+      if (!adminData || !adminData.categories) return;
+      const container = document.getElementById('categories-container');
+      container.innerHTML = ''; 
+
+      adminData.categories.forEach(cat => {
+        const section = document.createElement('section');
+        section.className = 'cat-section';
+        
+        const nomineesHtml = (cat.nominees || []).map(n => {
+          const imgHtml = n.img
+            ? `<img src="${n.img}" alt="${n.name}">`
+            : `<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;"></div>`;
+          return `
+            <div class="nominee-card">
+              <div class="nominee-img-box">${imgHtml}</div>
+              <div class="nominee-info">
+                <div class="nominee-name-label">${n.name}</div>
+                <div class="nominee-sub-label">${n.sub || ''}</div>
+              </div>
+            </div>`;
+        }).join('');
+
+        section.innerHTML = `
+          <div class="cat-header">
+            <a href="categorie.html?cat=${cat.id}" class="cat-header-link" style="text-decoration:none; color:inherit; flex-grow:1;">
+              <span class="cat-num">${cat.num}</span>
+              <h2 class="cat-title">${cat.title} <span class="icon-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></h2>
+              <p class="cat-subtitle">Les ${(cat.nominees || []).length} Pre-Nommée·s 2026</p>
+            </a>
+          </div>
+          <div class="cat-scroll">
+            ${(cat.nominees || []).length > 7 ? `
+              <button class="cat-arrow prev" aria-label="Précédent"><span class="icon-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(180deg)"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></button>
+            ` : ''}
+            <div class="cat-viewport">
+              <div class="cat-track">
+                ${nomineesHtml || '<div style="color:var(--text-subtle);padding:20px 48px;font-size:0.8rem;">Aucun nomine pour le moment</div>'}
+              </div>
+            </div>
+            ${(cat.nominees || []).length > 7 ? `
+              <button class="cat-arrow next" aria-label="Suivant"><span class="icon-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></button>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(section);
+      });
+
+      if (window.initScrollArrows) window.initScrollArrows();
+    }
+
+    loadCategories();
+  </script>
+  <script type="module" src="scripts/auth-ui.js"></script>
+</body>
+</html>

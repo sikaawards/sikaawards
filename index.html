@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIKA AWARDS -- La Ceremonie qui celebre les cultures</title>
+  <meta name="description"
+    content="Sika Awards est la ceremonie qui celebre et recompense les talents des cultures populaires. Decouvrez les categories, les nomines et les laureats.">
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="styles/main.css?v=3" as="style">
+  <link rel="preload" href="assets/Logo SA/SA-logo-Normal.png" as="image">
+  <link rel="stylesheet" href="styles/main.css?v=3">
+  <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav-links">
+        <a href="index.html">Accueil</a>
+        <a href="categories.html">Catégories</a>
+        <div class="header-logo-wrap">
+          <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards">
+        </div>
+        <a href="construction.html">Playlist</a>
+        <a href="construction.html">La Cérémonie</a>
+      </nav>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <a href="index.html">Accueil</a>
+    <a href="#about">À Propos</a>
+    <a href="categories.html">Catégories</a>
+    <a href="#">Playlist</a>
+    <a href="#">La Cérémonie</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-layout">
+      <div class="hero-left">
+        <div class="hero-countdown-label">Fermeture des votes</div>
+        <div class="hero-countdown" id="countdown">00:00:00:00</div>
+      </div>
+      <div class="hero-center">
+        <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards Logo" class="hero-logo">
+        <div class="hero-edition">Edition 2026</div>
+      </div>
+      <div class="hero-right">
+        <a href="categories.html" class="hero-vote-link">
+          <span class="icon-arrow">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+          </span> voter
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about section-padding" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="about-label">Pourquoi Sika Awards ?</div>
+          <h2 class="about-title">Célébrer ceux qui<br>font vibrer la culture</h2>
+          <p class="about-text">
+            Sika Awards est né de la volonté de mettre en lumière les artistes, créateurs et acteurs qui façonnent et
+            repoussent les limites des cultures populaires.
+          </p>
+          <p class="about-text">
+            Comme un symbole d'excellence, « Sika » représente la valeur et la richesse de ces talents qui illuminent
+            nos scènes, nos écrans et nos quotidiens.
+          </p>
+        </div>
+        <div class="about-stats reveal">
+          <div class="stat-item">
+            <span class="stat-number" data-count="15" data-suffix="+">0</span>
+            <span class="stat-label">Catégories</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-count="50" data-suffix="+">0</span>
+            <span class="stat-label">Nominés</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-count="10" data-suffix="K">0</span>
+            <span class="stat-label">Votes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- CATEGORIES PREVIEW -->
+  <section class="section-padding" id="categories" style="background:var(--bg-surface);">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">Catégories</div>
+        <h2 class="section-title">Les prix décernés</h2>
+        <p class="section-subtitle">Découvrez les différentes catégories qui récompensent l'excellence.</p>
+      </div>
+      <div class="categories-grid" id="home-categories-grid">
+        <!-- Generé dynamiquement par JS -->
+        <p style="text-align: center; grid-column: 1/-1; opacity: 0.5;">Chargement des catégories...</p>
+      </div>
+      <div style="text-align:center; margin-top:48px;" class="reveal">
+        <a href="categories.html" class="btn btn-primary">Voir toutes les catégories</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section-padding" id="contact">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">Contact</div>
+        <h2 class="section-title">Restons en contact</h2>
+        <p class="section-subtitle">Une question, un partenariat ou une suggestion ? Écrivez-nous.</p>
+      </div>
+      <div style="max-width:600px;margin:0 auto;" class="reveal">
+        <form style="display:flex;flex-direction:column;gap:20px;"
+          onsubmit="event.preventDefault();alert('Merci pour votre message !');">
+          <input type="text" placeholder="Votre nom" required
+            style="padding:16px 20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:1rem;font-family:var(--font-body);outline:none;transition:var(--transition);"
+            onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+          <input type="email" placeholder="Votre email" required
+            style="padding:16px 20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:1rem;font-family:var(--font-body);outline:none;transition:var(--transition);"
+            onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+          <textarea placeholder="Votre message" rows="5" required
+            style="padding:16px 20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:1rem;font-family:var(--font-body);resize:vertical;outline:none;transition:var(--transition);"
+            onfocus="this.style.borderColor='var(--primary)'"
+            onblur="this.style.borderColor='var(--border)'"></textarea>
+          <button type="submit" class="btn btn-primary" style="align-self:flex-start;">Envoyer le message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-row">
+        <div class="footer-social">
+          <a href="#">Instagram</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Youtube</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Twitter</a>
+          <span class="footer-sep">|</span>
+          <a href="#">TikTok</a>
+        </div>
+        <div class="footer-legal">
+          <a href="#">CGU</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Cookies</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Legal</a>
+        </div>
+        <div class="footer-logo">
+          <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js?v=3"></script>
+  <script type="module">
+    import { db, collection, getDocs } from './scripts/firebase-config.js';
+
+    async function loadHomeCategories() {
+      try {
+        const snap = await getDocs(collection(db, "categories"));
+        const categories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+        categories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
+
+        const grid = document.getElementById('home-categories-grid');
+        if (categories.length === 0) {
+          grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; opacity: 0.5;">Aucune catégorie disponible.</p>';
+          return;
+        }
+
+        grid.innerHTML = categories.slice(0, 6).map(cat => `
+          <div class="category-card reveal">
+            <div class="category-number">${cat.num}</div>
+            <h3 class="category-name">${cat.title}</h3>
+            <p class="category-desc">${cat.desc || ''}</p>
+          </div>
+        `).join('');
+
+        // Re-run reveal observer for new elements
+        if (window.refreshReveals) window.refreshReveals();
+
+      } catch (err) {
+        console.error("Erreur home categories:", err);
+      }
+    }
+
+    loadHomeCategories();
+  </script>
+  <script type="module" src="scripts/auth-ui.js"></script>
+</body>
+</html>

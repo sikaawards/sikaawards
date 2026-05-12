@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categorie -- SIKA AWARDS</title>
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css?v=3">
+  <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
+  <style>
+    /* ---- DETAIL PAGE ---- */
+    .detail-hero {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 48px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 60%, var(--bg) 100%);
+      z-index: 1;
+    }
+
+    .detail-hero-bg {
+      position: absolute;
+      inset: 0;
+      background: #111;
+      z-index: 0;
+    }
+
+    .detail-hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .detail-back {
+      position: absolute;
+      top: 100px;
+      left: 48px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .detail-back:hover {
+      color: var(--text);
+    }
+
+    .detail-next {
+      position: absolute;
+      top: 100px;
+      right: 48px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .detail-next:hover {
+      color: var(--text);
+    }
+
+    .detail-cat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .detail-cat-num {
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+      margin-bottom: 8px;
+    }
+
+    .detail-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 8vw, 5rem);
+      /* Taille réduite pour les titres longs */
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      line-height: 0.9;
+      /* Plus serré pour un look plus massif */
+      letter-spacing: -2px;
+      margin-bottom: 32px;
+      max-width: 1000px;
+    }
+
+    .detail-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 540px;
+      line-height: 1.8;
+      margin: 0 auto 32px;
+    }
+
+    .detail-criteria {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-subtle);
+      border-bottom: 1px solid var(--text-subtle);
+      padding-bottom: 4px;
+      display: inline-block;
+      margin-bottom: 32px;
+      text-decoration: none;
+    }
+
+    .btn-vote {
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      background: transparent;
+      color: #fff;
+      padding: 20px 40px;
+      font-family: var(--font-heading);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      border: 2px solid #fff;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-vote:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px var(--primary-glow);
+    }
+
+    /* ---- NOMINEES SECTION ---- */
+    .nominees-section {
+      padding: 80px 0 120px;
+    }
+
+    .nominees-section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      padding: 0 48px;
+      margin-bottom: 48px;
+    }
+
+    .nominees-section-title em {
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .nominees-big-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      /* Plus flexible */
+      gap: 10px;
+      /* Plus d'espace pour éviter le chevauchement */
+      padding: 0 38px;
+    }
+
+    .nominee-big-card {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .nominee-big-img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(100%) blur(10px);
+      /* Rétablit le flou */
+      transform: scale(1.15);
+      /* Cache les bords du flou */
+      transition: 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+    }
+
+    .nominee-big-card:hover .nominee-big-img {
+      transform: scale(1.2);
+      /* Petit zoom au survol */
+    }
+
+    .nominee-big-card.revealed .nominee-big-img {
+      filter: grayscale(0%) blur(0);
+      transform: scale(1);
+    }
+
+    .nominee-big-info {
+      padding: 12px 4px 8px;
+      text-align: center;
+      /* Centrage du texte */
+      filter: blur(6px);
+      /* Texte flouté par défaut */
+      opacity: 0.2;
+      transition: 0.5s ease;
+    }
+
+    .nominee-big-card:hover .nominee-big-info {
+      opacity: 0.5;
+    }
+
+    .nominee-big-card.revealed .nominee-big-info {
+      filter: blur(0);
+      opacity: 1;
+    }
+
+    .nominee-big-name {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+
+    .nominee-big-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .detail-hero {
+        padding: 120px 24px 60px;
+        min-height: 60vh;
+      }
+
+      .detail-title {
+        letter-spacing: -1px;
+      }
+
+      .detail-back {
+        left: 24px;
+      }
+
+      .detail-next {
+        right: 24px;
+      }
+
+      .nominees-section-title {
+        padding: 0 24px;
+      }
+
+      .nominees-big-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 24px;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nominees-big-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav-links">
+        <a href="index.html">Accueil</a>
+        <a href="categories.html">Catégories</a>
+        <div class="header-logo-wrap">
+          <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards">
+        </div>
+        <a href="construction.html">Playlist</a>
+        <a href="construction.html">La Cérémonie</a>
+      </nav>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <a href="index.html">Accueil</a>
+    <a href="index.html#about">À Propos</a>
+    <a href="categories.html">Catégories</a>
+    <a href="#">Playlist</a>
+    <a href="#">La Cérémonie</a>
+  </nav>
+
+  <!-- NAVIGATION CATEGORIE -->
+  <a href="categories.html" class="detail-back"><span class="icon-arrow"
+      style="transform: rotate(180deg); margin-right: 8px;"><svg viewBox="0 0 24 24" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"
+          stroke-linejoin="miter" />
+      </svg></span> Toutes les categories</a>
+  <a href="#" class="detail-next" id="next-cat">Categorie suivante <span class="icon-arrow"
+      style="margin-left: 8px;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"
+          stroke-linejoin="miter" />
+      </svg></span></a>
+
+  <!-- HERO DETAIL -->
+  <section class="detail-hero">
+    <div class="detail-hero-bg"></div>
+    <div class="detail-hero-content">
+      <div class="detail-cat-num" id="detail-num">01</div>
+      <div class="detail-cat-label">Sika Awards 2026</div>
+      <h1 class="detail-title" id="detail-title">Artiste de l'annee</h1>
+      <p class="detail-desc" id="detail-desc">
+        Ce prix recompense l'artiste qui a marque l'annee par son impact culturel, sa creativite et son rayonnement.
+      </p>
+      <a href="#nominees" class="detail-criteria">Les Pre-Nomme·e·s</a>
+    </div>
+  </section>
+
+  <!-- NOMINEES -->
+  <section class="nominees-section" id="nominees">
+    <h2 class="nominees-section-title" id="nominees-title">
+      Les Pre-Nommée·s <em>2026</em>
+    </h2>
+    <div class="nominees-big-grid" id="nominees-grid">
+      <!-- Generé par JS selon la categorie -->
+    </div>
+  </section>
+
+  <!-- PASSER AU VOTE -->
+  <section class="cat-section" style="border-top: 1px solid var(--border); padding: 80px 48px; max-width: 1400px; margin: 0 auto;">
+    <div class="cat-header" style="margin-bottom: 0;">
+      <a href="vote.html" id="btn-vote-link" class="cat-header-link" style="text-decoration:none; color:inherit; display:block;">
+        <span class="cat-num">VOTER</span>
+        <h2 class="cat-title">PASSER AU VOTE <span class="icon-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></h2>
+        <p class="cat-subtitle" style="text-transform: uppercase;">SOUTENEZ VOTRE FAVORIS POUR CETTE CATÉGORIE</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-row">
+        <div class="footer-social">
+          <a href="#">Instagram</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Youtube</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Twitter</a>
+          <span class="footer-sep">|</span>
+          <a href="#">TikTok</a>
+        </div>
+        <div class="footer-legal">
+          <a href="#">CGU</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Cookies</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Legal</a>
+        </div>
+        <div class="footer-logo">
+          <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js"></script>
+  <script type="module">
+    import { db, doc, getDoc, collection, getDocs } from './scripts/firebase-config.js';
+
+    async function initPage() {
+      try {
+        const snap = await getDocs(collection(db, "categories"));
+        const dataCategories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+        dataCategories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
+        renderPage(dataCategories);
+      } catch (err) {
+        console.error("Erreur chargement catégorie:", err);
+      }
+    }
+
+    function renderPage(dataCategories) {
+      const params = new URLSearchParams(window.location.search);
+      const catId = params.get('cat') || 'artiste';
+      const catIndex = dataCategories.findIndex(c => c.id === catId);
+      const cat = dataCategories[catIndex] || dataCategories[0];
+
+      if (!cat) return;
+
+      document.getElementById('detail-num').textContent = cat.num;
+      document.getElementById('detail-title').textContent = cat.title;
+      document.getElementById('detail-desc').textContent = cat.desc;
+      document.title = cat.title + ' -- SIKA AWARDS';
+
+      const nomineesTitle = document.getElementById('nominees-title');
+      if (nomineesTitle) {
+        nomineesTitle.innerHTML = `Les ${(cat.nominees || []).length} Pre-Nommée·s <em>2026</em> de la catégorie ${cat.title}`;
+      }
+
+      const voteLink = document.getElementById('btn-vote-link');
+      if (voteLink) voteLink.href = `vote.html?cat=${cat.id}`;
+
+      const nextCat = dataCategories[(catIndex + 1) % dataCategories.length];
+      const nextLink = document.getElementById('next-cat');
+      nextLink.href = 'categorie.html?cat=' + nextCat.id;
+      nextLink.innerHTML = `${nextCat.title} <span class="icon-arrow" style="margin-left: 8px;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span>`;
+
+      const grid = document.getElementById('nominees-grid');
+      grid.innerHTML = '';
+      (cat.nominees || []).forEach(n => {
+        const card = document.createElement('div');
+        card.className = 'nominee-big-card';
+        const imgHtml = n.img
+          ? `<img src="${n.img}" class="nominee-big-img" alt="${n.name}">`
+          : `<div class="nominee-big-img" style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;"></div>`;
+
+        card.innerHTML = `
+          ${imgHtml}
+          <div class="nominee-big-info">
+            <div class="nominee-big-name">${n.name}</div>
+            <div class="nominee-big-sub">${n.sub || ''}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    initPage();
+  </script>
+  <script type="module" src="scripts/auth-ui.js"></script>
+</body>
+
+</html>

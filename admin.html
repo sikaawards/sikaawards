@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard -- SIKA AWARDS</title>
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css?v=6">
+  <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
+  <style>
+    body {
+      background: #050505;
+      color: #fff;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 320px;
+      border-right: 1px solid var(--border);
+      background: #080808;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 30px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo {
+      height: 30px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-title {
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 15px;
+    }
+
+    .sidebar-search {
+      padding: 0 20px 20px;
+    }
+
+    .sidebar-search input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      padding: 12px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+    }
+
+    .sidebar-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+
+    .sidebar-item {
+      padding: 15px 20px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: 0.2s;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .sidebar-item.active {
+      background: rgba(255,51,0,0.05);
+      border-left-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .item-num {
+      font-size: 0.7rem;
+      opacity: 0.5;
+    }
+
+    .sidebar-item-actions {
+      display: flex;
+      gap: 5px;
+      margin-left: 10px;
+    }
+
+    .sidebar-btn-move {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      padding: 4px 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-btn-move:hover {
+      background: var(--primary);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .main-header {
+      padding: 30px 48px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-info h1 {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn-action {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 10px 20px;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-action:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      color: #fff;
+    }
+
+    .content-scroll {
+      flex: 1;
+      padding: 48px;
+      overflow-y: auto;
+    }
+
+    /* Nominees Grid */
+    .nominees-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .admin-card {
+      background: #080808;
+      border: 1px solid var(--border);
+      padding: 20px;
+      position: relative;
+    }
+
+    .admin-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      background: #111;
+      margin-bottom: 15px;
+    }
+
+    .admin-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .admin-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 15px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 0.65rem;
+    }
+
+    /* Stats */
+    .votes-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--primary);
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      font-weight: 900;
+    }
+
+    /* Form Overlay */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .overlay.active { display: flex; }
+
+    .modal {
+      background: #0A0A0A;
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 500px;
+      padding: 40px;
+    }
+
+    .modal h2 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-style: italic;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      background: #111;
+      border: 1px solid var(--border);
+      padding: 12px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .modal-actions {
+      margin-top: 30px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+    }
+
+    /* Utils */
+    .hidden { display: none; }
+    .loading-overlay {
+      position: fixed; inset: 0; background: #000; z-index: 2000;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-size: 2rem; font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="loading-overlay" id="loading">SIKA ADMIN...</div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="assets/Logo SA/SA-logo-Normal.png" alt="" class="sidebar-logo">
+      <div class="sidebar-title">Categories</div>
+    </div>
+    <div class="sidebar-search">
+      <input type="text" id="cat-search" placeholder="Rechercher..." oninput="renderSidebar()">
+    </div>
+    <div class="sidebar-list" id="sidebar-list">
+      <!-- JS -->
+    </div>
+    <div style="padding: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px;">
+      <button class="btn-action" style="width: 100%" onclick="openCategoryModal()">+ Nouvelle Catégorie</button>
+      <button class="btn-action btn-primary" style="width: 100%" onclick="exportToJSON()">Exporter vers data.json</button>
+      <button class="btn-action" style="width: 100%; border-color: rgba(255,0,0,0.3); color: #ff4444;" id="btn-logout">Déconnexion</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="main-header" id="main-header">
+      <div class="header-info">
+        <h1 id="active-cat-title">Chargement...</h1>
+        <p id="active-cat-desc" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;"></p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-action" onclick="openNomineeModal()">+ Ajouter Nommé</button>
+        <button class="btn-action" id="btn-edit-cat">Editer Categorie</button>
+        <button class="btn-action btn-primary" onclick="window.location.href='index.html'">Voir le site</button>
+      </div>
+    </div>
+
+    <div class="content-scroll">
+      <div class="nominees-grid" id="nominees-grid">
+        <!-- JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- MODALS -->
+  <div class="overlay" id="modal-overlay">
+    <div class="modal" id="cat-modal">
+      <h2 id="cat-modal-title">Nouvelle Catégorie</h2>
+      <div class="form-group">
+        <label>ID (ex: hit, revelation)</label>
+        <input type="text" id="cat-id">
+      </div>
+      <div class="form-group">
+        <label>Numéro (ex: 01, 02)</label>
+        <input type="text" id="cat-num">
+      </div>
+      <div class="form-group">
+        <label>Titre de la catégorie</label>
+        <input type="text" id="cat-title-input">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="cat-desc" rows="3"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action" onclick="closeModals()">Annuler</button>
+        <button class="btn-action" style="border-color: rgba(255,0,0,0.5); color: #ff4444; display: none;" id="btn-delete-cat">Supprimer</button>
+        <button class="btn-action btn-primary" id="btn-save-cat">Enregistrer</button>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="nominee-modal">
+      <h2 id="nominee-modal-title">Nouveau Nommé</h2>
+      <div class="form-group">
+        <label>Nom de l'artiste / candidat</label>
+        <input type="text" id="nom-name">
+      </div>
+      <div class="form-group">
+        <label>Sous-titre (ex: Nom du morceau)</label>
+        <input type="text" id="nom-sub">
+      </div>
+      <div class="form-group">
+        <label>Image URL</label>
+        <input type="text" id="nom-img">
+      </div>
+      <div class="form-group">
+        <label>Spotify URL</label>
+        <input type="text" id="nom-spotify">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action" onclick="closeModals()">Annuler</button>
+        <button class="btn-action" style="border-color: rgba(255,0,0,0.5); color: #ff4444; display: none;" id="btn-delete-nominee">Supprimer</button>
+        <button class="btn-action btn-primary" id="btn-save-nominee">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db, signOut, ADMIN_EMAILS, onAuthStateChanged, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, query, where } from './scripts/firebase-config.js';
+
+    let categories = [];
+    let activeCatId = null;
+    let editingCatId = null;
+    let editingNomineeIdx = null;
+
+    // 1. Auth check
+    onAuthStateChanged(auth, (user) => {
+      if (!user || !ADMIN_EMAILS.includes(user.email)) {
+        window.location.href = 'login.html?redirect=admin.html';
+      } else {
+        init();
+      }
+    });
+
+    document.getElementById('btn-logout').onclick = async () => {
+      if (confirm("Voulez-vous vous déconnecter ?")) {
+        await signOut(auth);
+        window.location.href = 'index.html';
+      }
+    };
+
+    async function init() {
+      await loadCategories();
+      document.getElementById('loading').style.display = 'none';
+    }
+
+    async function loadCategories() {
+      const snap = await getDocs(collection(db, "categories"));
+      categories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+      
+      // Sort by num
+      categories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
+
+      if (categories.length > 0 && !activeCatId) {
+        activeCatId = categories[0].id;
+      }
+      
+      renderSidebar();
+      renderActiveCategory();
+    }
+
+    window.renderSidebar = function() {
+      const list = document.getElementById('sidebar-list');
+      const search = document.getElementById('cat-search').value.toLowerCase();
+      const filtered = categories.filter(c => 
+        c.title.toLowerCase().includes(search) || c.num.includes(search)
+      );
+
+      list.innerHTML = filtered.map(c => {
+        const fullIdx = categories.findIndex(cat => cat.id === c.id);
+        return `
+          <div class="sidebar-item ${c.id === activeCatId ? 'active' : ''}" onclick="selectCategory('${c.id}')">
+            <div style="display:flex; align-items:center; gap:10px; overflow:hidden;">
+              <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${c.title}</span>
+              <span class="item-num">${c.num}</span>
+            </div>
+            <div class="sidebar-item-actions" onclick="event.stopPropagation()">
+              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, -1)" title="Monter">↑</button>
+              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, 1)" title="Descendre">↓</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    };
+
+    window.moveCategory = async function(idx, direction) {
+      const targetIdx = idx + direction;
+      if (targetIdx < 0 || targetIdx >= categories.length) return;
+
+      // Swap nums
+      const catA = categories[idx];
+      const catB = categories[targetIdx];
+      
+      const numA = catA.num;
+      const numB = catB.num;
+
+      // If nums are the same, increment/decrement
+      let newNumA = numB;
+      let newNumB = numA;
+      
+      if (numA === numB) {
+        newNumA = String(parseInt(numB) - direction).padStart(2, '0');
+      }
+
+      await updateDoc(doc(db, "categories", catA.id), { num: newNumA });
+      await updateDoc(doc(db, "categories", catB.id), { num: newNumB });
+      
+      loadCategories();
+    };
+
+    window.selectCategory = function(id) {
+      activeCatId = id;
+      renderSidebar();
+      renderActiveCategory();
+    };
+
+    function renderActiveCategory() {
+      const cat = categories.find(c => c.id === activeCatId);
+      if (!cat) return;
+
+      document.getElementById('active-cat-title').textContent = cat.title;
+      document.getElementById('active-cat-desc').textContent = cat.desc;
+      
+      const grid = document.getElementById('nominees-grid');
+      if (!cat.nominees || cat.nominees.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.3; padding: 100px 0;">Aucun nommé dans cette catégorie.</p>';
+      } else {
+        grid.innerHTML = cat.nominees.map((n, i) => `
+          <div class="admin-card">
+            <div class="votes-badge">${n.votes || 0} Votes</div>
+            <img src="${n.img || 'https://via.placeholder.com/400'}" alt="">
+            <h3>${n.name}</h3>
+            <p>${n.sub || ''}</p>
+            <div class="card-actions">
+              <button class="btn-action btn-small" onclick="openNomineeModal(${i})">Editer</button>
+              <button class="btn-action btn-small" onclick="deleteNominee(${i})">Supprimer</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      document.getElementById('btn-edit-cat').onclick = () => openCategoryModal(cat);
+    }
+
+    // Modal Logic
+    const overlay = document.getElementById('modal-overlay');
+    const catModal = document.getElementById('cat-modal');
+    const nomineeModal = document.getElementById('nominee-modal');
+
+    window.openCategoryModal = function(cat = null) {
+      overlay.classList.add('active');
+      catModal.classList.remove('hidden');
+      nomineeModal.classList.add('hidden');
+      
+      if (cat) {
+        document.getElementById('cat-modal-title').textContent = "Editer Categorie";
+        document.getElementById('cat-id').value = cat.id;
+        document.getElementById('cat-id').disabled = false;
+        document.getElementById('cat-num').value = cat.num;
+        document.getElementById('cat-title-input').value = cat.title;
+        document.getElementById('cat-desc').value = cat.desc;
+        document.getElementById('btn-delete-cat').style.display = "block";
+        editingCatId = cat.id;
+      } else {
+        document.getElementById('cat-modal-title').textContent = "Nouvelle Categorie";
+        document.getElementById('cat-id').value = "";
+        document.getElementById('cat-id').disabled = false;
+        document.getElementById('cat-num').value = "";
+        document.getElementById('cat-title-input').value = "";
+        document.getElementById('cat-desc').value = "";
+        document.getElementById('btn-delete-cat').style.display = "none";
+        editingCatId = null;
+      }
+    };
+
+    window.openNomineeModal = function(idx = null) {
+      overlay.classList.add('active');
+      nomineeModal.classList.remove('hidden');
+      catModal.classList.add('hidden');
+      
+      const cat = categories.find(c => c.id === activeCatId);
+      
+      if (idx !== null) {
+        const n = cat.nominees[idx];
+        document.getElementById('nominee-modal-title').textContent = "Editer Nommé";
+        document.getElementById('nom-name').value = n.name;
+        document.getElementById('nom-sub').value = n.sub;
+        document.getElementById('nom-img').value = n.img;
+        document.getElementById('nom-spotify').value = n.spotify || "";
+        document.getElementById('btn-delete-nominee').style.display = "block";
+        editingNomineeIdx = idx;
+      } else {
+        document.getElementById('nominee-modal-title').textContent = "Nouveau Nommé";
+        document.getElementById('nom-name').value = "";
+        document.getElementById('nom-sub').value = "";
+        document.getElementById('nom-img').value = "";
+        document.getElementById('nom-spotify').value = "";
+        document.getElementById('btn-delete-nominee').style.display = "none";
+        editingNomineeIdx = null;
+      }
+    };
+
+    window.closeModals = function() {
+      overlay.classList.remove('active');
+    };
+
+    document.getElementById('btn-save-cat').onclick = async () => {
+      const id = document.getElementById('cat-id').value.trim();
+      const num = document.getElementById('cat-num').value.trim();
+      const title = document.getElementById('cat-title-input').value.trim();
+      const desc = document.getElementById('cat-desc').value.trim();
+
+      if (!id || !title) return alert("ID et Titre requis");
+
+      let existingNominees = [];
+      const oldId = editingCatId;
+
+      if (oldId) {
+        const existing = categories.find(c => c.id === oldId);
+        if (existing) existingNominees = existing.nominees || [];
+      }
+
+      const catData = { id, num, title, desc, nominees: existingNominees };
+
+      // If ID changed and we are editing
+      if (oldId && id !== oldId) {
+        if (!confirm(`Attention: Vous changez l'ID de "${oldId}" vers "${id}". L'ancienne entrée sera supprimée et les liens vers celle-ci seront brisés. Continuer ?`)) {
+          return;
+        }
+        // SAFE ORDER: Create new document FIRST, then delete old one
+        await setDoc(doc(db, "categories", id), catData);
+        await deleteDoc(doc(db, "categories", oldId));
+        // Update activeCatId
+        if (activeCatId === oldId) activeCatId = id;
+      } else {
+        await setDoc(doc(db, "categories", id), catData, { merge: true });
+      }
+      
+      closeModals();
+      await loadCategories();
+    };
+
+    document.getElementById('btn-save-nominee').onclick = async () => {
+      const name = document.getElementById('nom-name').value;
+      const sub = document.getElementById('nom-sub').value;
+      const img = document.getElementById('nom-img').value;
+      const spotify = document.getElementById('nom-spotify').value;
+
+      const cat = categories.find(c => c.id === activeCatId);
+      const nominees = [...(cat.nominees || [])];
+
+      if (editingNomineeIdx !== null) {
+        nominees[editingNomineeIdx] = { ...nominees[editingNomineeIdx], name, sub, img, spotify };
+      } else {
+        nominees.push({ name, sub, img, spotify, votes: 0 });
+      }
+
+      await updateDoc(doc(db, "categories", activeCatId), { nominees });
+      
+      closeModals();
+      loadCategories();
+    };
+
+    document.getElementById('btn-delete-cat').onclick = async () => {
+      if (!editingCatId) return;
+      if (!confirm(`Supprimer la catégorie "${editingCatId}" ?`)) return;
+      await deleteDoc(doc(db, "categories", editingCatId));
+      closeModals();
+      if (activeCatId === editingCatId) activeCatId = null;
+      await loadCategories();
+    };
+
+    document.getElementById('btn-delete-nominee').onclick = async () => {
+      if (editingNomineeIdx === null) return;
+      await deleteNominee(editingNomineeIdx);
+      closeModals();
+    };
+
+    window.exportToJSON = async function() {
+      if (!confirm("Cela va écraser le fichier data.json local avec les données actuelles de Firebase. Continuer ?")) {
+        return;
+      }
+
+      try {
+        const snap = await getDocs(collection(db, "categories"));
+        const allCategories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+        // Sort
+        allCategories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
+
+        const response = await fetch('/api/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ categories: allCategories }, null, 2)
+        });
+
+        const result = await response.json();
+        if (result.ok) {
+          alert("✅ Export réussi vers data.json !");
+        } else {
+          throw new Error(result.error);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("❌ Erreur d'export : " + err.message);
+      }
+    };
+
+    window.deleteNominee = async function(idx) {
+      if (!confirm("Supprimer ce nommé ?")) return;
+      const cat = categories.find(c => c.id === activeCatId);
+      const nominees = cat.nominees.filter((_, i) => i !== idx);
+      await updateDoc(doc(db, "categories", activeCatId), { nominees });
+      loadCategories();
+    };
+
+  </script>
+</body>
+</html>
