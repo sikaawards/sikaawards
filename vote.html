@@ -16,8 +16,6 @@
       --duel-bg: #050505;
     }
     body {
-      background: var(--bg);
-      color: var(--text);
       overflow: hidden; /* Empeche le scroll pendant le vote */
     }
 
@@ -60,14 +58,21 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ---- INTRO SCREEN ---- */
+    .hero-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
     .intro-title {
       font-family: var(--font-heading);
       font-size: clamp(2rem, 8vw, 5rem);
       font-weight: 900;
       font-style: italic;
       text-transform: uppercase;
-      line-height: 0.9;
+      line-height: 1.1;
       margin-bottom: 20px;
     }
     .btn-start {
@@ -102,12 +107,15 @@
       width: 320px;
       position: relative;
       cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+      transition: all 0.25s cubic-bezier(0.2, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
       align-items: center;
       will-change: transform, opacity;
       transform: translateZ(0);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding-bottom: 20px;
     }
 
     .candidate-img-box {
@@ -160,10 +168,7 @@
 
 
     .vs-badge {
-      width: 50px; height: 50px;
-      background: var(--primary);
-      color: #fff;
-      border-radius: 50%;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -171,14 +176,16 @@
       font-weight: 900;
       font-style: italic;
       z-index: 10;
-      font-size: 1rem;
-      margin: 0 -25px;
+      font-size: 1.5rem;
+      margin: 0 30px;
+      letter-spacing: 2px;
+      opacity: 0.7;
     }
 
     /* ---- ANIMATIONS DUEL ---- */
     .candidate.winner { 
       transform: scale(1.1); 
-      border-color: var(--border);
+      border-color: var(--primary);
       box-shadow: 0 0 40px var(--primary-glow);
       z-index: 5; 
     }
@@ -199,7 +206,7 @@
       text-transform: uppercase;
       font-style: italic;
     }
-    .vote-feedback.active { animation: stamp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    .vote-feedback.active { animation: stamp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     @keyframes stamp {
       0% { opacity: 0; transform: translate(-50%, -50%) scale(3); }
       100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
@@ -323,7 +330,7 @@
     @media (max-width: 768px) {
       .duel-container { flex-direction: column; gap: 20px; }
       .candidate { flex: 0 0 auto; width: 260px; }
-      .vs-badge { order: 2; margin: -10px 0; }
+      .vs-badge { order: 2; margin: 10px 0; }
       .candidate:nth-child(1) { order: 1; }
       .candidate:nth-child(2) { order: 3; }
       .vote-feedback { top: 20px; font-size: 2rem; }
@@ -385,14 +392,12 @@
 
     <!-- WINNER -->
     <section class="screen" id="screen-winner">
-      <div class="hero-bg-text" style="font-size: 30vw; top: 50%; opacity: 0.02; z-index: 0;">SIKA</div>
       <div class="winner-label" style="position:relative; z-index:2;">VOTRE GAGNANT</div>
       <div class="winner-photo" style="display:block; z-index:2;">
         <img src="" alt="" id="win-img" style="display:block; width:100%; height:100%; object-fit:cover;">
       </div>
       <h1 class="winner-name" id="win-name" style="position:relative; z-index:2;">NOM DU GAGNANT</h1>
       <div class="winner-actions" style="position:relative; z-index:2;">
-        <button class="btn-winner-ghost" onclick="location.reload()">Recommencer</button>
         <button class="btn-winner-primary" onclick="location.href='categories.html'">Toutes les categories</button>
       </div>
     </section>
@@ -400,7 +405,7 @@
   </div>
 
   <script type="module">
-    import { auth, db, doc, getDoc, updateDoc, increment, collection, getDocs, query, where, runTransaction } from './scripts/firebase-config.js';
+    import { auth, db, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs, query, where, runTransaction, onAuthStateChanged, signInWithPopup, provider } from './scripts/firebase-config.js';
 
     // ---- SURVIVOR ENGINE ----
     let allCandidates = [];
@@ -409,6 +414,9 @@
     let nextCandidateIdx = 0;
     let isTransitioning = false;
     let categoryData = null;
+    let currentUser = null;
+    let hasVoted = false;
+    let isDataLoaded = false;
 
     // 1. Initialisation
     const params = new URLSearchParams(location.search);
@@ -436,7 +444,7 @@
         categoryData = { ...docSnap.data(), id: docSnap.id };
         
         if (!categoryData.nominees || categoryData.nominees.length < 2) {
-          document.getElementById('cat-title').textContent = "Pas assez de nommés (min. 2)";
+          document.getElementById('cat-title').textContent = "Pas assez de nominés (min. 2)";
           return;
         }
         
@@ -445,17 +453,63 @@
         // On mélange pour le tournoi
         allCandidates.sort(() => Math.random() - 0.5);
 
-        // Réactiver le bouton
-        if(startBtn) {
-          startBtn.style.opacity = "1";
-          startBtn.disabled = false;
-          startBtn.textContent = "Commencer le vote";
-        }
+        isDataLoaded = true;
+        updateStartButton();
       } catch (err) {
         console.error("Erreur chargement Firebase:", err);
         document.getElementById('cat-title').textContent = "Erreur de connexion";
       }
     }
+
+    function updateStartButton() {
+      if (!isDataLoaded) return;
+      if (!currentUser) {
+        if(startBtn) {
+          startBtn.textContent = "Se connecter avec Google pour voter";
+          startBtn.disabled = false;
+          startBtn.style.opacity = "1";
+          startBtn.onclick = async () => {
+            try {
+              await signInWithPopup(auth, provider);
+            } catch (error) {
+              console.error("Erreur de connexion", error);
+            }
+          };
+        }
+      } else if (hasVoted) {
+        if(startBtn) {
+          startBtn.textContent = "Vous avez déjà voté";
+          startBtn.disabled = true;
+          startBtn.style.opacity = "0.5";
+          startBtn.style.cursor = "not-allowed";
+        }
+      } else {
+        if(startBtn && allCandidates.length >= 2) {
+          startBtn.textContent = "Commencer le vote";
+          startBtn.disabled = false;
+          startBtn.style.opacity = "1";
+          startBtn.onclick = startTournament;
+        }
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      if (user) {
+        try {
+          const voteRef = doc(db, "votes", `${catId}_${user.uid}`);
+          const voteSnap = await getDoc(voteRef);
+          if (voteSnap.exists()) {
+            hasVoted = true;
+          } else {
+            hasVoted = false;
+          }
+        } catch (e) {
+          console.error("Erreur vérification vote", e);
+        }
+      }
+      updateStartButton();
+    });
 
     loadData();
 
@@ -487,10 +541,16 @@
       if (!leftCandidate || !rightCandidate) return;
 
       document.getElementById('name-0').textContent = leftCandidate.name;
-      document.getElementById('img-0').src = leftCandidate.img || 'https://via.placeholder.com/600';
-      
+      const imgBox0 = document.getElementById('cand-0').querySelector('.candidate-img-box');
+      imgBox0.innerHTML = leftCandidate.img 
+        ? `<img src="${leftCandidate.img}" alt="${leftCandidate.name}" id="img-0">` 
+        : `<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;" id="img-0"></div>`;
+        
       document.getElementById('name-1').textContent = rightCandidate.name;
-      document.getElementById('img-1').src = rightCandidate.img || 'https://via.placeholder.com/600';
+      const imgBox1 = document.getElementById('cand-1').querySelector('.candidate-img-box');
+      imgBox1.innerHTML = rightCandidate.img 
+        ? `<img src="${rightCandidate.img}" alt="${rightCandidate.name}" id="img-1">` 
+        : `<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;" id="img-1"></div>`;
 
       [0, 1].forEach(idx => {
         const cand = idx === 0 ? leftCandidate : rightCandidate;
@@ -528,25 +588,8 @@
       document.getElementById(`cand-${loserIdx}`).classList.add('loser');
       document.getElementById('feedback').classList.add('active');
 
-      // 1. SAUVEGARDE RÉELLE DANS FIRESTORE (transaction atomique)
-      try {
-        const catRef = doc(db, "categories", catId);
-        await runTransaction(db, async (transaction) => {
-          const catSnap = await transaction.get(catRef);
-          if (!catSnap.exists()) return;
-          const data = catSnap.data();
-          const nominees = [...(data.nominees || [])];
-          const realIdx = nominees.findIndex(n => n.name === winner.name);
-          if (realIdx !== -1) {
-            nominees[realIdx].votes = (nominees[realIdx].votes || 0) + 1;
-            transaction.update(catRef, { nominees });
-          }
-        });
-        console.log("Vote enregistré pour", winner.name);
-      } catch (e) {
-        console.error("Erreur enregistrement vote:", e);
-      }
-
+      // Le vote réel sera sauvegardé uniquement à la fin du tournoi, pour le gagnant final.
+      
       setTimeout(() => {
         if (nextCandidateIdx >= allCandidates.length) {
           showWinner(winner);
@@ -560,17 +603,55 @@
         nextCandidateIdx++;
         updateProgress();
         showDuel();
-      }, 1000);
+      }, 550);
     }
 
     function showWinner(winner) {
       document.getElementById('win-name').textContent = winner.name;
-      document.getElementById('win-img').src = winner.img || 'https://via.placeholder.com/600';
+      const winPhotoDiv = document.querySelector('.winner-photo');
+      winPhotoDiv.innerHTML = winner.img 
+        ? `<img src="${winner.img}" alt="${winner.name}" id="win-img" style="display:block; width:100%; height:100%; object-fit:cover;">`
+        : `<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;"></div>`;
       showScreen('screen-winner');
       
       // Petit confetti de célébration
       if (typeof confetti === 'function') {
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#FF3300', '#FFFFFF', '#FFD700'] });
+      }
+
+      // Enregistrement final du vote !
+      if (currentUser && !hasVoted) {
+        hasVoted = true; // Empêcher un double déclenchement
+        const catRef = doc(db, "categories", catId);
+        const voteRef = doc(db, "votes", `${catId}_${currentUser.uid}`);
+        
+        runTransaction(db, async (transaction) => {
+          const voteSnap = await transaction.get(voteRef);
+          if (voteSnap.exists()) {
+            throw new Error("Vous avez déjà voté pour cette catégorie.");
+          }
+          const catSnap = await transaction.get(catRef);
+          if (!catSnap.exists()) return;
+          
+          const data = catSnap.data();
+          const nominees = [...(data.nominees || [])];
+          const realIdx = nominees.findIndex(n => n.name === winner.name);
+          
+          if (realIdx !== -1) {
+            nominees[realIdx].votes = (nominees[realIdx].votes || 0) + 1;
+            transaction.update(catRef, { nominees });
+            transaction.set(voteRef, { 
+              timestamp: new Date(), 
+              winner: winner.name, 
+              uid: currentUser.uid,
+              categoryId: catId
+            });
+          }
+        }).then(() => {
+          console.log("Vote final enregistré avec succès !");
+        }).catch((e) => {
+          console.error("Erreur lors de l'enregistrement final du vote :", e);
+        });
       }
     }
 

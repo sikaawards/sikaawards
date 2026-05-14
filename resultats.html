@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Résultats -- SIKA AWARDS</title>
+  <meta name="description" content="Découvrez les grands gagnants des Sika Awards 2026.">
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css?v=4">
+  <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
+  <style>
+    .categories-hero {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: #000;
+      padding-top: 80px;
+    }
+    
+    .hero-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--primary);
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-main-title {
+      font-family: var(--font-heading);
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      font-style: italic;
+      line-height: 0.85;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    #results-container {
+      padding: 80px 5%;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-bottom: 120px;
+    }
+
+    .winner-card {
+      background: #080808;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .winner-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+    }
+
+    .winner-cat-label {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+      padding: 6px 12px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #fff;
+      z-index: 2;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .winner-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      padding: 6px 12px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+      z-index: 2;
+    }
+
+    .winner-img-box {
+      width: 100%;
+      aspect-ratio: 1;
+      position: relative;
+    }
+
+    .winner-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .winner-info {
+      padding: 24px;
+    }
+
+    .winner-name {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-style: italic;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .winner-sub {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header" id="header">
+    <div class="container">
+      <nav class="nav-links">
+        <a href="index.html">Accueil</a>
+        <a href="categories.html">Catégories</a>
+        <div class="header-logo-wrap">
+          <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards">
+        </div>
+        <a href="resultats.html" style="color:var(--primary)">Résultats</a>
+        <a href="construction.html">La Cérémonie</a>
+      </nav>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <a href="index.html">Accueil</a>
+    <a href="categories.html">Catégories</a>
+    <a href="resultats.html" style="color:var(--primary)">Résultats</a>
+    <a href="#">La Cérémonie</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="categories-hero">
+    <div class="container">
+      <div class="hero-label">Palmarès 2026</div>
+      <h1 class="hero-main-title">Les<br>Gagnants</h1>
+      <p class="hero-sub">Découvrez les grands vainqueurs de cette édition des Sika Awards, élus par le public.</p>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <main id="results-container">
+    <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 50px;">Chargement des résultats...</div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-row">
+        <div class="footer-social">
+          <a href="#">Instagram</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Youtube</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Twitter</a>
+          <span class="footer-sep">|</span>
+          <a href="#">TikTok</a>
+        </div>
+        <div class="footer-legal">
+          <a href="#">CGU</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Cookies</a>
+          <span class="footer-sep">|</span>
+          <a href="#">Legal</a>
+        </div>
+        <div class="footer-logo">
+          <img src="assets/Logo SA/SA-logo-Normal.png" alt="Sika Awards">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js"></script>
+  <script type="module">
+    import { db, collection, getDocs } from './scripts/firebase-config.js';
+
+    async function loadResults() {
+      try {
+        const snap = await getDocs(collection(db, "categories"));
+        const categories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+        
+        categories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
+        
+        const container = document.getElementById('results-container');
+        container.innerHTML = '';
+
+        categories.forEach(cat => {
+          const nominees = cat.nominees || [];
+          if (nominees.length === 0) return; // Skip empty categories
+
+          // Find winner (nominee with max votes)
+          const sorted = [...nominees].sort((a,b) => (b.votes||0) - (a.votes||0));
+          const winner = sorted[0];
+
+          if (!winner) return;
+
+          const imgHtml = winner.img 
+            ? `<img src="${winner.img}" alt="${winner.name}">` 
+            : `<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);width:100%;height:100%;"></div>`;
+
+          const card = document.createElement('div');
+          card.className = 'winner-card';
+          card.innerHTML = `
+            <div class="winner-cat-label">${cat.title}</div>
+            <div class="winner-badge">Gagnant 2026</div>
+            <div class="winner-img-box">${imgHtml}</div>
+            <div class="winner-info">
+              <div class="winner-name">${winner.name}</div>
+              <div class="winner-sub">${winner.sub || ''}</div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        if (container.innerHTML === '') {
+          container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 50px;">Aucun résultat disponible.</div>';
+        }
+
+      } catch (err) {
+        console.error("Erreur chargement résultats:", err);
+        document.getElementById('results-container').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #ff4444;">Erreur lors du chargement des résultats.</div>';
+      }
+    }
+
+    loadResults();
+  </script>
+  <script type="module" src="scripts/auth-ui.js"></script>
+</body>
+</html>

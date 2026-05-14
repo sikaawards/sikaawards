@@ -324,7 +324,7 @@
     </div>
     <div style="padding: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px;">
       <button class="btn-action" style="width: 100%" onclick="openCategoryModal()">+ Nouvelle Catégorie</button>
-      <button class="btn-action btn-primary" style="width: 100%" onclick="exportToJSON()">Exporter vers data.json</button>
+      <button class="btn-action btn-primary" style="width: 100%" onclick="exportToJSON()">⬇ Backup JSON</button>
       <button class="btn-action" style="width: 100%; border-color: rgba(255,0,0,0.3); color: #ff4444;" id="btn-logout">Déconnexion</button>
     </div>
   </aside>
@@ -336,10 +336,14 @@
         <h1 id="active-cat-title">Chargement...</h1>
         <p id="active-cat-desc" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;"></p>
       </div>
-      <div class="header-actions">
-        <button class="btn-action" onclick="openNomineeModal()">+ Ajouter Nommé</button>
-        <button class="btn-action" id="btn-edit-cat">Editer Categorie</button>
-        <button class="btn-action btn-primary" onclick="window.location.href='index.html'">Voir le site</button>
+      <div class="header-actions-wrapper" style="display: grid; grid-template-columns: auto auto auto; gap: 10px; justify-content: end;">
+        <button class="btn-action" onclick="openNomineeModal()" style="grid-column: 1; grid-row: 1; width: 100%;">+ Ajouter Nominé</button>
+        <button class="btn-action" id="btn-edit-cat" style="grid-column: 2; grid-row: 1; width: 100%;">Editer Categorie</button>
+        <button class="btn-action btn-primary" onclick="window.location.href='index.html'" style="grid-column: 3; grid-row: 1; width: 100%;">Voir le site</button>
+        
+        <button class="btn-action btn-primary" onclick="openStatsModal()" style="grid-column: 1; grid-row: 2; width: 100%;">Statistique et Vote</button>
+        <button class="btn-action" onclick="deleteAllNominees()" style="grid-column: 2; grid-row: 2; width: 100%;">Tout Supprimé</button>
+        <button class="btn-action" onclick="addTenPlaceholders()" style="grid-column: 3; grid-row: 2; width: 100%;">Rajouter 10</button>
       </div>
     </div>
 
@@ -378,7 +382,7 @@
     </div>
 
     <div class="modal hidden" id="nominee-modal">
-      <h2 id="nominee-modal-title">Nouveau Nommé</h2>
+      <h2 id="nominee-modal-title">Nouveau Nominé</h2>
       <div class="form-group">
         <label>Nom de l'artiste / candidat</label>
         <input type="text" id="nom-name">
@@ -399,6 +403,16 @@
         <button class="btn-action" onclick="closeModals()">Annuler</button>
         <button class="btn-action" style="border-color: rgba(255,0,0,0.5); color: #ff4444; display: none;" id="btn-delete-nominee">Supprimer</button>
         <button class="btn-action btn-primary" id="btn-save-nominee">Enregistrer</button>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="stats-modal">
+      <h2 id="stats-modal-title">Statistiques de la Catégorie</h2>
+      <div id="stats-content" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px; padding-right: 10px;">
+        <!-- JS -->
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action btn-primary" onclick="closeModals()">Fermer</button>
       </div>
     </div>
   </div>
@@ -511,7 +525,7 @@
       
       const grid = document.getElementById('nominees-grid');
       if (!cat.nominees || cat.nominees.length === 0) {
-        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.3; padding: 100px 0;">Aucun nommé dans cette catégorie.</p>';
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.3; padding: 100px 0;">Aucun nominé dans cette catégorie.</p>';
       } else {
         grid.innerHTML = cat.nominees.map((n, i) => `
           <div class="admin-card">
@@ -534,6 +548,93 @@
     const overlay = document.getElementById('modal-overlay');
     const catModal = document.getElementById('cat-modal');
     const nomineeModal = document.getElementById('nominee-modal');
+    const statsModal = document.getElementById('stats-modal');
+
+    window.openStatsModal = function() {
+      overlay.classList.add('active');
+      catModal.classList.add('hidden');
+      nomineeModal.classList.add('hidden');
+      statsModal.classList.remove('hidden');
+
+      const cat = categories.find(c => c.id === activeCatId);
+      if(!cat) return;
+
+      const nominees = cat.nominees || [];
+      const totalVotes = nominees.reduce((sum, n) => sum + (n.votes || 0), 0);
+      
+      const sorted = [...nominees].sort((a,b) => (b.votes||0) - (a.votes||0));
+      
+      let html = `<div style="font-size: 1.2rem; margin-bottom: 20px; color: #fff;">Total des votants : <strong style="color: var(--primary); font-size: 1.5rem;">${totalVotes}</strong></div>`;
+      
+      if(totalVotes === 0) {
+        html += `<p style="opacity:0.5;">Aucun vote pour l'instant.</p>`;
+      } else {
+        html += sorted.map((n, i) => {
+          const votes = n.votes || 0;
+          const percent = ((votes / totalVotes) * 100).toFixed(1);
+          return `
+            <div style="margin-bottom: 15px; background: #111; padding: 15px; border-left: 3px solid var(--primary);">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <strong style="color: #fff; font-size: 0.9rem;">${i+1}. ${n.name}</strong>
+                <span style="color: var(--primary); font-weight: bold; font-size: 0.9rem;">${votes} votes (${percent}%)</span>
+              </div>
+              <div style="background: #222; height: 8px; border-radius: 4px; overflow: hidden;">
+                <div style="background: var(--primary); height: 100%; width: ${percent}%;"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('stats-content').innerHTML = html;
+    };
+
+    window.addTenPlaceholders = async function() {
+      if(!confirm("Voulez-vous vraiment rajouter 10 nominés vides ?")) return;
+      const cat = categories.find(c => c.id === activeCatId);
+      if(!cat) return;
+      
+      if(!cat.nominees) cat.nominees = [];
+      
+      // On compte combien de nominés existent déjà pour continuer la numérotation
+      const countActuel = cat.nominees.length;
+      
+      for(let i=0; i<10; i++) {
+        cat.nominees.push({
+          name: `Nominé ${countActuel + i + 1}`,
+          sub: "",
+          img: "",
+          spotify: "",
+          votes: 0
+        });
+      }
+      
+      // Update in Firebase
+      try {
+        await updateDoc(doc(db, "categories", cat.id), { nominees: cat.nominees });
+        renderActiveCategory();
+      } catch (err) {
+        console.error(err);
+        alert("Erreur lors de l'ajout.");
+      }
+    };
+
+    window.deleteAllNominees = async function() {
+      if(!confirm("ATTENTION : Voulez-vous vraiment TOUT supprimer dans cette catégorie ?")) return;
+      const cat = categories.find(c => c.id === activeCatId);
+      if(!cat) return;
+      
+      cat.nominees = [];
+      
+      // Update in Firebase
+      try {
+        await updateDoc(doc(db, "categories", cat.id), { nominees: cat.nominees });
+        renderActiveCategory();
+      } catch (err) {
+        console.error(err);
+        alert("Erreur lors de la suppression.");
+      }
+    };
 
     window.openCategoryModal = function(cat = null) {
       overlay.classList.add('active');
@@ -570,7 +671,7 @@
       
       if (idx !== null) {
         const n = cat.nominees[idx];
-        document.getElementById('nominee-modal-title').textContent = "Editer Nommé";
+        document.getElementById('nominee-modal-title').textContent = "Editer Nominé";
         document.getElementById('nom-name').value = n.name;
         document.getElementById('nom-sub').value = n.sub;
         document.getElementById('nom-img').value = n.img;
@@ -578,7 +679,7 @@
         document.getElementById('btn-delete-nominee').style.display = "block";
         editingNomineeIdx = idx;
       } else {
-        document.getElementById('nominee-modal-title').textContent = "Nouveau Nommé";
+        document.getElementById('nominee-modal-title').textContent = "Nouveau Nominé";
         document.getElementById('nom-name').value = "";
         document.getElementById('nom-sub').value = "";
         document.getElementById('nom-img').value = "";
@@ -590,6 +691,7 @@
 
     window.closeModals = function() {
       overlay.classList.remove('active');
+      statsModal.classList.add('hidden');
     };
 
     document.getElementById('btn-save-cat').onclick = async () => {
@@ -665,28 +767,20 @@
     };
 
     window.exportToJSON = async function() {
-      if (!confirm("Cela va écraser le fichier data.json local avec les données actuelles de Firebase. Continuer ?")) {
-        return;
-      }
-
       try {
         const snap = await getDocs(collection(db, "categories"));
         const allCategories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
-        // Sort
         allCategories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
 
-        const response = await fetch('/api/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ categories: allCategories }, null, 2)
-        });
-
-        const result = await response.json();
-        if (result.ok) {
-          alert("✅ Export réussi vers data.json !");
-        } else {
-          throw new Error(result.error);
-        }
+        const json = JSON.stringify({ categories: allCategories }, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'data-backup.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        alert("✅ Backup téléchargé : data-backup.json");
       } catch (err) {
         console.error(err);
         alert("❌ Erreur d'export : " + err.message);
@@ -694,7 +788,7 @@
     };
 
     window.deleteNominee = async function(idx) {
-      if (!confirm("Supprimer ce nommé ?")) return;
+      if (!confirm("Supprimer ce nominé ?")) return;
       const cat = categories.find(c => c.id === activeCatId);
       const nominees = cat.nominees.filter((_, i) => i !== idx);
       await updateDoc(doc(db, "categories", activeCatId), { nominees });

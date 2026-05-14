@@ -10,7 +10,9 @@
   <meta name="theme-color" content="#0A0A0A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="preload" href="styles/main.css?v=3" as="style">
   <link rel="preload" href="assets/Logo SA/SA-logo-Normal.png" as="image">
   <link rel="stylesheet" href="styles/main.css?v=3">
@@ -61,7 +63,10 @@
       <div class="hero-right">
         <a href="categories.html" class="hero-vote-link">
           <span class="icon-arrow">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"
+                stroke-linejoin="miter" />
+            </svg>
           </span> voter
         </a>
       </div>
@@ -103,6 +108,32 @@
   </section>
 
 
+
+  <!-- VIDEO CEREMONIE -->
+  <section class="section-padding" id="ceremonie"
+    style="background: #020202; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);">
+    <div class="container" style="display: flex; align-items: center; gap: 80px; flex-wrap: wrap;">
+      <div style="flex: 1.2; min-width: 300px; position: relative;" class="reveal">
+        <div
+          style="position: relative; padding-bottom: 56.25%; height: 0; background: #111; border-radius: 4px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); cursor: pointer;"
+          onclick="this.innerHTML='<iframe style=\'position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;\' src=\'https://www.youtube.com/embed/R1H1yYFO8d0?autoplay=1&rel=0\' title=\'SIKA Awards\' allow=\'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\' allowfullscreen></iframe>'">
+          <!-- Image de couverture (Thumbnail) -->
+          <img src="https://youtu.be/akJzShh9y8c/maxresdefault.jpg" alt="Couverture vidéo"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;"
+            onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+      </div>
+      <div style="flex: 0.8; min-width: 300px;" class="reveal">
+        <h2
+          style="font-family: var(--font-heading); font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -2px; margin-bottom: 15px; line-height: 1;">
+          La Cérémonie</h2>
+        <p
+          style="font-size: 1.1rem; color: rgba(255,255,255,0.7); line-height: 1.5; font-weight: 400; max-width: 400px;">
+          Revivez la Cérémonie SIKA Awards, en direct pour célébrer nos talents.
+        </p>
+      </div>
+    </div>
+  </section>
 
   <!-- CATEGORIES PREVIEW -->
   <section class="section-padding" id="categories" style="background:var(--bg-surface);">
@@ -212,4 +243,5 @@
   </script>
   <script type="module" src="scripts/auth-ui.js"></script>
 </body>
+
 </html>
