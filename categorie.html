@@ -99,15 +99,13 @@
 
     .detail-title {
       font-family: var(--font-heading);
-      font-size: clamp(1.8rem, 8vw, 5rem);
-      /* Taille réduite pour les titres longs */
+      font-size: clamp(2.5rem, 6vw, 5rem);
       font-weight: 900;
       font-style: italic;
       text-transform: uppercase;
-      line-height: 0.9;
-      /* Plus serré pour un look plus massif */
-      letter-spacing: -2px;
+      line-height: 1.1;
       margin-bottom: 32px;
+      letter-spacing: -2px;
       max-width: 1000px;
     }
 
@@ -249,6 +247,10 @@
 
     /* Responsive */
     @media (max-width: 768px) {
+      .nav-text {
+        display: none;
+      }
+      
       .detail-hero {
         padding: 120px 24px 60px;
         min-height: 60vh;
@@ -319,8 +321,8 @@
         xmlns="http://www.w3.org/2000/svg">
         <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"
           stroke-linejoin="miter" />
-      </svg></span> Toutes les categories</a>
-  <a href="#" class="detail-next" id="next-cat">Categorie suivante <span class="icon-arrow"
+      </svg></span> <span class="nav-text">Toutes les categories</span></a>
+  <a href="#" class="detail-next" id="next-cat"><span class="nav-text">Categorie suivante</span> <span class="icon-arrow"
       style="margin-left: 8px;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"
           stroke-linejoin="miter" />
@@ -330,11 +332,11 @@
   <section class="detail-hero">
     <div class="detail-hero-bg"></div>
     <div class="detail-hero-content">
-      <div class="detail-cat-num" id="detail-num">01</div>
+      <div class="detail-cat-num" id="detail-num">...</div>
       <div class="detail-cat-label">Sika Awards 2026</div>
-      <h1 class="detail-title" id="detail-title">Artiste de l'annee</h1>
+      <h1 class="detail-title" id="detail-title">Chargement...</h1>
       <p class="detail-desc" id="detail-desc">
-        Ce prix recompense l'artiste qui a marque l'annee par son impact culturel, sa creativite et son rayonnement.
+        Veuillez patienter pendant le chargement des détails...
       </p>
       <a href="#nominees" class="detail-criteria">Les Pré-Nominé·e·s</a>
     </div>
@@ -427,7 +429,7 @@
       const nextCat = dataCategories[(catIndex + 1) % dataCategories.length];
       const nextLink = document.getElementById('next-cat');
       nextLink.href = 'categorie.html?cat=' + nextCat.id;
-      nextLink.innerHTML = `${nextCat.title} <span class="icon-arrow" style="margin-left: 8px;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span>`;
+      nextLink.innerHTML = `<span class="nav-text">${nextCat.title}</span> <span class="icon-arrow" style="margin-left: 8px;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span>`;
 
       const grid = document.getElementById('nominees-grid');
       grid.innerHTML = '';

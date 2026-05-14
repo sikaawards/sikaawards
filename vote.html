@@ -323,16 +323,35 @@
       letter-spacing: 2px;
       opacity: 0.5;
       transition: 0.3s;
+      background: rgba(0,0,0,0.5);
+      padding: 8px 16px;
+      border-radius: 30px;
     }
     .btn-quit:hover { opacity: 1; transform: translateX(-5px); }
     .btn-quit svg { width: 18px; height: 18px; fill: #fff; }
 
     @media (max-width: 768px) {
-      .duel-container { flex-direction: column; gap: 20px; }
-      .candidate { flex: 0 0 auto; width: 260px; }
-      .vs-badge { order: 2; margin: 10px 0; }
-      .candidate:nth-child(1) { order: 1; }
-      .candidate:nth-child(2) { order: 3; }
+      .btn-quit {
+        top: 15px; right: 15px;
+        font-size: 0.6rem;
+        padding: 6px 12px;
+      }
+      .duel-container { 
+        flex-direction: row; 
+        gap: 10px; 
+        width: 100%;
+        padding: 0 10px;
+      }
+      .candidate { 
+        flex: 1 1 0; 
+        width: auto;
+        min-width: 0;
+        padding-bottom: 15px; 
+      }
+      .candidate-img-box { margin-bottom: 10px; }
+      .candidate-name { font-size: 0.95rem; margin-bottom: 4px; }
+      .candidate-info p { font-size: 0.65rem; }
+      .vs-badge { margin: 0 5px; font-size: 1.2rem; flex-shrink: 0; }
       .vote-feedback { top: 20px; font-size: 2rem; }
     }
   </style>
