@@ -551,14 +551,14 @@ button {
 .cat-viewport {
   flex: 1;
   overflow: hidden;
-  margin: 0 64px;
+  margin: 0 55px;
   /* Crée l'espace vide pour les flèches */
   position: relative;
 }
 
 .cat-track {
   display: flex;
-  gap: 16px;
+  gap: 10px;
   padding: 0;
   /* Plus besoin de padding ici, le viewport s'en charge */
   overflow-x: auto;
@@ -1050,7 +1050,7 @@ button {
   }
 
   .mobile-logo-wrap img {
-    height: 36px;
+    height: 28px;
     width: auto;
     object-fit: contain;
   }
