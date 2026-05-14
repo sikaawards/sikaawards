@@ -1,4 +1,4 @@
-�<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 
 <head>
@@ -13,9 +13,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
-  <link rel="preload" href="styles/main.css?v=4" as="style">
+  <link rel="preload" href="styles/main.css?v=5" as="style">
   <link rel="preload" href="assets/Logo_SA/SA-logo-Normal.png" as="image">
-  <link rel="stylesheet" href="styles/main.css?v=4">
+  <link rel="stylesheet" href="styles/main.css?v=5">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
 </head>
 
@@ -30,9 +30,9 @@
       <nav class="nav-links">
         <a href="index.html">Accueil</a>
         <a href="categories.html">Catégories</a>
-        <div class="header-logo-wrap">
+        <a href="index.html" class="header-logo-wrap">
           <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
-        </div>
+        </a>
         <a href="construction.html">Playlist</a>
         <a href="construction.html">La Cérémonie</a>
       </nav>
@@ -45,7 +45,7 @@
   <!-- MOBILE NAV -->
   <nav class="mobile-nav">
     <a href="index.html">Accueil</a>
-    <a href="#about">ì Propos</a>
+    <a href="#about">À Propos</a>
     <a href="categories.html">Catégories</a>
     <a href="#">Playlist</a>
     <a href="#">La Cérémonie</a>
@@ -56,7 +56,7 @@
   <section class="hero" id="hero">
     <div class="hero-layout">
       <div class="hero-left">
-        <div class="hero-countdown-label">Fermeture des votes</div>
+        <div class="hero-countdown-label">Ouverture des votes</div>
         <div class="hero-countdown" id="countdown">00:00:00:00</div>
       </div>
       <div class="hero-center">
@@ -65,13 +65,40 @@
       </div>
       <div class="hero-right">
         <a href="categories.html" class="hero-vote-link">
+          voter
           <span class="icon-arrow">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"
                 stroke-linejoin="miter" />
             </svg>
-          </span> voter
+          </span>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO CEREMONIE -->
+  <section class="section-padding" id="ceremonie"
+    style="background: #020202; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);">
+    <div class="container" style="display: flex; align-items: center; gap: 80px; flex-wrap: wrap;">
+      <div style="flex: 1.2; min-width: 300px; position: relative;" class="reveal">
+        <div
+          style="position: relative; padding-bottom: 56.25%; height: 0; background: #111; border-radius: 4px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); cursor: pointer;"
+          onclick="this.innerHTML='<iframe style=\'position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;\' src=\'https://www.youtube.com/embed/R1H1yYFO8d0?autoplay=1&rel=0\' title=\'SIKA Awards\' allow=\'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\' allowfullscreen></iframe>'">
+          <!-- Image de couverture (Thumbnail) -->
+          <img src="https://img.youtube.com/vi/akJzShh9y8c/maxresdefault.jpg" alt="Couverture vidéo"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;"
+            onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+        </div>
+      </div>
+      <div style="flex: 0.8; min-width: 300px;" class="reveal">
+        <h2
+          style="font-family: var(--font-heading); font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -2px; margin-bottom: 15px; line-height: 1;">
+          La Cérémonie</h2>
+        <p
+          style="font-size: 1.1rem; color: rgba(255,255,255,0.7); line-height: 1.5; font-weight: 400; max-width: 400px;">
+          Revivez la Cérémonie SIKA Awards, en direct pour célébrer nos talents.
+        </p>
       </div>
     </div>
   </section>
@@ -110,34 +137,6 @@
     </div>
   </section>
 
-
-
-  <!-- VIDEO CEREMONIE -->
-  <section class="section-padding" id="ceremonie"
-    style="background: #020202; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05);">
-    <div class="container" style="display: flex; align-items: center; gap: 80px; flex-wrap: wrap;">
-      <div style="flex: 1.2; min-width: 300px; position: relative;" class="reveal">
-        <div
-          style="position: relative; padding-bottom: 56.25%; height: 0; background: #111; border-radius: 4px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); cursor: pointer;"
-          onclick="this.innerHTML='<iframe style=\'position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;\' src=\'https://www.youtube.com/embed/R1H1yYFO8d0?autoplay=1&rel=0\' title=\'SIKA Awards\' allow=\'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\' allowfullscreen></iframe>'">
-          <!-- Image de couverture (Thumbnail) -->
-          <img src="https://youtu.be/akJzShh9y8c/maxresdefault.jpg" alt="Couverture vidéo"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;"
-            onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-        </div>
-      </div>
-      <div style="flex: 0.8; min-width: 300px;" class="reveal">
-        <h2
-          style="font-family: var(--font-heading); font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -2px; margin-bottom: 15px; line-height: 1;">
-          La Cérémonie</h2>
-        <p
-          style="font-size: 1.1rem; color: rgba(255,255,255,0.7); line-height: 1.5; font-weight: 400; max-width: 400px;">
-          Revivez la Cérémonie SIKA Awards, en direct pour célébrer nos talents.
-        </p>
-      </div>
-    </div>
-  </section>
-
   <!-- CATEGORIES PREVIEW -->
   <section class="section-padding" id="categories" style="background:var(--bg-surface);">
     <div class="container">
@@ -162,7 +161,7 @@
       <div class="section-header reveal">
         <div class="section-label">Contact</div>
         <h2 class="section-title">Restons en contact</h2>
-        <p class="section-subtitle">Une question, un partenariat ou une suggestion ? �0crivez-nous.</p>
+        <p class="section-subtitle">Une question, un partenariat ou une suggestion ? Écrivez-nous.</p>
       </div>
       <div style="max-width:600px;margin:0 auto;" class="reveal">
         <form style="display:flex;flex-direction:column;gap:20px;"
@@ -202,9 +201,6 @@
           <a href="#">Cookies</a>
           <span class="footer-sep">|</span>
           <a href="#">Legal</a>
-        </div>
-        <div class="footer-logo">
-          <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
         </div>
       </div>
     </div>

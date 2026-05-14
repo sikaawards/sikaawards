@@ -8,12 +8,13 @@ onAuthStateChanged(auth, (user) => {
     document.querySelectorAll('.btn-logout-global').forEach(el => el.remove());
 
     if (user) {
-        // Desktop
-        if (desktopNav) {
+        // Desktop — positionné à droite du header, hors du nav centré
+        const headerContainer = document.querySelector('.header .container');
+        if (headerContainer) {
             const logoutLink = document.createElement('a');
             logoutLink.href = '#';
             logoutLink.className = 'btn-logout-global';
-            logoutLink.style.color = 'var(--primary)';
+            logoutLink.style.cssText = 'position:absolute; right:24px; color:var(--primary); font-family:var(--font-heading); font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;';
             logoutLink.textContent = 'Déconnexion';
             logoutLink.onclick = async (e) => {
                 e.preventDefault();
@@ -22,7 +23,7 @@ onAuthStateChanged(auth, (user) => {
                     window.location.reload();
                 }
             };
-            desktopNav.appendChild(logoutLink);
+            headerContainer.appendChild(logoutLink);
         }
 
         // Mobile
@@ -31,7 +32,6 @@ onAuthStateChanged(auth, (user) => {
             logoutLink.href = '#';
             logoutLink.className = 'btn-logout-global';
             logoutLink.style.color = 'var(--primary)';
-            logoutLink.style.fontSize = '1.5rem';
             logoutLink.textContent = 'Déconnexion';
             logoutLink.onclick = async (e) => {
                 e.preventDefault();

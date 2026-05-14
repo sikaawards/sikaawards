@@ -1,14 +1,14 @@
-��<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VOTE � SIKA AWARDS 2026</title>
+  <title>VOTE -- SIKA AWARDS 2026</title>
   <meta name="theme-color" content="#0A0A0A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=4">
+  <link rel="stylesheet" href="styles/main.css?v=5">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
@@ -378,7 +378,7 @@
 
     <!-- DUEL -->
     <section class="screen" id="screen-duel" style="padding:0">
-      <div class="vote-feedback" id="feedback">VOT�0 !</div>
+      <div class="vote-feedback" id="feedback">VOTÉ !</div>
       <div class="duel-container">
         <div class="candidate" id="cand-0" onclick="vote(0)">
           <div class="candidate-img-box"><img src="" alt="" id="img-0"></div>
@@ -404,8 +404,8 @@
 
     <!-- INTER-ROUND -->
     <section class="screen" id="screen-summary">
-      <div class="summary-title">R�0SULTAT DU ROUND</div>
-      <h2 class="summary-round" id="sum-round-name">ROUND 1 TERMIN�0</h2>
+      <div class="summary-title">RÉSULTAT DU ROUND</div>
+      <h2 class="summary-round" id="sum-round-name">ROUND 1 TERMINÉ</h2>
       <div class="survivors-grid" id="survivors"></div>
       <button class="btn-start" onclick="nextRound()">Round Suivant</button>
     </section>
@@ -425,7 +425,7 @@
   </div>
 
   <script type="module">
-    import { auth, db, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs, query, where, runTransaction, onAuthStateChanged, signInWithPopup, provider } from './scripts/firebase-config.js';
+    import { auth, db, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs, query, where, runTransaction, onAuthStateChanged, signInWithRedirect, getRedirectResult, provider } from './scripts/firebase-config.js';
 
     // ---- SURVIVOR ENGINE ----
     let allCandidates = [];
@@ -491,8 +491,7 @@
           startBtn.onclick = async (e) => {
             e.preventDefault();
             try {
-              console.log("Tentative de connexion Google...");
-              await signInWithPopup(auth, provider);
+              await signInWithRedirect(auth, provider);
             } catch (error) {
               console.error("Erreur de connexion", error);
               alert("Erreur de connexion : " + error.message);
@@ -532,6 +531,13 @@
         }
       }
       updateStartButton();
+    });
+
+    getRedirectResult(auth).catch((error) => {
+      if (error.code !== 'auth/no-current-user') {
+        console.error("Erreur redirect Google:", error);
+        alert("Erreur de connexion : " + error.message);
+      }
     });
 
     loadData();

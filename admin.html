@@ -1,4 +1,4 @@
-��<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -15,7 +15,11 @@
       background: #050505;
       color: #fff;
       display: flex;
+      flex-direction: row;
+      width: 100vw;
       height: 100vh;
+      margin: 0;
+      padding: 0;
       overflow: hidden;
     }
 
@@ -226,17 +230,6 @@
       font-size: 0.65rem;
     }
 
-    /* Stats */
-    .votes-badge {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: var(--primary);
-      color: #fff;
-      padding: 4px 10px;
-      font-size: 0.7rem;
-      font-weight: 900;
-    }
 
     /* Form Overlay */
     .overlay {
@@ -324,7 +317,7 @@
     </div>
     <div style="padding: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px;">
       <button class="btn-action" style="width: 100%" onclick="openCategoryModal()">+ Nouvelle Catégorie</button>
-      <button class="btn-action btn-primary" style="width: 100%" onclick="exportToJSON()">�! Backup JSON</button>
+      <button class="btn-action btn-primary" style="width: 100%" onclick="exportToJSON()">Backup JSON</button>
       <button class="btn-action" style="width: 100%; border-color: rgba(255,0,0,0.3); color: #ff4444;" id="btn-logout">Déconnexion</button>
     </div>
   </aside>
@@ -341,7 +334,7 @@
         <button class="btn-action" id="btn-edit-cat" style="grid-column: 2; grid-row: 1; width: 100%;">Editer Categorie</button>
         <button class="btn-action btn-primary" onclick="window.location.href='index.html'" style="grid-column: 3; grid-row: 1; width: 100%;">Voir le site</button>
         
-        <button class="btn-action btn-primary" onclick="openStatsModal()" style="grid-column: 1; grid-row: 2; width: 100%;">Statistique et Vote</button>
+        <button class="btn-action btn-primary" onclick="window.location.href='stats.html'" style="grid-column: 1; grid-row: 2; width: 100%;">Statistique et Vote</button>
         <button class="btn-action" onclick="deleteAllNominees()" style="grid-column: 2; grid-row: 2; width: 100%;">Tout Supprimé</button>
         <button class="btn-action" onclick="addTenPlaceholders()" style="grid-column: 3; grid-row: 2; width: 100%;">Rajouter 10</button>
       </div>
@@ -406,15 +399,6 @@
       </div>
     </div>
 
-    <div class="modal hidden" id="stats-modal">
-      <h2 id="stats-modal-title">Statistiques de la Catégorie</h2>
-      <div id="stats-content" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px; padding-right: 10px;">
-        <!-- JS -->
-      </div>
-      <div class="modal-actions">
-        <button class="btn-action btn-primary" onclick="closeModals()">Fermer</button>
-      </div>
-    </div>
   </div>
 
   <script type="module">
@@ -477,8 +461,8 @@
               <span class="item-num">${c.num}</span>
             </div>
             <div class="sidebar-item-actions" onclick="event.stopPropagation()">
-              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, -1)" title="Monter">� </button>
-              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, 1)" title="Descendre">� </button>
+              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, -1)" title="Monter">↑</button>
+              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, 1)" title="Descendre">↓</button>
             </div>
           </div>
         `;
@@ -529,8 +513,7 @@
       } else {
         grid.innerHTML = cat.nominees.map((n, i) => `
           <div class="admin-card">
-            <div class="votes-badge">${n.votes || 0} Votes</div>
-            <img src="${n.img || 'https://via.placeholder.com/400'}" alt="">
+            ${n.img ? `<img src="${n.img}" alt="">` : `<div style="width:100%;aspect-ratio:1;background:#1a1a1a;border:1px dashed #333;display:flex;align-items:center;justify-content:center;color:#444;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:15px;">Pas d'image</div>`}
             <h3>${n.name}</h3>
             <p>${n.sub || ''}</p>
             <div class="card-actions">
@@ -548,47 +531,6 @@
     const overlay = document.getElementById('modal-overlay');
     const catModal = document.getElementById('cat-modal');
     const nomineeModal = document.getElementById('nominee-modal');
-    const statsModal = document.getElementById('stats-modal');
-
-    window.openStatsModal = function() {
-      overlay.classList.add('active');
-      catModal.classList.add('hidden');
-      nomineeModal.classList.add('hidden');
-      statsModal.classList.remove('hidden');
-
-      const cat = categories.find(c => c.id === activeCatId);
-      if(!cat) return;
-
-      const nominees = cat.nominees || [];
-      const totalVotes = nominees.reduce((sum, n) => sum + (n.votes || 0), 0);
-      
-      const sorted = [...nominees].sort((a,b) => (b.votes||0) - (a.votes||0));
-      
-      let html = `<div style="font-size: 1.2rem; margin-bottom: 20px; color: #fff;">Total des votants : <strong style="color: var(--primary); font-size: 1.5rem;">${totalVotes}</strong></div>`;
-      
-      if(totalVotes === 0) {
-        html += `<p style="opacity:0.5;">Aucun vote pour l'instant.</p>`;
-      } else {
-        html += sorted.map((n, i) => {
-          const votes = n.votes || 0;
-          const percent = ((votes / totalVotes) * 100).toFixed(1);
-          return `
-            <div style="margin-bottom: 15px; background: #111; padding: 15px; border-left: 3px solid var(--primary);">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <strong style="color: #fff; font-size: 0.9rem;">${i+1}. ${n.name}</strong>
-                <span style="color: var(--primary); font-weight: bold; font-size: 0.9rem;">${votes} votes (${percent}%)</span>
-              </div>
-              <div style="background: #222; height: 8px; border-radius: 4px; overflow: hidden;">
-                <div style="background: var(--primary); height: 100%; width: ${percent}%;"></div>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      document.getElementById('stats-content').innerHTML = html;
-    };
-
     window.addTenPlaceholders = async function() {
       if(!confirm("Voulez-vous vraiment rajouter 10 nominés vides ?")) return;
       const cat = categories.find(c => c.id === activeCatId);
@@ -691,7 +633,6 @@
 
     window.closeModals = function() {
       overlay.classList.remove('active');
-      statsModal.classList.add('hidden');
     };
 
     document.getElementById('btn-save-cat').onclick = async () => {
@@ -780,10 +721,10 @@
         a.download = 'data-backup.json';
         a.click();
         URL.revokeObjectURL(url);
-        alert("�S& Backup téléchargé : data-backup.json");
+        alert("Backup téléchargé : data-backup.json");
       } catch (err) {
         console.error(err);
-        alert("�R Erreur d'export : " + err.message);
+        alert("Erreur d'export : " + err.message);
       }
     };
 
