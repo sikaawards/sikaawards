@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+��<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -313,7 +313,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-header">
-      <img src="assets/Logo SA/SA-logo-Normal.png" alt="" class="sidebar-logo">
+      <img src="assets/Logo_SA/SA-logo-Normal.png" alt="" class="sidebar-logo">
       <div class="sidebar-title">Categories</div>
     </div>
     <div class="sidebar-search">
@@ -324,7 +324,7 @@
     </div>
     <div style="padding: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px;">
       <button class="btn-action" style="width: 100%" onclick="openCategoryModal()">+ Nouvelle Catégorie</button>
-      <button class="btn-action btn-primary" style="width: 100%" onclick="exportToJSON()">⬇ Backup JSON</button>
+      <button class="btn-action btn-primary" style="width: 100%" onclick="exportToJSON()">�! Backup JSON</button>
       <button class="btn-action" style="width: 100%; border-color: rgba(255,0,0,0.3); color: #ff4444;" id="btn-logout">Déconnexion</button>
     </div>
   </aside>
@@ -477,8 +477,8 @@
               <span class="item-num">${c.num}</span>
             </div>
             <div class="sidebar-item-actions" onclick="event.stopPropagation()">
-              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, -1)" title="Monter">↑</button>
-              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, 1)" title="Descendre">↓</button>
+              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, -1)" title="Monter">� </button>
+              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, 1)" title="Descendre">� </button>
             </div>
           </div>
         `;
@@ -780,10 +780,10 @@
         a.download = 'data-backup.json';
         a.click();
         URL.revokeObjectURL(url);
-        alert("✅ Backup téléchargé : data-backup.json");
+        alert("�S& Backup téléchargé : data-backup.json");
       } catch (err) {
         console.error(err);
-        alert("❌ Erreur d'export : " + err.message);
+        alert("�R Erreur d'export : " + err.message);
       }
     };
 

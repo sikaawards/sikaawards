@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+��<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VOTE — SIKA AWARDS 2026</title>
+  <title>VOTE � SIKA AWARDS 2026</title>
   <meta name="theme-color" content="#0A0A0A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -331,6 +331,7 @@
     .btn-quit svg { width: 18px; height: 18px; fill: #fff; }
 
     @media (max-width: 768px) {
+      .screen { padding: 30px; }
       .btn-quit {
         top: 15px; right: 15px;
         font-size: 0.6rem;
@@ -340,18 +341,18 @@
         flex-direction: row; 
         gap: 10px; 
         width: 100%;
-        padding: 0 10px;
+        padding: 0 40px;
       }
       .candidate { 
         flex: 1 1 0; 
         width: auto;
         min-width: 0;
-        padding-bottom: 15px; 
+        padding-bottom: 12px; 
       }
-      .candidate-img-box { margin-bottom: 10px; }
-      .candidate-name { font-size: 0.95rem; margin-bottom: 4px; }
-      .candidate-info p { font-size: 0.65rem; }
-      .vs-badge { margin: 0 5px; font-size: 1.2rem; flex-shrink: 0; }
+      .candidate-img-box { margin-bottom: 8px; }
+      .candidate-name { font-size: 0.8rem; margin-bottom: 4px; }
+      .candidate-info p { font-size: 0.55rem; }
+      .vs-badge { margin: 0 2px; font-size: 1rem; flex-shrink: 0; }
       .vote-feedback { top: 20px; font-size: 2rem; }
     }
   </style>
@@ -372,12 +373,12 @@
       <div class="hero-label" id="cat-label">SIKA AWARDS 2026</div>
       <h1 class="intro-title" id="cat-title">Chargement...</h1>
       <p class="hero-sub" style="margin-bottom:40px">Selectionnez votre favori a chaque duel pour elire le champion final.</p>
-      <button class="btn-start" onclick="startTournament()">Commencer le vote</button>
+      <button class="btn-start" id="btn-start-main">Commencer le vote</button>
     </section>
 
     <!-- DUEL -->
     <section class="screen" id="screen-duel" style="padding:0">
-      <div class="vote-feedback" id="feedback">VOTÉ !</div>
+      <div class="vote-feedback" id="feedback">VOT�0 !</div>
       <div class="duel-container">
         <div class="candidate" id="cand-0" onclick="vote(0)">
           <div class="candidate-img-box"><img src="" alt="" id="img-0"></div>
@@ -403,8 +404,8 @@
 
     <!-- INTER-ROUND -->
     <section class="screen" id="screen-summary">
-      <div class="summary-title">RÉSULTAT DU ROUND</div>
-      <h2 class="summary-round" id="sum-round-name">ROUND 1 TERMINÉ</h2>
+      <div class="summary-title">R�0SULTAT DU ROUND</div>
+      <h2 class="summary-round" id="sum-round-name">ROUND 1 TERMIN�0</h2>
       <div class="survivors-grid" id="survivors"></div>
       <button class="btn-start" onclick="nextRound()">Round Suivant</button>
     </section>
@@ -440,7 +441,7 @@
     // 1. Initialisation
     const params = new URLSearchParams(location.search);
     const catId = params.get('cat') || 'artiste';
-    const startBtn = document.querySelector('.btn-start');
+    const startBtn = document.getElementById('btn-start-main');
 
     // Désactiver le bouton au début
     if(startBtn) {
@@ -487,11 +488,14 @@
           startBtn.textContent = "Se connecter avec Google pour voter";
           startBtn.disabled = false;
           startBtn.style.opacity = "1";
-          startBtn.onclick = async () => {
+          startBtn.onclick = async (e) => {
+            e.preventDefault();
             try {
+              console.log("Tentative de connexion Google...");
               await signInWithPopup(auth, provider);
             } catch (error) {
               console.error("Erreur de connexion", error);
+              alert("Erreur de connexion : " + error.message);
             }
           };
         }
