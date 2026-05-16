@@ -22,9 +22,15 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 120px 48px 60px;
+      padding: 180px 280px 60px;
       position: relative;
       overflow: hidden;
+    }
+
+    @media (max-width: 1200px) {
+      .detail-hero {
+        padding: 180px 80px 60px;
+      }
     }
 
     .detail-hero::before {
@@ -49,7 +55,7 @@
 
     .detail-back {
       position: absolute;
-      top: 100px;
+      top: 140px;
       left: 48px;
       font-size: 0.75rem;
       text-transform: uppercase;
@@ -67,7 +73,7 @@
 
     .detail-next {
       position: absolute;
-      top: 100px;
+      top: 140px;
       right: 48px;
       font-size: 0.75rem;
       text-transform: uppercase;
@@ -159,7 +165,7 @@
 
     /* ---- NOMINEES SECTION ---- */
     .nominees-section {
-      padding: 80px 0 120px;
+      padding: 40px 0 60px;
     }
 
     .nominees-section-title {
@@ -167,17 +173,19 @@
       font-size: clamp(2rem, 5vw, 3.5rem);
       font-weight: 800;
       padding: 0 48px;
-      margin-bottom: 48px;
+      margin-bottom: 40px;
+      letter-spacing: -1px;
+      line-height: 1.1;
     }
 
     .nominees-section-title em {
       font-style: italic;
-      color: var(--text-muted);
+      color: var(--primary);
     }
 
     .nominees-big-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(5, 1fr);
       /* Plus flexible */
       gap: 10px;
       /* Plus d'espace pour éviter le chevauchement */
@@ -335,20 +343,26 @@
   <section class="detail-hero">
     <div class="detail-hero-bg"></div>
     <div class="detail-hero-content">
-      <div class="detail-cat-num" id="detail-num">...</div>
-      <div class="detail-cat-label">Sika Awards 2026</div>
       <h1 class="detail-title" id="detail-title">Chargement...</h1>
       <p class="detail-desc" id="detail-desc">
         Veuillez patienter pendant le chargement des détails...
       </p>
-      <a href="#nominees" class="detail-criteria">Les Pré-Nominé·e·s</a>
+      <a href="#nominees" class="detail-criteria">Les Pré-Nominé(e)s</a>
+      <div>
+        <a href="vote.html" id="btn-vote-hero" class="detail-criteria" style="border-bottom:none; padding-bottom:0;">
+          <span style="border-bottom:1px solid var(--text-subtle); padding-bottom:4px; display:inline-flex; align-items:center; gap:8px;">
+            Passer au vote
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px; display:block;"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+          </span>
+        </a>
+      </div>
     </div>
   </section>
 
   <!-- NOMINEES -->
   <section class="nominees-section" id="nominees">
     <h2 class="nominees-section-title" id="nominees-title">
-      Les Pré-Nominé·e·s <em>2026</em>
+      Les Pré-Nominé(e)s <em>2026</em>
     </h2>
     <div class="nominees-big-grid" id="nominees-grid">
       <!-- Generé par JS selon la categorie -->
@@ -416,18 +430,20 @@
 
       if (!cat) return;
 
-      document.getElementById('detail-num').textContent = cat.num;
       document.getElementById('detail-title').textContent = cat.title;
       document.getElementById('detail-desc').textContent = cat.desc;
       document.title = cat.title + ' -- SIKA AWARDS';
 
       const nomineesTitle = document.getElementById('nominees-title');
       if (nomineesTitle) {
-        nomineesTitle.innerHTML = `Les ${(cat.nominees || []).length} Pré-Nominé·e·s <em>2026</em> de la catégorie ${cat.title}`;
+        nomineesTitle.innerHTML = `Les Pré-Nominé(e)s <em>2026</em>`;
       }
 
       const voteLink = document.getElementById('btn-vote-link');
       if (voteLink) voteLink.href = `vote.html?cat=${cat.id}`;
+
+      const voteHero = document.getElementById('btn-vote-hero');
+      if (voteHero) voteHero.href = `vote.html?cat=${cat.id}`;
 
       const nextCat = dataCategories[(catIndex + 1) % dataCategories.length];
       const nextLink = document.getElementById('next-cat');
