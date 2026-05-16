@@ -409,9 +409,7 @@
   </footer>
 
   <script src="scripts/main.js" defer></script>
-  <script type="module">
-    import { db, doc, getDoc, collection, getDocs } from './scripts/firebase-config.js';
-
+  <script>
     const CACHE_KEY = 'sika_categories_cache';
 
     // Affichage immédiat depuis le cache
@@ -422,6 +420,7 @@
 
     async function initPage() {
       try {
+        const { db, collection, getDocs } = await import('./scripts/firebase-config.js');
         const snap = await getDocs(collection(db, "categories"));
         const dataCategories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
         dataCategories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
@@ -505,9 +504,13 @@
       grid.appendChild(frag);
     }
 
-    initPage();
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initPage, { timeout: 2000 });
+    } else {
+      setTimeout(initPage, 200);
+    }
   </script>
-  <script type="module" src="scripts/auth-ui.js"></script>
+  <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js'),200)}</script>
 </body>
 
 </html>

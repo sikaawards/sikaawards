@@ -697,6 +697,6 @@
 
   </script>
   <script src="scripts/main.js" defer></script>
-  <script type="module" src="scripts/auth-ui.js"></script>
+  <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js'),200)}</script>
 </body>
 </html>

@@ -208,41 +208,56 @@
     </div>
   </footer>
 
-  <script src="scripts/main.js?v=3"></script>
-  <script type="module">
-    import { db, collection, getDocs } from './scripts/firebase-config.js';
-
-    async function loadHomeCategories() {
-      try {
-        const snap = await getDocs(collection(db, "categories"));
-        const categories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
-        categories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
-
-        const grid = document.getElementById('home-categories-grid');
-        if (categories.length === 0) {
-          grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; opacity: 0.5;">Aucune catégorie disponible.</p>';
-          return;
-        }
-
-        grid.innerHTML = categories.slice(0, 6).map(cat => `
-          <div class="category-card reveal">
-            <div class="category-number">${cat.num}</div>
-            <h3 class="category-name">${cat.title}</h3>
-            <p class="category-desc">${cat.desc || ''}</p>
-          </div>
-        `).join('');
-
-        // Re-run reveal observer for new elements
-        if (window.refreshReveals) window.refreshReveals();
-
-      } catch (err) {
-        console.error("Erreur home categories:", err);
+  <script src="scripts/main.js?v=3" defer></script>
+  <script>
+    // Affichage immédiat des catégories home depuis le cache
+    function renderHomeCategories(categories) {
+      const grid = document.getElementById('home-categories-grid');
+      if (!grid) return;
+      if (!categories || categories.length === 0) {
+        grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; opacity: 0.5;">Aucune catégorie disponible.</p>';
+        return;
       }
+      grid.innerHTML = categories.slice(0, 6).map(cat => `
+        <div class="category-card reveal">
+          <div class="category-number">${cat.num}</div>
+          <h3 class="category-name">${cat.title}</h3>
+          <p class="category-desc">${cat.desc || ''}</p>
+        </div>
+      `).join('');
+      if (window.refreshReveals) window.refreshReveals();
     }
 
-    loadHomeCategories();
+    try {
+      const cached = localStorage.getItem('sika_categories_cache');
+      if (cached) renderHomeCategories(JSON.parse(cached));
+    } catch (e) { /* ignore */ }
+
+    // Lazy-load Firebase pendant le temps d'inactivité du navigateur
+    const lazyInit = async () => {
+      try {
+        const { db, collection, getDocs } = await import('./scripts/firebase-config.js');
+        const snap = await getDocs(collection(db, 'categories'));
+        const categories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+        categories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
+        const fresh = JSON.stringify(categories);
+        if (fresh !== localStorage.getItem('sika_categories_cache')) {
+          localStorage.setItem('sika_categories_cache', fresh);
+          renderHomeCategories(categories);
+        }
+        // Charge l'UI auth seulement quand le thread est libre
+        import('./scripts/auth-ui.js');
+      } catch (err) {
+        console.error('Erreur init Firebase:', err);
+      }
+    };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(lazyInit, { timeout: 2000 });
+    } else {
+      setTimeout(lazyInit, 200);
+    }
   </script>
-  <script type="module" src="scripts/auth-ui.js"></script>
 </body>
 
 </html>
