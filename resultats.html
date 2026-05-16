@@ -8,7 +8,9 @@
   <meta name="theme-color" content="#0A0A0A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/main.css?v=5">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
@@ -207,7 +209,7 @@
     </div>
   </footer>
 
-  <script src="scripts/main.js"></script>
+  <script src="scripts/main.js" defer></script>
   <script type="module">
     import { db, collection, getDocs } from './scripts/firebase-config.js';
 

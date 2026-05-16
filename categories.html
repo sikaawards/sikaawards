@@ -10,8 +10,10 @@
   <meta name="theme-color" content="#0A0A0A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
   <link rel="preload" href="styles/main.css?v=5" as="style">
   <link rel="stylesheet" href="styles/main.css?v=5">
@@ -152,17 +154,33 @@
     </div>
   </footer>
 
-  <script src="scripts/main.js"></script>
+  <script src="scripts/main.js" defer></script>
   <script type="module">
     import { db, collection, getDocs } from './scripts/firebase-config.js';
+
+    const CACHE_KEY = 'sika_categories_cache';
+
+    // 1) Affichage immédiat depuis le cache
+    try {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const categories = JSON.parse(cached);
+        applyAdminData({ categories });
+      }
+    } catch (e) { /* ignore */ }
 
     async function loadCategories() {
       try {
         const snap = await getDocs(collection(db, "categories"));
         const categories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
-        // Trier par numéro
         categories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
-        applyAdminData({ categories });
+
+        // 2) Mise à jour cache + DOM si la donnée a changé
+        const fresh = JSON.stringify(categories);
+        if (fresh !== localStorage.getItem(CACHE_KEY)) {
+          localStorage.setItem(CACHE_KEY, fresh);
+          applyAdminData({ categories });
+        }
       } catch (err) {
         console.error("Erreur chargement catégories:", err);
       }
@@ -179,7 +197,7 @@
 
         const nomineesHtml = (cat.nominees || []).map(n => {
           const imgHtml = n.img
-            ? `<img src="${n.img}" alt="${n.name}">`
+            ? `<img src="${n.img}" alt="${n.name}" loading="lazy" decoding="async">`
             : `<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;"></div>`;
           return `
             <div class="nominee-card">
