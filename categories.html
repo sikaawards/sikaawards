@@ -23,7 +23,6 @@
       align-items: center;
       position: relative;
       overflow: hidden;
-      background: #070707;
       padding-top: 80px;
     }
 
@@ -53,7 +52,7 @@
 
     .hero-main-title {
       font-family: var(--font-heading);
-      font-size: clamp(3.5rem, 12vw, 9rem);
+      font-size: clamp(2.5rem, 8vw, 6rem);
       font-weight: 900;
       text-transform: uppercase;
       font-style: italic;
@@ -114,7 +113,6 @@
   <!-- HERO CATEGORIES -->
   <section class="categories-hero">
     <div class="container">
-      <div class="hero-label">Sika Awards 2026</div>
       <h1 class="hero-main-title">Les<br>Categories</h1>
       <p class="hero-sub">Explorez les differentes recompenses et decouvrez les artistes qui ont faconne l'industrie
         cette annee.</p>
@@ -198,7 +196,6 @@
             <a href="categorie.html?cat=${cat.id}" class="cat-header-link" style="text-decoration:none; color:inherit; flex-grow:1;">
               <span class="cat-num">${cat.num}</span>
               <h2 class="cat-title">${cat.title}</h2>
-              <p class="cat-subtitle">Les ${(cat.nominees || []).length} Pré-Nominé(e)s 2026</p>
             </a>
             <a href="vote.html?cat=${cat.id}" class="cat-header-vote-link" style="text-decoration:none; color:var(--text); transition: color 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text)'">
               <h2 class="cat-title" style="font-size: clamp(1.2rem, 3vw, 1.8rem);">VOTER <span class="icon-arrow" style="display:inline-block; vertical-align:middle; margin-left:8px;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></h2>

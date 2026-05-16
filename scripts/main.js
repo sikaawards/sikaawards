@@ -4,16 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- Header scroll effect ---
-  const header = document.querySelector('.header');
-  if (header) {
-    window.addEventListener('scroll', () => {
-      const scroll = window.scrollY;
-      header.classList.toggle('scrolled', scroll > 50);
-      header.classList.toggle('scrolled-logo', scroll > 310);
-    });
-  }
-
   // --- Hamburger menu ---
   const hamburger = document.querySelector('.hamburger');
   const mobileNav = document.querySelector('.mobile-nav');

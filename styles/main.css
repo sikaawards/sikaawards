@@ -98,15 +98,10 @@ button {
   right: 0;
   z-index: 1000;
   padding: 16px 0;
-  transition: var(--transition);
-}
-
-.header.scrolled {
   background: rgba(10, 10, 10, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
-  padding: 16px 0;
 }
 
 .header .container {
@@ -123,21 +118,17 @@ button {
 }
 
 .header-logo-wrap {
-  width: 0;
-  opacity: 0;
-  overflow: hidden;
-  filter: blur(10px);
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, filter 0.5s ease;
+  width: 45px;
+  margin: 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
 }
 
 .header-logo-wrap img {
-  width: 50px;
+  width: 45px;
   /* Fixed width to prevent deformation */
-  min-width: 50px;
+  min-width: 45px;
   /* Strict minimum */
   height: auto;
   display: block;
@@ -145,13 +136,6 @@ button {
   object-fit: contain;
 }
 
-.header.scrolled-logo .header-logo-wrap {
-  width: 50px;
-  opacity: 1;
-  filter: blur(0);
-  margin: 0 10px;
-  pointer-events: auto;
-}
 
 .mobile-logo-wrap {
   display: none;
@@ -1037,9 +1021,13 @@ button {
     display: flex;
   }
 
-  .header,
-  .header.scrolled {
-    padding: 8px 0;
+  .header {
+    padding: 2px 0;
+  }
+
+  .mobile-logo-wrap img {
+    height: 26px;
+    width: auto;
   }
 
   .header .btn-logout-global {
@@ -1047,7 +1035,7 @@ button {
   }
 
   .header .container {
-    min-height: 56px;
+    min-height: 36px;
   }
 
   .mobile-logo-wrap {

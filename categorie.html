@@ -42,10 +42,7 @@
     }
 
     .detail-hero-bg {
-      position: absolute;
-      inset: 0;
-      background: #111;
-      z-index: 0;
+      display: none;
     }
 
     .detail-hero-content {
@@ -260,7 +257,7 @@
       }
       
       .detail-hero {
-        padding: 120px 24px 60px;
+        padding: 160px 24px 60px;
         min-height: 60vh;
       }
 
@@ -269,10 +266,12 @@
       }
 
       .detail-back {
+        top: 80px;
         left: 24px;
       }
 
       .detail-next {
+        top: 80px;
         right: 24px;
       }
 
@@ -327,13 +326,13 @@
   </nav>
 
   <!-- NAVIGATION CATEGORIE -->
-  <a href="categories.html" class="detail-back"><span class="icon-arrow"
+  <a href="#" class="detail-back" id="prev-cat"><span class="icon-arrow"
       style="transform: rotate(180deg); margin-right: 8px;"><svg viewBox="0 0 24 24" fill="none"
         xmlns="http://www.w3.org/2000/svg">
         <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"
           stroke-linejoin="miter" />
-      </svg></span> <span class="nav-text">Toutes les categories</span></a>
-  <a href="#" class="detail-next" id="next-cat"><span class="nav-text">Categorie suivante</span> <span class="icon-arrow"
+      </svg></span> <span class="nav-text">Catégorie précédente</span></a>
+  <a href="#" class="detail-next" id="next-cat"><span class="nav-text">Catégorie suivante</span> <span class="icon-arrow"
       style="margin-left: 8px;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"
           stroke-linejoin="miter" />
@@ -349,7 +348,7 @@
       </p>
       <a href="#nominees" class="detail-criteria">Les Pré-Nominé(e)s</a>
       <div>
-        <a href="vote.html" id="btn-vote-hero" class="detail-criteria" style="border-bottom:none; padding-bottom:0;">
+        <a href="#passer-au-vote" id="btn-vote-hero" class="detail-criteria" style="border-bottom:none; padding-bottom:0;">
           <span style="border-bottom:1px solid var(--text-subtle); padding-bottom:4px; display:inline-flex; align-items:center; gap:8px;">
             Passer au vote
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px; display:block;"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg>
@@ -370,7 +369,7 @@
   </section>
 
   <!-- PASSER AU VOTE -->
-  <section class="cat-section" style="border-top: 1px solid var(--border); padding: 80px 48px; max-width: 1400px; margin: 0 auto;">
+  <section id="passer-au-vote" class="cat-section" style="border-top: 1px solid var(--border); padding: 80px 48px; max-width: 1400px; margin: 0 auto; scroll-margin-top: 80px;">
     <div class="cat-header" style="margin-bottom: 0;">
       <a href="vote.html" id="btn-vote-link" class="cat-header-link" style="text-decoration:none; color:inherit; display:block;">
         <span class="cat-num">VOTER</span>
@@ -442,13 +441,14 @@
       const voteLink = document.getElementById('btn-vote-link');
       if (voteLink) voteLink.href = `vote.html?cat=${cat.id}`;
 
-      const voteHero = document.getElementById('btn-vote-hero');
-      if (voteHero) voteHero.href = `vote.html?cat=${cat.id}`;
 
       const nextCat = dataCategories[(catIndex + 1) % dataCategories.length];
       const nextLink = document.getElementById('next-cat');
-      nextLink.href = 'categorie.html?cat=' + nextCat.id;
-      nextLink.innerHTML = `<span class="nav-text">${nextCat.title}</span> <span class="icon-arrow" style="margin-left: 8px;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span>`;
+      if (nextLink) nextLink.href = 'categorie.html?cat=' + nextCat.id;
+
+      const prevCat = dataCategories[(catIndex - 1 + dataCategories.length) % dataCategories.length];
+      const prevLink = document.getElementById('prev-cat');
+      if (prevLink) prevLink.href = 'categorie.html?cat=' + prevCat.id;
 
       const grid = document.getElementById('nominees-grid');
       grid.innerHTML = '';
