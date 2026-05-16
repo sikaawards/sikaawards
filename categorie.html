@@ -465,6 +465,24 @@
       const prevLink = document.getElementById('prev-cat');
       if (prevLink) prevLink.href = 'categorie.html?cat=' + prevCat.id;
 
+      // Prefetch au survol : précharge la page suivante quand l'user passe la souris dessus
+      const prefetchOnHover = (link) => {
+        if (!link) return;
+        const trigger = () => {
+          const url = link.getAttribute('href');
+          if (!url || link.dataset.prefetched) return;
+          link.dataset.prefetched = '1';
+          const l = document.createElement('link');
+          l.rel = 'prefetch';
+          l.href = url;
+          document.head.appendChild(l);
+        };
+        link.addEventListener('mouseenter', trigger, { once: true });
+        link.addEventListener('touchstart', trigger, { once: true, passive: true });
+      };
+      prefetchOnHover(nextLink);
+      prefetchOnHover(prevLink);
+
       const grid = document.getElementById('nominees-grid');
       grid.innerHTML = '';
       const frag = document.createDocumentFragment();

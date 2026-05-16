@@ -237,6 +237,21 @@
       });
 
       if (window.initScrollArrows) window.initScrollArrows();
+
+      // Prefetch au survol des cartes catégorie
+      container.querySelectorAll('a[href^="categorie.html"], a[href^="vote.html"]').forEach(link => {
+        const trigger = () => {
+          const url = link.getAttribute('href');
+          if (!url || link.dataset.prefetched) return;
+          link.dataset.prefetched = '1';
+          const l = document.createElement('link');
+          l.rel = 'prefetch';
+          l.href = url;
+          document.head.appendChild(l);
+        };
+        link.addEventListener('mouseenter', trigger, { once: true });
+        link.addEventListener('touchstart', trigger, { once: true, passive: true });
+      });
     }
 
     loadCategories();
