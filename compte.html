@@ -46,7 +46,7 @@
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: 1fr;
       gap: 40px;
     }
 
@@ -404,6 +404,7 @@
       border-radius: var(--radius-sm);
       overflow: hidden;
       border: 1px solid var(--border);
+      min-height: 500px;
     }
 
     .video-container video {
@@ -470,6 +471,160 @@
       background: rgba(255,255,255,0.1);
       cursor: not-allowed;
       transform: none;
+    }
+
+    /* Chat Section */
+    .chat-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      margin-top: 20px;
+    }
+
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chat-title {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .chat-user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-username-display {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .btn-change-username {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: var(--transition);
+    }
+
+    .btn-change-username:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .chat-messages {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      padding-right: 10px;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+      border-radius: 3px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .chat-message {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+    }
+
+    .chat-message.system {
+      background: rgba(255,51,0,0.1);
+      border-left: 3px solid var(--primary);
+    }
+
+    .chat-username {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 0.85rem;
+      min-width: 100px;
+    }
+
+    .chat-text {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      word-break: break-word;
+    }
+
+    .chat-input-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 12px 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .chat-input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-send {
+      background: var(--primary);
+      border: none;
+      color: #fff;
+      padding: 12px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-send:hover {
+      background: #ff6b00;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .chat-section {
+        padding: 15px;
+      }
+
+      .chat-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .chat-messages {
+        max-height: 200px;
+      }
     }
 
     .live-placeholder-text {
@@ -540,27 +695,6 @@
     </div>
 
     <div class="account-grid">
-      <!-- Sidebar Profile -->
-      <div class="profile-sidebar">
-        <div class="profile-card">
-          <div class="profile-avatar" id="user-avatar">?</div>
-          <div class="profile-section-title">Mon Profil</div>
-          
-          <div class="profile-info">
-            <div class="profile-info-item">
-              <div class="profile-label">Email</div>
-              <div class="profile-value" id="user-email">Chargement...</div>
-            </div>
-            <div class="profile-info-item">
-              <div class="profile-label">Membre depuis</div>
-              <div class="profile-value" id="user-since">Chargement...</div>
-            </div>
-          </div>
-
-          <button class="btn-logout" id="btn-logout">Se déconnecter</button>
-        </div>
-      </div>
-
       <!-- Main Content -->
       <div class="account-main">
         <!-- Live Stream -->
@@ -589,6 +723,31 @@
                   <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                 </svg>
                 Rafraîchir le stream
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat Section -->
+          <div class="chat-section">
+            <div class="chat-header">
+              <div class="chat-title">Chat en direct</div>
+              <div class="chat-user-info">
+                <span class="chat-username-display" id="chat-username-display">Utilisateur</span>
+                <button class="btn-change-username" id="btn-change-username">Changer</button>
+              </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+              <div class="chat-message system">
+                <span class="chat-username">Système</span>
+                <span class="chat-text">Bienvenue sur le chat SIKA AWARDS !</span>
+              </div>
+            </div>
+            <div class="chat-input-container">
+              <input type="text" class="chat-input" id="chat-input" placeholder="Écrivez votre message..." maxlength="200">
+              <button class="btn-send" id="btn-send">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
               </button>
             </div>
           </div>
@@ -628,6 +787,24 @@
             <div class="loading">Chargement de vos votes...</div>
           </div>
         </div>
+
+        <!-- User Info Footer -->
+        <div class="profile-card" style="margin-top: 40px;">
+          <div class="profile-section-title">Mon Profil</div>
+          
+          <div class="profile-info">
+            <div class="profile-info-item">
+              <div class="profile-label">Email</div>
+              <div class="profile-value" id="user-email">Chargement...</div>
+            </div>
+            <div class="profile-info-item">
+              <div class="profile-label">Membre depuis</div>
+              <div class="profile-value" id="user-since">Chargement...</div>
+            </div>
+          </div>
+
+          <button class="btn-logout" id="btn-logout">Se déconnecter</button>
+        </div>
       </div>
     </div>
   </div>
@@ -658,12 +835,14 @@
 
   <script src="scripts/main.js" defer></script>
   <script type="module">
-    import { auth, signOut, onAuthStateChanged, db, collection, getDocs, doc, getDoc } from './scripts/firebase-config.js';
+    import { auth, signOut, onAuthStateChanged, db, collection, getDocs, doc, getDoc, setDoc, addDoc, onSnapshot, query, orderBy, limit } from './scripts/firebase-config.js';
 
     let currentUser = null;
     let categories = [];
     let userVotes = [];
     let liveStreamUrl = '';
+    let username = '';
+    let chatUnsubscribe = null;
 
     // Vérification de l'authentification
     onAuthStateChanged(auth, async (user) => {
@@ -676,6 +855,8 @@
       await loadUserData();
       await loadCategories();
       await loadStreamConfig();
+      await loadUsername();
+      initChat();
       renderAccount();
 
       // Initialiser le lecteur après le chargement des données
@@ -695,6 +876,135 @@
         window.location.href = 'index.html';
       }
     });
+
+    // Gestion du username
+    async function loadUsername() {
+      try {
+        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+        if (userDoc.exists()) {
+          username = userDoc.data().username || currentUser.email.split('@')[0];
+        } else {
+          username = currentUser.email.split('@')[0];
+          // Créer le document utilisateur avec username par défaut
+          await setDoc(doc(db, 'users', currentUser.uid), {
+            email: currentUser.email,
+            username: username,
+            createdAt: new Date().toISOString()
+          });
+        }
+        document.getElementById('chat-username-display').textContent = username;
+      } catch (error) {
+        console.error('Erreur chargement username:', error);
+        username = currentUser.email.split('@')[0];
+        document.getElementById('chat-username-display').textContent = username;
+      }
+    }
+
+    // Changer le username
+    document.getElementById('btn-change-username').addEventListener('click', () => {
+      const newUsername = prompt('Entrez votre nouveau nom d\'utilisateur:', username);
+      if (newUsername && newUsername.trim() !== '') {
+        username = newUsername.trim();
+        document.getElementById('chat-username-display').textContent = username;
+        // Sauvegarder dans Firestore
+        setDoc(doc(db, 'users', currentUser.uid), {
+          email: currentUser.email,
+          username: username,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      }
+    });
+
+    // Initialiser le chat avec Firestore
+    function initChat() {
+      try {
+        const chatQuery = query(
+          collection(db, 'chat_messages'),
+          orderBy('timestamp', 'asc'),
+          limit(50)
+        );
+        
+        console.log('Chat initialisé avec Firestore');
+        
+        // Écouter les messages en temps réel
+        chatUnsubscribe = onSnapshot(chatQuery, (snapshot) => {
+          const chatMessages = document.getElementById('chat-messages');
+          chatMessages.innerHTML = ''; // Clear current messages
+          
+          snapshot.forEach((doc) => {
+            const message = doc.data();
+            addChatMessage(message.username, message.text, message.timestamp);
+          });
+          
+          // Scroll vers le bas
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, (error) => {
+          console.error('Erreur écoute chat:', error);
+        });
+      } catch (error) {
+        console.error('Erreur initialisation chat:', error);
+      }
+    }
+
+    // Ajouter un message au chat
+    function addChatMessage(messageUsername, messageText, timestamp) {
+      const chatMessages = document.getElementById('chat-messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'chat-message';
+      
+      const usernameSpan = document.createElement('span');
+      usernameSpan.className = 'chat-username';
+      usernameSpan.textContent = messageUsername + ':';
+      
+      const textSpan = document.createElement('span');
+      textSpan.className = 'chat-text';
+      textSpan.textContent = messageText;
+      
+      messageDiv.appendChild(usernameSpan);
+      messageDiv.appendChild(textSpan);
+      
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Envoyer un message
+    document.getElementById('btn-send').addEventListener('click', sendMessage);
+    document.getElementById('chat-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function sendMessage() {
+      const chatInput = document.getElementById('chat-input');
+      const messageText = chatInput.value.trim();
+      
+      if (messageText === '') return;
+      
+      const message = {
+        username: username,
+        text: messageText,
+        timestamp: Date.now(),
+        userId: currentUser.uid
+      };
+      
+      console.log('Envoi du message:', message);
+      
+      try {
+        addDoc(collection(db, 'chat_messages'), message)
+          .then(() => {
+            console.log('Message envoyé avec succès');
+            chatInput.value = '';
+          })
+          .catch((error) => {
+            console.error('Erreur envoi message:', error);
+            alert('Erreur lors de l\'envoi du message: ' + error.message);
+          });
+      } catch (error) {
+        console.error('Erreur envoi message:', error);
+        alert('Erreur lors de l\'envoi du message: ' + error.message);
+      }
+    }
 
     async function loadUserData() {
       try {
@@ -739,9 +1049,8 @@
     function renderAccount() {
       // Profile info
       document.getElementById('user-email').textContent = currentUser.email;
-      document.getElementById('user-avatar').textContent = currentUser.email.charAt(0).toUpperCase();
-      
-      const userSince = currentUser.metadata.creationTime 
+
+      const userSince = currentUser.metadata.creationTime
         ? new Date(currentUser.metadata.creationTime).toLocaleDateString('fr-FR')
         : 'Inconnu';
       document.getElementById('user-since').textContent = userSince;
@@ -832,73 +1141,34 @@
       const youtubeMatch = streamUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|live\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
 
       if (youtubeMatch) {
-        console.log('URL YouTube détectée, utilisation de l\'API YouTube Iframe API avec contrôles personnalisés');
+        console.log('URL YouTube détectée, utilisation de l\'iframe YouTube standard avec modestbranding');
         const videoId = youtubeMatch[1];
 
-        // Charger l'API YouTube si pas déjà chargée
-        if (!window.YT) {
-          const tag = document.createElement('script');
-          tag.src = "https://www.youtube.com/iframe_api";
-          const firstScriptTag = document.getElementsByTagName('script')[0];
-          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        }
+        // Créer l'iframe YouTube standard avec modestbranding=1 et controls=0
+        const iframe = document.createElement('iframe');
+        iframe.width = '100%';
+        iframe.height = '100%';
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&controls=0&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1`;
+        iframe.frameBorder = '0';
+        iframe.style.position = 'absolute';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = false;
 
-        // Créer le conteneur pour le player YouTube
-        const playerDiv = document.createElement('div');
-        playerDiv.id = 'youtube-player-' + Date.now();
-        playerDiv.style.position = 'absolute';
-        playerDiv.style.top = '0';
-        playerDiv.style.left = '0';
-        playerDiv.style.width = '100%';
-        playerDiv.style.height = '100%';
-        videoContainer.appendChild(playerDiv);
-
+        videoContainer.appendChild(iframe);
         placeholder.style.display = 'none';
 
-        // Initialiser le player YouTube quand l'API est prête
-        let player;
-
-        window.onYouTubeIframeAPIReady = function() {
-          if (window.YT && window.YT.Player) {
-            player = new YT.Player(playerDiv.id, {
-              height: '100%',
-              width: '100%',
-              videoId: videoId,
-              playerVars: {
-                'autoplay': 1,
-                'controls': 0,
-                'modestbranding': 1,
-                'rel': 0,
-                'disablekb': 1,
-                'fs': 0,
-                'playsinline': 1,
-                'iv_load_policy': 3,
-                'origin': window.location.origin
-              },
-              events: {
-                'onReady': onPlayerReady,
-                'onError': onPlayerError
-              }
-            });
-          }
-        };
-
-        function onPlayerReady(event) {
-          console.log('Player YouTube prêt');
-          event.target.playVideo();
-        }
-
-        function onPlayerError(event) {
-          console.error('Erreur YouTube player:', event.data);
+        // Gestion d'erreur pour YouTube
+        iframe.onerror = function() {
+          console.error('Erreur chargement YouTube iframe');
           placeholder.style.display = 'flex';
+          iframe.remove();
           placeholderText.textContent = 'Erreur de chargement du stream';
           refreshBtn.style.display = 'block';
-        }
-
-        // Si l'API est déjà chargée, appeler la fonction directement
-        if (window.YT && window.YT.Player) {
-          window.onYouTubeIframeAPIReady();
-        }
+        };
 
         return;
       }
