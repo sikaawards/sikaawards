@@ -472,6 +472,18 @@
       transform: none;
     }
 
+    /* Masquer la barre supérieure YouTube (logo et partage) */
+    .youtube-header-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+      z-index: 2;
+      pointer-events: none;
+    }
+
     .live-placeholder-text {
       font-size: 1.2rem;
       font-weight: 600;
@@ -835,9 +847,9 @@
         console.log('URL YouTube détectée, utilisation de l\'iframe YouTube standard');
         const videoId = youtubeMatch[1];
 
-        // Créer l'iframe YouTube standard avec contrôles natifs (garant de fonctionnement)
+        // Créer l'iframe YouTube avec masquage du logo et boutons de partage
         const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&controls=1&showinfo=0&iv_load_policy=3&disablekb=1&fs=1&playsinline=1`;
         iframe.style.position = 'absolute';
         iframe.style.top = '0';
         iframe.style.left = '0';
@@ -848,6 +860,12 @@
         iframe.style.allowFullscreen = true;
 
         videoContainer.appendChild(iframe);
+        
+        // Ajouter un masque pour cacher le logo et boutons YouTube
+        const headerMask = document.createElement('div');
+        headerMask.className = 'youtube-header-mask';
+        videoContainer.appendChild(headerMask);
+        
         placeholder.style.display = 'none';
 
         // Gestion d'erreur pour YouTube
