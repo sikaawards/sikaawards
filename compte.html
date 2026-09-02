@@ -501,11 +501,14 @@
       opacity: 1;
     }
 
-    .custom-video-header .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 2px;
+    .custom-video-header .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .custom-video-header .sika-logo {
+      height: 40px;
+      width: auto;
     }
 
     .custom-video-header .ceremony-name {
@@ -520,8 +523,8 @@
         gap: 10px;
       }
 
-      .custom-video-header .logo {
-        font-size: 1.3rem;
+      .custom-video-header .sika-logo {
+        height: 35px;
       }
 
       .custom-video-header .ceremony-name {
@@ -535,8 +538,8 @@
         gap: 8px;
       }
 
-      .custom-video-header .logo {
-        font-size: 1.2rem;
+      .custom-video-header .sika-logo {
+        height: 30px;
       }
 
       .custom-video-header .ceremony-name {
@@ -1089,7 +1092,28 @@
         const customHeader = document.createElement('div');
         customHeader.className = 'custom-video-header';
         customHeader.innerHTML = `
-          <span class="logo">SIKA</span>
+          <div class="logo-container">
+            <svg viewBox="0 0 180 50" class="sika-logo" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- S - Orange geometric shape -->
+              <path d="M5 10 L30 10 L30 20 L15 20 L15 25 L25 25 L25 35 L15 35 L15 40 L30 40 L30 50 L5 50 L5 40 L20 40 L20 35 L10 35 L10 25 L20 25 L20 20 L5 20 Z" fill="#FF6B00"/>
+              
+              <!-- I - Black vertical line -->
+              <rect x="40" y="10" width="5" height="40" fill="black"/>
+              
+              <!-- K - Orange with black diagonal -->
+              <rect x="55" y="10" width="20" height="40" fill="#FF6B00"/>
+              <polygon points="65,10 65,50 75,10" fill="black"/>
+              <polygon points="55,30 65,30 65,50 55,40" fill="black"/>
+              
+              <!-- A - Orange with triangular cutout -->
+              <path d="M85 10 L105 10 L95 50 Z" fill="#FF6B00"/>
+              <polygon points="95,20 90,40 100,40" fill="black"/>
+              <rect x="90" y="30" width="10" height="3" fill="white"/>
+              
+              <!-- AWARDS text -->
+              <text x="115" y="32" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white" letter-spacing="1">AWARDS</text>
+            </svg>
+          </div>
           <span class="ceremony-name">Cérémonie en direct</span>
         `;
         videoContainer.appendChild(customHeader);
