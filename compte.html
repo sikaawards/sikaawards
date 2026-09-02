@@ -501,11 +501,15 @@
       opacity: 1;
     }
 
-    .custom-video-header .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 2px;
+    .custom-video-header .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .custom-video-header .sika-logo {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
     }
 
     .custom-video-header .ceremony-name {
@@ -520,8 +524,8 @@
         gap: 10px;
       }
 
-      .custom-video-header .logo {
-        font-size: 1.3rem;
+      .custom-video-header .sika-logo {
+        height: 35px;
       }
 
       .custom-video-header .ceremony-name {
@@ -535,8 +539,8 @@
         gap: 8px;
       }
 
-      .custom-video-header .logo {
-        font-size: 1.2rem;
+      .custom-video-header .sika-logo {
+        height: 30px;
       }
 
       .custom-video-header .ceremony-name {
@@ -1089,7 +1093,9 @@
         const customHeader = document.createElement('div');
         customHeader.className = 'custom-video-header';
         customHeader.innerHTML = `
-          <span class="logo">SIKA</span>
+          <div class="logo-container">
+            <img src="images/logo.png" alt="SIKA" class="sika-logo">
+          </div>
           <span class="ceremony-name">Cérémonie en direct</span>
         `;
         videoContainer.appendChild(customHeader);
