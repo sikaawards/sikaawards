@@ -472,16 +472,146 @@
       transform: none;
     }
 
-    /* Masquer la barre supérieure YouTube (logo et partage) */
-    .youtube-header-mask {
+    .custom-video-controls {
       position: absolute;
-      top: 0;
+      bottom: 0;
       left: 0;
       right: 0;
-      height: 60px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-      z-index: 2;
-      pointer-events: none;
+      background: rgba(0, 0, 0, 1);
+      padding: 12px 20px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      z-index: 10;
+      opacity: 1;
+    }
+
+    .custom-control-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 12px;
+      border-radius: 8px;
+      transition: var(--transition);
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    .custom-control-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .custom-control-btn:active {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(0.95);
+    }
+
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .volume-slider {
+      width: 80px;
+      height: 6px;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+      outline: none;
+      touch-action: manipulation;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .volume-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .custom-video-controls {
+        padding: 20px;
+        gap: 12px;
+      }
+
+      .custom-control-btn {
+        padding: 20px;
+        min-width: 56px;
+        min-height: 56px;
+      }
+
+      .custom-control-btn svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .volume-slider {
+        width: 70px;
+        height: 10px;
+      }
+
+      .volume-slider::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+      }
+
+      .volume-slider::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .custom-video-controls {
+        padding: 25px;
+        gap: 15px;
+      }
+
+      .custom-control-btn {
+        padding: 25px;
+        min-width: 64px;
+        min-height: 64px;
+      }
+
+      .custom-control-btn svg {
+        width: 28px;
+        height: 28px;
+      }
+
+      .volume-slider {
+        width: 80px;
+        height: 12px;
+      }
+
+      .volume-slider::-webkit-slider-thumb {
+        width: 28px;
+        height: 28px;
+      }
+
+      .volume-slider::-moz-range-thumb {
+        width: 28px;
+        height: 28px;
+      }
     }
 
     .live-placeholder-text {
@@ -847,26 +977,166 @@
         console.log('URL YouTube détectée, utilisation de l\'iframe YouTube standard');
         const videoId = youtubeMatch[1];
 
-        // Créer l'iframe YouTube avec masquage du logo et boutons de partage
+        // Créer l'iframe YouTube sans interface
         const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&controls=1&showinfo=0&iv_load_policy=3&disablekb=1&fs=1&playsinline=1`;
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&rel=0&modestbranding=1&controls=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&enablejsapi=1&origin=${window.location.origin}`;
+        iframe.id = 'youtube-iframe';
         iframe.style.position = 'absolute';
         iframe.style.top = '0';
         iframe.style.left = '0';
         iframe.style.width = '100%';
         iframe.style.height = '100%';
         iframe.style.border = 'none';
+        iframe.style.pointerEvents = 'none';
         iframe.style.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-        iframe.style.allowFullscreen = true;
+        iframe.style.allowFullscreen = false;
 
         videoContainer.appendChild(iframe);
-        
-        // Ajouter un masque pour cacher le logo et boutons YouTube
-        const headerMask = document.createElement('div');
-        headerMask.className = 'youtube-header-mask';
-        videoContainer.appendChild(headerMask);
-        
         placeholder.style.display = 'none';
+
+        // Créer des contrôles personnalisés
+        const customControls = document.createElement('div');
+        customControls.className = 'custom-video-controls';
+        customControls.innerHTML = `
+          <button class="custom-control-btn" id="custom-play-pause" title="Pause">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <rect x="6" y="4" width="4" height="16"/>
+              <rect x="14" y="4" width="4" height="16"/>
+            </svg>
+          </button>
+          <div class="volume-control">
+            <button class="custom-control-btn" id="custom-mute" title="Mute">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c-1.77 0-3.29.46-4.5 1.23L13 8.32c.83-.44 1.91-.74 3-.74 2.87 0 5.18 2.3 5.18 5.18 0 1.27-.46 2.43-1.23 3.32l1.46 1.36C22.54 16.29 23 14.79 23 13c0-3.87-3.13-7-7-7zM9 13c0 1.1.9 2 2 2 1.1 0 2-.9 2-2 0-1.1-.9-2-2-2s-2 .9-2 2c0 1.1.9 2 2 2z"/>
+              </svg>
+            </button>
+            <input type="range" id="custom-volume-slider" class="volume-slider" min="0" max="100" value="100">
+          </div>
+          <button class="custom-control-btn" id="custom-fullscreen" title="Fullscreen">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+            </svg>
+          </button>
+        `;
+        videoContainer.appendChild(customControls);
+
+        // Logique des contrôles personnalisés
+        let isPlaying = true;
+        let isMuted = false;
+        let currentVolume = 100;
+        let playerReady = false;
+
+        const playPauseBtn = document.getElementById('custom-play-pause');
+        const muteBtn = document.getElementById('custom-mute');
+        const volumeSlider = document.getElementById('custom-volume-slider');
+
+        // Écouter les événements YouTube
+        window.addEventListener('message', function(event) {
+          if (event.origin !== 'https://www.youtube.com') return;
+
+          try {
+            const data = JSON.parse(event.data);
+            if (data.event === 'onStateChange') {
+              if (data.data === 1) { // Playing
+                isPlaying = true;
+                playerReady = true;
+                updatePlayPauseIcon();
+              } else if (data.data === 2) { // Paused
+                isPlaying = false;
+                updatePlayPauseIcon();
+              }
+            }
+          } catch (e) {
+            console.error('Erreur parsing message YouTube:', e);
+          }
+        });
+
+        function updatePlayPauseIcon() {
+          if (isPlaying) {
+            playPauseBtn.innerHTML = `
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <rect x="6" y="4" width="4" height="16"/>
+                <rect x="14" y="4" width="4" height="16"/>
+              </svg>
+            `;
+            playPauseBtn.title = "Pause";
+          } else {
+            playPauseBtn.innerHTML = `
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            `;
+            playPauseBtn.title = "Play";
+          }
+        }
+
+        function updateMuteIcon() {
+          if (isMuted) {
+            muteBtn.innerHTML = `
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+              </svg>
+            `;
+            muteBtn.title = "Unmute";
+          } else {
+            muteBtn.innerHTML = `
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c-1.77 0-3.29.46-4.5 1.23L13 8.32c.83-.44 1.91-.74 3-.74 2.87 0 5.18 2.3 5.18 5.18 0 1.27-.46 2.43-1.23 3.32l1.46 1.36C22.54 16.29 23 14.79 23 13c0-3.87-3.13-7-7-7zM9 13c0 1.1.9 2 2 2 1.1 0 2-.9 2-2 0-1.1-.9-2-2-2s-2 .9-2 2c0 1.1.9 2 2 2z"/>
+              </svg>
+            `;
+            muteBtn.title = "Mute";
+          }
+        }
+
+        playPauseBtn.addEventListener('click', () => {
+          isPlaying = !isPlaying;
+          if (isPlaying) {
+            iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+          } else {
+            iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          }
+          updatePlayPauseIcon();
+        });
+
+        muteBtn.addEventListener('click', () => {
+          isMuted = !isMuted;
+          if (isMuted) {
+            iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+            volumeSlider.value = 0;
+          } else {
+            iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+            iframe.contentWindow.postMessage('{"event":"command","func":"setVolume","args":[currentVolume]}', '*');
+            volumeSlider.value = currentVolume;
+          }
+          updateMuteIcon();
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+          const volume = e.target.value;
+          currentVolume = volume;
+          iframe.contentWindow.postMessage('{"event":"command","func":"setVolume","args":[volume]}', '*');
+
+          if (volume == 0) {
+            isMuted = true;
+          } else {
+            isMuted = false;
+          }
+          updateMuteIcon();
+        });
+
+        document.getElementById('custom-fullscreen').addEventListener('click', () => {
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          } else {
+            videoContainer.requestFullscreen();
+          }
+        });
+
+        // Essayer d'activer le son après un délai
+        setTimeout(() => {
+          iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+          iframe.contentWindow.postMessage('{"event":"command","func":"setVolume","args":[100]}', '*');
+        }, 1000);
 
         // Gestion d'erreur pour YouTube
         iframe.onerror = function() {
