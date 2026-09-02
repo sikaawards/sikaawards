@@ -133,6 +133,15 @@
 
       .video-container {
         min-height: 250px;
+        position: relative !important;
+        display: block !important;
+        visibility: visible !important;
+      }
+
+      .video-container iframe {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
       }
 
       .live-header {
@@ -1262,11 +1271,14 @@
       placeholderText.textContent = 'Chargement du stream...';
 
       // Détecter si c'est une URL YouTube
+      console.log('URL à analyser:', streamUrl);
       const youtubeMatch = streamUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|live\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+      console.log('Résultat matching YouTube:', youtubeMatch);
 
       if (youtubeMatch) {
         console.log('URL YouTube détectée, utilisation de l\'iframe YouTube standard avec modestbranding');
         const videoId = youtubeMatch[1];
+        console.log('Video ID extrait:', videoId);
 
         // Créer l'iframe YouTube standard avec modestbranding=1 et controls=0
         const iframe = document.createElement('iframe');
@@ -1284,10 +1296,12 @@
         iframe.style.height = '100%';
         iframe.style.pointerEvents = 'auto';
         iframe.style.zIndex = '1';
+        iframe.style.display = 'block';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
         iframe.allowFullscreen = true;
         
         console.log('Configuration YouTube pour mobile:', isMobile, 'mute:', muteParam);
+        console.log('Iframe source:', iframe.src);
 
         videoContainer.appendChild(iframe);
         placeholder.style.display = 'none';
