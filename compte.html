@@ -779,7 +779,7 @@
       placeholderText.textContent = 'Chargement du stream...';
 
       // Détecter si c'est une URL YouTube
-      const youtubeMatch = streamUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+      const youtubeMatch = streamUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|live\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
 
       if (youtubeMatch) {
         console.log('URL YouTube détectée, utilisation de l\'iframe YouTube');
