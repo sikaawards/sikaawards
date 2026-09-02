@@ -747,25 +747,30 @@
       votesList.innerHTML = html;
     }
 
-    // Initialisation du lecteur vidéo HLS avec hls.js optimisé
+    // Initialisation du lecteur vidéo avec support YouTube et HLS
     function initLivePlayer(streamUrl) {
       const video = document.getElementById('live-video');
       const placeholder = document.getElementById('live-placeholder');
       const placeholderText = document.getElementById('placeholder-text');
       const refreshBtn = document.getElementById('btn-refresh-stream');
+      const videoContainer = document.getElementById('video-container');
 
-      console.log('Initialisation du lecteur HLS avec URL:', streamUrl);
+      console.log('Initialisation du lecteur avec URL:', streamUrl);
 
       if (!streamUrl) {
         console.log('Aucun URL de stream fourni');
         return;
       }
 
-      // Nettoyer l'instance précédente si elle existe
+      // Nettoyer les instances précédentes
       if (window.hls) {
         window.hls.destroy();
         window.hls = null;
       }
+
+      // Nettoyer les iframes YouTube existants
+      const existingIframes = videoContainer.querySelectorAll('iframe');
+      existingIframes.forEach(iframe => iframe.remove());
 
       // Réinitialiser l'interface
       video.style.display = 'none';
@@ -773,8 +778,43 @@
       refreshBtn.style.display = 'none';
       placeholderText.textContent = 'Chargement du stream...';
 
+      // Détecter si c'est une URL YouTube
+      const youtubeMatch = streamUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+
+      if (youtubeMatch) {
+        console.log('URL YouTube détectée, utilisation de l\'iframe YouTube');
+        const videoId = youtubeMatch[1];
+
+        // Créer l'iframe YouTube
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+        iframe.style.position = 'absolute';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        iframe.style.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.style.allowFullscreen = true;
+
+        videoContainer.appendChild(iframe);
+        placeholder.style.display = 'none';
+
+        // Gestion d'erreur pour YouTube
+        iframe.onerror = function() {
+          console.error('Erreur chargement YouTube iframe');
+          placeholder.style.display = 'flex';
+          iframe.remove();
+          placeholderText.textContent = 'Erreur de chargement du stream YouTube';
+          refreshBtn.style.display = 'block';
+        };
+
+        return;
+      }
+
+      // Si ce n'est pas YouTube, utiliser HLS.js pour les flux m3u8
       if (Hls.isSupported()) {
-        console.log('HLS.js est supporté');
+        console.log('HLS.js est supporté pour flux m3u8');
 
         const hls = new Hls({
           debug: false,
@@ -874,8 +914,9 @@
           refreshBtn.style.display = 'block';
         });
       } else {
-        console.log('HLS not supported');
-        placeholderText.textContent = 'Votre navigateur ne supporte pas ce format de vidéo';
+        console.log('Format non supporté');
+        placeholderText.textContent = 'Format de stream non supporté (utilisez YouTube ou m3u8)';
+        refreshBtn.style.display = 'block';
       }
     }
 
