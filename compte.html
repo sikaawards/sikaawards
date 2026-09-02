@@ -832,71 +832,34 @@
       const youtubeMatch = streamUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|live\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
 
       if (youtubeMatch) {
-        console.log('URL YouTube détectée, utilisation de l\'API YouTube Iframe API');
+        console.log('URL YouTube détectée, utilisation de l\'iframe YouTube standard');
         const videoId = youtubeMatch[1];
 
-        // Charger l'API YouTube si pas déjà chargée
-        if (!window.YT) {
-          const tag = document.createElement('script');
-          tag.src = "https://www.youtube.com/iframe_api";
-          const firstScriptTag = document.getElementsByTagName('script')[0];
-          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        }
+        // Créer l'iframe YouTube standard
+        const iframe = document.createElement('iframe');
+        iframe.width = '100%';
+        iframe.height = '100%';
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&showinfo=0&rel=0&controls=1&modestbranding=1`;
+        iframe.frameBorder = '0';
+        iframe.style.position = 'absolute';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
 
-        // Créer le conteneur pour le player YouTube
-        const playerDiv = document.createElement('div');
-        playerDiv.id = 'youtube-player-' + Date.now();
-        playerDiv.style.position = 'absolute';
-        playerDiv.style.top = '0';
-        playerDiv.style.left = '0';
-        playerDiv.style.width = '100%';
-        playerDiv.style.height = '100%';
-        videoContainer.appendChild(playerDiv);
-
+        videoContainer.appendChild(iframe);
         placeholder.style.display = 'none';
 
-        // Initialiser le player YouTube quand l'API est prête
-        let player;
-
-        window.onYouTubeIframeAPIReady = function() {
-          if (window.YT && window.YT.Player) {
-            player = new YT.Player(playerDiv.id, {
-              height: '100%',
-              width: '100%',
-              videoId: videoId,
-              playerVars: {
-                'autoplay': 1,
-                'controls': 1,
-                'modestbranding': 1,
-                'rel': 0,
-                'fs': 1,
-                'playsinline': 1,
-                'origin': window.location.origin
-              },
-              events: {
-                'onReady': onPlayerReady,
-                'onError': onPlayerError
-              }
-            });
-          }
-        };
-
-        function onPlayerReady(event) {
-          console.log('Player YouTube prêt');
-          event.target.playVideo();
-        }
-
-        function onPlayerError(event) {
-          console.error('Erreur YouTube player:', event.data);
+        // Gestion d'erreur pour YouTube
+        iframe.onerror = function() {
+          console.error('Erreur chargement YouTube iframe');
           placeholder.style.display = 'flex';
+          iframe.remove();
           placeholderText.textContent = 'Erreur de chargement du stream';
           refreshBtn.style.display = 'block';
-        }
-
-        // Si l'API est déjà chargée, appeler la fonction directement
-        if (window.YT && window.YT.Player) {
-          window.onYouTubeIframeAPIReady();
-        }
+        };
 
         return;
       }
