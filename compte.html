@@ -486,6 +486,64 @@
       opacity: 1;
     }
 
+    /* Barre d'en-tête personnalisée pour masquer le logo YouTube */
+    .custom-video-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 1);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 10;
+      opacity: 1;
+    }
+
+    .custom-video-header .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 2px;
+    }
+
+    .custom-video-header .ceremony-name {
+      font-size: 1rem;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .custom-video-header {
+        padding: 15px;
+        gap: 10px;
+      }
+
+      .custom-video-header .logo {
+        font-size: 1.3rem;
+      }
+
+      .custom-video-header .ceremony-name {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .custom-video-header {
+        padding: 20px;
+        gap: 8px;
+      }
+
+      .custom-video-header .logo {
+        font-size: 1.2rem;
+      }
+
+      .custom-video-header .ceremony-name {
+        font-size: 0.85rem;
+      }
+    }
+
     /* Masquer le logo et boutons YouTube avec des overlays ciblés */
     .youtube-overlay {
       position: absolute;
@@ -1026,6 +1084,15 @@
         iframe.style.allowFullscreen = false;
 
         videoContainer.appendChild(iframe);
+        
+        // Ajouter la barre d'en-tête personnalisée avec logo SIKA
+        const customHeader = document.createElement('div');
+        customHeader.className = 'custom-video-header';
+        customHeader.innerHTML = `
+          <span class="logo">SIKA</span>
+          <span class="ceremony-name">Cérémonie en direct</span>
+        `;
+        videoContainer.appendChild(customHeader);
         
         // Ajouter des overlays pour masquer le logo et boutons YouTube
         const overlay = document.createElement('div');
