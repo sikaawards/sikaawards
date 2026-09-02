@@ -822,59 +822,19 @@
     <div class="account-grid">
       <!-- Main Content -->
       <div class="account-main">
-        <!-- Live Stream -->
+        <!-- Live Section Card -->
         <div class="live-section">
           <div class="live-header">
             <div class="live-badge">EN DIRECT</div>
             <div class="profile-section-title" style="margin-bottom: 0;">La Cérémonie</div>
-            <button class="btn-refresh" id="btn-refresh-header" style="margin: 0; padding: 8px 16px; font-size: 0.7rem;">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="vertical-align: middle; margin-right: 6px;">
-                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-              </svg>
-              Rafraîchir
-            </button>
           </div>
-          <div class="video-container" id="video-container">
-            <video id="live-video" controls style="display: none;"></video>
-            <div class="live-placeholder" id="live-placeholder">
-              <svg class="live-placeholder-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M10 8L16 12L10 16V8Z" fill="currentColor"/>
-              </svg>
-              <div class="live-placeholder-text" id="placeholder-text">Le live sera disponible le jour de la cérémonie</div>
-              <div class="live-placeholder-sub">Restez connectés !</div>
-              <button class="btn-refresh" id="btn-refresh-stream" style="display: none;">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="vertical-align: middle; margin-right: 6px;">
-                  <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                </svg>
-                Rafraîchir le stream
-              </button>
-            </div>
-          </div>
-
-          <!-- Chat Section -->
-          <div class="chat-section">
-            <div class="chat-header">
-              <div class="chat-title">Chat en direct</div>
-              <div class="chat-user-info">
-                <span class="chat-username-display" id="chat-username-display">Utilisateur</span>
-                <button class="btn-change-username" id="btn-change-username">Changer</button>
-              </div>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-              <div class="chat-message system">
-                <span class="chat-username">Système</span>
-                <span class="chat-text">Bienvenue sur le chat SIKA AWARDS !</span>
-              </div>
-            </div>
-            <div class="chat-input-container">
-              <input type="text" class="chat-input" id="chat-input" placeholder="Écrivez votre message..." maxlength="200">
-              <button class="btn-send" id="btn-send">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                </svg>
-              </button>
-            </div>
+          <div style="text-align: center; padding: 40px 20px;">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 80px; height: 80px; color: var(--primary); margin-bottom: 20px;">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10 8L16 12L10 16V8Z" fill="currentColor"/>
+            </svg>
+            <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 20px;">Regardez la cérémonie en direct</p>
+            <a href="live.html" class="btn-logout" style="text-decoration: none; display: inline-block; max-width: 300px;">Regarder le live</a>
           </div>
         </div>
 
@@ -977,12 +937,20 @@
       }
 
       currentUser = user;
-      await loadUserData();
-      await loadCategories();
-      await loadStreamConfig();
-      await loadUsername();
-      initChat();
-      renderAccount();
+      console.log('Utilisateur authentifié:', user.email);
+      
+      try {
+        await loadUserData();
+        await loadCategories();
+        await loadStreamConfig();
+        await loadUsername();
+        initChat();
+        renderAccount();
+        console.log('Initialisation terminée avec succès');
+      } catch (error) {
+        console.error('Erreur lors de l\'initialisation:', error);
+        alert('Erreur lors du chargement des données. Veuillez rafraîchir la page.');
+      }
 
       // Initialiser le lecteur après le chargement des données
       console.log('URL du stream après chargement:', liveStreamUrl);
@@ -1005,11 +973,14 @@
     // Gestion du username
     async function loadUsername() {
       try {
+        console.log('Chargement username pour utilisateur:', currentUser.uid);
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
         if (userDoc.exists()) {
           username = userDoc.data().username || currentUser.email.split('@')[0];
+          console.log('Username chargé depuis Firestore:', username);
         } else {
           username = currentUser.email.split('@')[0];
+          console.log('Username par défaut:', username);
           // Créer le document utilisateur avec username par défaut
           await setDoc(doc(db, 'users', currentUser.uid), {
             email: currentUser.email,

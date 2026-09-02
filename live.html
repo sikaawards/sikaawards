@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live - SIKA AWARDS</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0a0a;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding: 100px 20px 40px;
+    }
+
+    .live-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .video-wrapper {
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 16/9;
+      max-height: 70vh;
+    }
+
+    .video-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    .back-button {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .live-indicator {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 51, 0, 0.9);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      z-index: 10;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .chat-panel {
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      margin-top: 20px;
+      padding: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .chat-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .chat-messages::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: rgba(255, 51, 0, 0.5);
+      border-radius: 2px;
+    }
+
+    .chat-message {
+      margin-bottom: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+    }
+
+    .chat-message.system {
+      background: rgba(255, 51, 0, 0.1);
+      border-left: 3px solid #ff3300;
+    }
+
+    .chat-username {
+      font-weight: 600;
+      color: #ff6600;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .chat-text {
+      color: #ccc;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .chat-input-container {
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 25px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-input:focus {
+      border-color: #ff6600;
+    }
+
+    .chat-send {
+      background: #ff6600;
+      border: none;
+      color: #fff;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .chat-send:hover {
+      background: #ff7733;
+      transform: scale(1.05);
+    }
+
+    .chat-send svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .user-info {
+      padding: 10px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-username-display {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .btn-change-username {
+      background: none;
+      border: none;
+      color: #ff6600;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .btn-change-username:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 80px 15px 30px;
+      }
+
+      .video-wrapper {
+        max-height: 50vh;
+      }
+
+      .chat-panel {
+        width: 100%;
+        transform: translateY(100%);
+      }
+
+      .chat-panel.open {
+        transform: translateY(0);
+      }
+
+      .chat-toggle {
+        bottom: 20px;
+        right: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 70px 10px 20px;
+      }
+
+      .video-wrapper {
+        max-height: 40vh;
+      }
+
+      .back-button {
+        padding: 10px 20px;
+        font-size: 12px;
+      }
+
+      .live-indicator {
+        font-size: 10px;
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="live-container">
+    <div class="video-wrapper">
+      <div class="video-overlay">
+        <a href="compte.html" class="back-button">← Retour</a>
+      </div>
+      <div class="live-indicator">EN DIRECT</div>
+      <div class="video-container" id="video-container">
+        <div id="live-placeholder" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #888;">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 60px; height: 60px; margin-bottom: 20px;">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 8L16 12L10 16V8Z" fill="currentColor"/>
+          </svg>
+          <div id="placeholder-text">Chargement...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-panel" id="chat-panel">
+      <div class="chat-header">
+        <div class="chat-title">Chat en direct</div>
+      </div>
+      <div class="user-info">
+        <span class="chat-username-display" id="chat-username-display">Chargement...</span>
+        <button class="btn-change-username" id="btn-change-username">Changer</button>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-message system">
+          <div class="chat-username">Système</div>
+          <div class="chat-text">Bienvenue sur le chat SIKA AWARDS !</div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" class="chat-input" id="chat-input" placeholder="Écrivez votre message..." maxlength="200">
+        <button class="chat-send" id="btn-send">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/main.js" defer></script>
+
+  <script src="scripts/main.js" defer></script>
+  <script type="module">
+    import { auth, onAuthStateChanged, db, doc, getDoc, setDoc, addDoc, collection, onSnapshot, query, orderBy, limit } from './scripts/firebase-config.js';
+
+    let currentUser = null;
+    let username = '';
+    let liveStreamUrl = '';
+    let chatUnsubscribe = null;
+
+    // Vérification de l'authentification
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = 'login.html?redirect=live.html';
+        return;
+      }
+
+      currentUser = user;
+      console.log('Utilisateur authentifié:', user.email);
+      
+      try {
+        await loadUsername();
+        await loadStreamConfig();
+        initLivePlayer(liveStreamUrl);
+        initChat();
+        console.log('Initialisation live terminée avec succès');
+      } catch (error) {
+        console.error('Erreur lors de l\'initialisation live:', error);
+        alert('Erreur lors du chargement du live. Veuillez rafraîchir la page.');
+      }
+    });
+
+    async function loadUsername() {
+      try {
+        console.log('Chargement username pour utilisateur:', currentUser.uid);
+        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+        if (userDoc.exists()) {
+          username = userDoc.data().username || currentUser.email.split('@')[0];
+          console.log('Username chargé depuis Firestore:', username);
+        } else {
+          username = currentUser.email.split('@')[0];
+          console.log('Username par défaut:', username);
+          await setDoc(doc(db, 'users', currentUser.uid), {
+            email: currentUser.email,
+            username: username,
+            createdAt: new Date().toISOString()
+          });
+        }
+        document.getElementById('chat-username-display').textContent = username;
+      } catch (error) {
+        console.error('Erreur chargement username:', error);
+        username = currentUser.email.split('@')[0];
+        document.getElementById('chat-username-display').textContent = username;
+      }
+    }
+
+    async function loadStreamConfig() {
+      try {
+        const configDoc = await getDoc(doc(db, 'config', 'live'));
+        if (configDoc.exists()) {
+          liveStreamUrl = configDoc.data().streamUrl || '';
+        }
+        if (!liveStreamUrl) {
+          liveStreamUrl = 'https://www.youtube.com/live/TWxYNCxG9AQ?feature=share';
+        }
+      } catch (error) {
+        console.error('Erreur chargement config stream:', error);
+        liveStreamUrl = 'https://www.youtube.com/live/TWxYNCxG9AQ?feature=share';
+      }
+    }
+
+    function initLivePlayer(streamUrl) {
+      const placeholder = document.getElementById('live-placeholder');
+      const placeholderText = document.getElementById('placeholder-text');
+      const refreshBtn = document.getElementById('btn-refresh');
+      const videoContainer = document.getElementById('video-container');
+
+      console.log('Initialisation du lecteur avec URL:', streamUrl);
+
+      if (!streamUrl) {
+        console.log('Aucun URL de stream fourni');
+        return;
+      }
+
+      const youtubeMatch = streamUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|live\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+      console.log('Résultat matching YouTube:', youtubeMatch);
+
+      if (youtubeMatch) {
+        console.log('URL YouTube détectée');
+        const videoId = youtubeMatch[1];
+        console.log('Video ID extrait:', videoId);
+
+        const iframe = document.createElement('iframe');
+        iframe.width = '100%';
+        iframe.height = '100%';
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const muteParam = isMobile ? 'mute=1' : 'mute=0';
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&${muteParam}&modestbranding=1&controls=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=1&playsinline=1&enablejsapi=1`;
+        iframe.frameBorder = '0';
+        iframe.style.position = 'absolute';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.pointerEvents = 'auto';
+        iframe.style.zIndex = '1';
+        iframe.style.display = 'block';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+
+        videoContainer.appendChild(iframe);
+        placeholder.style.display = 'none';
+
+        console.log('Iframe créée avec source:', iframe.src);
+      } else {
+        placeholderText.textContent = 'Aucun stream disponible';
+      }
+    }
+
+    function initChat() {
+      try {
+        const chatQuery = query(
+          collection(db, 'chat_messages'),
+          orderBy('timestamp', 'asc'),
+          limit(50)
+        );
+        
+        console.log('Chat initialisé avec Firestore');
+        
+        chatUnsubscribe = onSnapshot(chatQuery, (snapshot) => {
+          const chatMessages = document.getElementById('chat-messages');
+          chatMessages.innerHTML = '';
+          
+          snapshot.forEach((doc) => {
+            const message = doc.data();
+            console.log('Message reçu:', message);
+            addChatMessage(message.username, message.text, message.timestamp);
+          });
+          
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, (error) => {
+          console.error('Erreur écoute chat:', error);
+        });
+      } catch (error) {
+        console.error('Erreur initialisation chat:', error);
+      }
+    }
+
+    function addChatMessage(messageUsername, messageText, timestamp) {
+      const chatMessages = document.getElementById('chat-messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'chat-message';
+      
+      const usernameSpan = document.createElement('span');
+      usernameSpan.className = 'chat-username';
+      usernameSpan.textContent = messageUsername + ':';
+      
+      const textSpan = document.createElement('span');
+      textSpan.className = 'chat-text';
+      textSpan.textContent = messageText;
+      
+      messageDiv.appendChild(usernameSpan);
+      messageDiv.appendChild(textSpan);
+      
+      chatMessages.appendChild(messageDiv);
+    }
+
+    document.getElementById('btn-change-username').addEventListener('click', () => {
+      const newUsername = prompt('Entrez votre nouveau nom d\'utilisateur:', username);
+      if (newUsername && newUsername.trim() !== '') {
+        username = newUsername.trim();
+        document.getElementById('chat-username-display').textContent = username;
+        setDoc(doc(db, 'users', currentUser.uid), {
+          email: currentUser.email,
+          username: username,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      }
+    });
+
+    document.getElementById('btn-send').addEventListener('click', sendMessage);
+    document.getElementById('chat-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function sendMessage() {
+      const chatInput = document.getElementById('chat-input');
+      const messageText = chatInput.value.trim();
+      
+      if (messageText === '') return;
+      
+      if (!username) {
+        alert('Username non chargé. Veuillez rafraîchir la page.');
+        return;
+      }
+      
+      const message = {
+        username: username,
+        text: messageText,
+        timestamp: Date.now(),
+        userId: currentUser.uid
+      };
+      
+      console.log('Envoi du message:', message);
+      
+      try {
+        addDoc(collection(db, 'chat_messages'), message)
+          .then(() => {
+            console.log('Message envoyé avec succès');
+            chatInput.value = '';
+          })
+          .catch((error) => {
+            console.error('Erreur envoi message:', error);
+            alert('Erreur lors de l\'envoi du message: ' + error.message);
+          });
+      } catch (error) {
+        console.error('Erreur envoi message:', error);
+        alert('Erreur lors de l\'envoi du message: ' + error.message);
+      }
+    }
+
+    document.getElementById('btn-refresh').addEventListener('click', () => {
+      loadStreamConfig().then(() => {
+        initLivePlayer(liveStreamUrl);
+      });
+    });
+  </script>
+</body>
+</html>
