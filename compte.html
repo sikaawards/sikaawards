@@ -933,6 +933,7 @@
           
           snapshot.forEach((doc) => {
             const message = doc.data();
+            console.log('Message reçu:', message);
             addChatMessage(message.username, message.text, message.timestamp);
           });
           
@@ -940,9 +941,11 @@
           chatMessages.scrollTop = chatMessages.scrollHeight;
         }, (error) => {
           console.error('Erreur écoute chat:', error);
+          alert('Erreur de connexion au chat: ' + error.message);
         });
       } catch (error) {
         console.error('Erreur initialisation chat:', error);
+        alert('Erreur initialisation chat: ' + error.message);
       }
     }
 
@@ -980,6 +983,11 @@
       const messageText = chatInput.value.trim();
       
       if (messageText === '') return;
+      
+      if (!username) {
+        alert('Username non chargé. Veuillez rafraîchir la page.');
+        return;
+      }
       
       const message = {
         username: username,
@@ -1148,7 +1156,10 @@
         const iframe = document.createElement('iframe');
         iframe.width = '100%';
         iframe.height = '100%';
-        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&controls=0&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1`;
+        // Pour mobile : mute=1 requis pour autoplay, playsinline=1 requis pour iOS
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const muteParam = isMobile ? 'mute=1' : 'mute=0';
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&${muteParam}&modestbranding=1&controls=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=1&playsinline=1`;
         iframe.frameBorder = '0';
         iframe.style.position = 'absolute';
         iframe.style.top = '0';
@@ -1156,7 +1167,9 @@
         iframe.style.width = '100%';
         iframe.style.height = '100%';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-        iframe.allowFullscreen = false;
+        iframe.allowFullscreen = true;
+        
+        console.log('Configuration YouTube pour mobile:', isMobile, 'mute:', muteParam);
 
         videoContainer.appendChild(iframe);
         placeholder.style.display = 'none';
