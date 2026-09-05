@@ -19,7 +19,7 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 // Liste des administrateurs autorisés
-const ADMIN_EMAILS = ["thesouscote@gmail.com", "lomenouar@gmail.com", "pabelo@gmail.com"];
+const ADMIN_EMAILS = ["thesouscote@gmail.com", "lomenouar@gmail.com", "pabelo@gmail.com", "gbayoropabelo@gmail.com"];
 
 export {
   auth,
