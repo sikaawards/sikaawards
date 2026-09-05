@@ -488,11 +488,6 @@
           <option value="480">480p</option>
           <option value="360">360p</option>
         </select>
-        <button class="control-btn" id="cast-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/>
-          </svg>
-        </button>
         <button class="control-btn" id="fullscreen-btn">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
@@ -525,7 +520,7 @@
   <script src="scripts/main.js" defer></script>
 
   <script type="module">
-    import { auth, onAuthStateChanged, db, doc, getDoc, setDoc, addDoc, collection, onSnapshot, query, orderBy, limit } from './scripts/firebase-config.js';
+    import { auth, onAuthStateChanged, db, doc, getDoc, setDoc, addDoc, collection, onSnapshot, query, orderBy, limit } from './scripts/firebase-config.js?v=3';
 
     let currentUser = null;
     let username = '';
@@ -551,7 +546,6 @@
     const volumeSlider = document.getElementById('volume-slider');
     const resolutionSelect = document.getElementById('resolution-select');
     const fullscreenBtn = document.getElementById('fullscreen-btn');
-    const castBtn = document.getElementById('cast-btn');
     const videoWrapper = document.querySelector('.video-wrapper');
     const controlsOverlay = document.getElementById('controls-overlay');
 
@@ -672,26 +666,6 @@
         });
       } else {
         document.exitFullscreen();
-      }
-    }
-
-    // Cast to TV
-    castBtn.addEventListener('click', castToTV);
-
-    function castToTV() {
-      // Use YouTube player's built-in casting functionality
-      if (player && player.castVideo) {
-        player.castVideo();
-      } else if (player && player.requestFullscreen) {
-        // Fallback: suggest using YouTube's native casting
-        const videoId = player.getVideoData && player.getVideoData().video_id;
-        if (videoId) {
-          window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
-          alert('La vidéo s\'ouvrira dans YouTube. Utilisez le bouton Cast de YouTube pour diffuser sur votre TV.');
-        }
-      } else {
-        // Manual instructions
-        alert('Pour diffuser cette vidéo sur votre TV, utilisez l\'application YouTube sur votre appareil et recherchez la vidéo, ou utilisez le mirroring de votre appareil.');
       }
     }
 

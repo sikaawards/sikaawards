@@ -238,7 +238,7 @@
     // Lazy-load Firebase pendant le temps d'inactivité du navigateur
     const lazyInit = async () => {
       try {
-        const { db, collection, getDocs } = await import('./scripts/firebase-config.js');
+        const { db, collection, getDocs } = await import('./scripts/firebase-config.js?v=3');
         const snap = await getDocs(collection(db, 'categories'));
         const categories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
         categories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
