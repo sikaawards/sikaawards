@@ -58,55 +58,69 @@
       right: 0;
       height: 60px;
       background: #000;
-      z-index: 5;
+      z-index: 999;
       transition: opacity 0.3s ease;
     }
 
+    .video-controls-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 998;
+      pointer-events: auto;
+      background: transparent;
+    }
+
+
+
     @media (max-width: 768px) {
       .video-black-bar {
-        height: 30px;
+        height: 40px;
       }
 
       .custom-controls {
-        height: 30px !important;
-        padding: 0 6px;
-        gap: 4px;
+        height: 40px !important;
+        padding: 0 8px;
+        gap: 8px;
       }
 
       .control-btn {
-        padding: 2px;
-        height: 24px;
-        width: 24px;
+        padding: 4px;
+        height: 32px;
+        width: 32px;
       }
 
       .control-btn svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      .volume-container {
-        gap: 4px;
-      }
-
-      .volume-slider {
-        width: 35px;
-        height: 2px;
-      }
-
-      .volume-slider::-webkit-slider-thumb {
-        width: 8px;
-        height: 8px;
-      }
-
-      .resolution-select {
-        font-size: 8px;
-        padding: 1px 3px;
+        width: 20px;
         height: 20px;
       }
 
+      .volume-container {
+        gap: 6px;
+      }
+
+      .volume-slider {
+        width: 45px;
+        height: 3px;
+      }
+
+      .volume-slider::-webkit-slider-thumb {
+        width: 10px;
+        height: 10px;
+      }
+
+      .resolution-select {
+        font-size: 10px;
+        padding: 3px 6px;
+        height: 28px;
+        min-width: 50px;
+      }
+
       .progress-bar {
-        bottom: 30px;
-        height: 2px;
+        bottom: 40px;
+        height: 3px;
       }
     }
 
@@ -134,7 +148,7 @@
       align-items: center;
       padding: 0 20px;
       gap: 15px;
-      z-index: 10;
+      z-index: 1000;
       transition: opacity 0.3s ease;
     }
 
@@ -441,6 +455,7 @@
           <div id="placeholder-text">Chargement...</div>
         </div>
       </div>
+      <div class="video-controls-overlay" id="controls-overlay"></div>
       <div class="video-black-bar top" id="top-bar"></div>
       <div class="video-black-bar bottom" id="bottom-bar"></div>
       <div class="progress-bar" id="progress-bar">
@@ -473,6 +488,11 @@
           <option value="480">480p</option>
           <option value="360">360p</option>
         </select>
+        <button class="control-btn" id="cast-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/>
+          </svg>
+        </button>
         <button class="control-btn" id="fullscreen-btn">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
@@ -531,7 +551,9 @@
     const volumeSlider = document.getElementById('volume-slider');
     const resolutionSelect = document.getElementById('resolution-select');
     const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const castBtn = document.getElementById('cast-btn');
     const videoWrapper = document.querySelector('.video-wrapper');
+    const controlsOverlay = document.getElementById('controls-overlay');
 
     // Show/hide controls on hover
     videoWrapper.addEventListener('mouseenter', showControls);
@@ -541,8 +563,16 @@
       controlsTimeout = setTimeout(hideControls, 6000);
     });
 
-    // Also handle mousemove on document for fullscreen
-    document.addEventListener('mousemove', (e) => {
+    // Handle fullscreen-specific events on overlay
+    controlsOverlay.addEventListener('mousemove', (e) => {
+      if (document.fullscreenElement) {
+        showControls();
+        clearTimeout(controlsTimeout);
+        controlsTimeout = setTimeout(hideControls, 6000);
+      }
+    });
+
+    controlsOverlay.addEventListener('click', (e) => {
       if (document.fullscreenElement) {
         showControls();
         clearTimeout(controlsTimeout);
@@ -642,6 +672,26 @@
         });
       } else {
         document.exitFullscreen();
+      }
+    }
+
+    // Cast to TV
+    castBtn.addEventListener('click', castToTV);
+
+    function castToTV() {
+      // Use YouTube player's built-in casting functionality
+      if (player && player.castVideo) {
+        player.castVideo();
+      } else if (player && player.requestFullscreen) {
+        // Fallback: suggest using YouTube's native casting
+        const videoId = player.getVideoData && player.getVideoData().video_id;
+        if (videoId) {
+          window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+          alert('La vidéo s\'ouvrira dans YouTube. Utilisez le bouton Cast de YouTube pour diffuser sur votre TV.');
+        }
+      } else {
+        // Manual instructions
+        alert('Pour diffuser cette vidéo sur votre TV, utilisez l\'application YouTube sur votre appareil et recherchez la vidéo, ou utilisez le mirroring de votre appareil.');
       }
     }
 
@@ -806,7 +856,9 @@
           fs: 0,
           playsinline: isMobile ? 1 : 0,
           enablejsapi: 1,
-          mute: isMobile ? 1 : 0
+          mute: isMobile ? 1 : 0,
+          cc_load_policy: 0,
+          hl: 'fr'
         },
         events: {
           onReady: onPlayerReady,
@@ -820,6 +872,24 @@
       isPlaying = true;
       playIcon.style.display = 'none';
       pauseIcon.style.display = 'block';
+      
+      // Try to hide YouTube controls
+      const iframe = document.querySelector('#youtube-player iframe');
+      if (iframe) {
+        iframe.style.pointerEvents = 'none';
+      }
+      
+      // Hide YouTube controls by targeting their classes
+      const hideYouTubeControls = setInterval(() => {
+        const youtubeControls = document.querySelectorAll('.ytp-chrome-top, .ytp-chrome-bottom, .ytp-gradient-top, .ytp-gradient-bottom');
+        youtubeControls.forEach(el => {
+          el.style.display = 'none';
+          el.style.opacity = '0';
+        });
+      }, 100);
+      
+      // Stop trying after 5 seconds
+      setTimeout(() => clearInterval(hideYouTubeControls), 5000);
       
       // Update progress bar
       updateProgress();
