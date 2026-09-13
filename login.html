@@ -131,7 +131,7 @@
 
 <body>
 
-  <a href="index.html" class="back-link">← Retour à l'accueil</a>
+  <a href="Accueil.html" class="back-link">← Retour à l'accueil</a>
 
   <div class="login-container">
     <div class="login-bg-text">SIKA</div>
@@ -193,7 +193,7 @@
     let isLoginMode = true;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = urlParams.get('redirect') || 'index.html';
+    const redirectUrl = urlParams.get('redirect') || 'Accueil.html';
 
     async function handleAuthSuccess(user) {
       if (redirectUrl.includes('admin.html')) {

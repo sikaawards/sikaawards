@@ -71,9 +71,11 @@ const server = http.createServer((req, res) => {
   pathname = pathname.split('?')[0];
 
   // Routes propres (sans .html)
-  if (pathname === '/') pathname = '/index.html';
+  if (pathname === '/') pathname = '/Accueil.html';
+  else if (pathname === '/accueil') pathname = '/Accueil.html';
   else if (pathname === '/categories') pathname = '/categories.html';
   else if (pathname === '/categorie') pathname = '/categorie.html';
+  else if (pathname === '/playlist') pathname = '/playlist.html';
   else if (pathname === '/admin') pathname = '/admin.html';
 
   const filePath = path.join(__dirname, pathname);

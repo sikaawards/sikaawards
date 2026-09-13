@@ -14,6 +14,7 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="styles/main.css?v=7">
+  <link rel="stylesheet" href="styles/cookie-banner.css">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
     /* ---- DETAIL PAGE ---- */
@@ -300,16 +301,16 @@
 
   <header class="header" id="header">
     <div class="container">
-      <a href="index.html" class="mobile-logo-wrap">
+      <a href="Accueil.html" class="mobile-logo-wrap">
         <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
       </a>
       <nav class="nav-links">
-        <a href="index.html">Accueil</a>
+        <a href="Accueil.html">Accueil</a>
         <a href="categories.html">Catégories</a>
-        <a href="index.html" class="header-logo-wrap">
+        <a href="Accueil.html" class="header-logo-wrap">
           <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
         </a>
-        <a href="construction.html">Playlist</a>
+        <a href="playlist.html">Playlist</a>
         <a href="construction.html">La Cérémonie</a>
         <a href="login.html">Mon compte</a>
       </nav>
@@ -321,10 +322,10 @@
 
   <!-- MOBILE NAV -->
   <nav class="mobile-nav">
-    <a href="index.html">Accueil</a>
-    <a href="index.html#about">À Propos</a>
+    <a href="Accueil.html">Accueil</a>
+    <a href="Accueil.html#about">À Propos</a>
     <a href="categories.html">Catégories</a>
-    <a href="#">Playlist</a>
+    <a href="playlist.html">Playlist</a>
     <a href="#">La Cérémonie</a>
     <a href="login.html">Mon compte</a>
   </nav>
@@ -410,7 +411,26 @@
     </div>
   </footer>
 
+  <!-- COOKIE CONSENT BANNER -->
+  <div id="cookie-banner" class="cookie-banner">
+    <div class="container">
+      <div class="cookie-content">
+        <h3 class="cookie-title">🍪 Cookies</h3>
+        <p class="cookie-text">
+          Nous utilisons des cookies pour améliorer votre expérience. En continuant à naviguer, vous acceptez notre 
+          <a href="#" class="cookie-link">politique de confidentialité</a>.
+        </p>
+      </div>
+      <div class="cookie-buttons">
+        <button id="cookie-accept" class="cookie-btn cookie-btn-accept">Accepter tout</button>
+        <button id="cookie-reject" class="cookie-btn cookie-btn-reject">Refuser</button>
+        <button id="cookie-settings" class="cookie-btn cookie-btn-settings">Paramètres</button>
+      </div>
+    </div>
+  </div>
+
   <script src="scripts/main.js" defer></script>
+  <script src="scripts/cookie-consent.js" defer></script>
   <script>
     const CACHE_KEY = 'sika_categories_cache';
 
