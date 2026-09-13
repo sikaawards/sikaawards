@@ -14,9 +14,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
-  <link rel="preload" href="styles/main.css?v=11" as="style">
+  <link rel="preload" href="styles/main.css?v=13" as="style">
   <link rel="preload" href="assets/Logo_SA/SA-logo-Normal.png" as="image">
-  <link rel="stylesheet" href="styles/main.css?v=11">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.1">
   <link rel="stylesheet" href="styles/cookie-banner.css">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
@@ -31,6 +31,35 @@
       position: relative;
       z-index: 1;
     }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 40px;
+    }
+
+    .playlist-embed {
+      width: 100%;
+      max-width: none;
+      margin-top: 40px;
+    }
+
+    .playlist-section .container {
+      max-width: 100% !important;
+    }
+
+    .playlist-section {
+      min-height: 75vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px;
+    }
   </style>
 </head>
 
@@ -39,15 +68,15 @@
   <!-- HEADER -->
   <header class="header" id="header">
     <div class="container">
-      <a href="Accueil.html" class="mobile-logo-wrap">
+      <a href="accueil.html" class="mobile-logo-wrap">
+        <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
+      </a>
+      <a href="accueil.html" class="header-logo-wrap">
         <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
       </a>
       <nav class="nav-links">
-        <a href="Accueil.html">Accueil</a>
+        <a href="accueil.html">accueil</a>
         <a href="categories.html">Catégories</a>
-        <a href="Accueil.html" class="header-logo-wrap">
-          <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
-        </a>
         <a href="playlist.html" style="color:var(--primary)">Playlist</a>
         <a href="construction.html">La Cérémonie</a>
         <a href="login.html">Mon compte</a>
@@ -60,8 +89,8 @@
 
   <!-- MOBILE NAV -->
   <nav class="mobile-nav">
-    <a href="Accueil.html">Accueil</a>
-    <a href="Accueil.html#about">À Propos</a>
+    <a href="accueil.html">accueil</a>
+    <a href="accueil.html#about">À Propos</a>
     <a href="categories.html">Catégories</a>
     <a href="playlist.html" style="color:var(--primary)">Playlist</a>
     <a href="#">La Cérémonie</a>
@@ -72,8 +101,8 @@
   <main>
     <section class="playlist-section">
       <div class="container">
-        <h1 class="hero-main-title">Playlist Officielle</h1>
-        <p class="section-subtitle">Découvrez les morceaux qui font vibrer les Sika Awards</p>
+        <h1 class="hero-main-title">PLAYLISTE<br>OFFICIELLE</h1>
+        <p class="hero-sub">Découvrez les morceaux qui font vibrer les Sika Awards</p>
         
         <div class="playlist-embed">
           <iframe 
@@ -96,13 +125,13 @@
     <div class="container">
       <div class="footer-row">
         <div class="footer-social">
-          <a href="#">Instagram</a>
+          <a href="https://www.instagram.com/sikawards" target="_blank">Instagram</a>
           <span class="footer-sep">|</span>
-          <a href="#">Youtube</a>
+          <a href="https://www.youtube.com/@sikaawards" target="_blank">Youtube</a>
           <span class="footer-sep">|</span>
-          <a href="#">Twitter</a>
+          <a href="https://www.facebook.com/sikaawards" target="_blank">Facebook</a>
           <span class="footer-sep">|</span>
-          <a href="#">TikTok</a>
+          <a href="https://www.tiktok.com/@sika.awards" target="_blank">TikTok</a>
         </div>
         <div class="footer-legal">
           <a href="#">CGU</a>
@@ -137,7 +166,7 @@
   </div>
 
   <!-- SCRIPTS -->
-  <script src="scripts/main.js"></script>
+  <script src="scripts/main.js?v=1.0.2"></script>
   <script src="scripts/cookie-consent.js" defer></script>
 </body>
 

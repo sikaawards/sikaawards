@@ -13,7 +13,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=7">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.1">
   <link rel="stylesheet" href="styles/cookie-banner.css">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
@@ -105,7 +105,7 @@
 
     .detail-title {
       font-family: var(--font-heading);
-      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
       font-weight: 900;
       font-style: italic;
       text-transform: uppercase;
@@ -113,6 +113,7 @@
       margin-bottom: 32px;
       letter-spacing: -2px;
       max-width: 1000px;
+      padding: 0 20px;
     }
 
     .detail-desc {
@@ -301,15 +302,15 @@
 
   <header class="header" id="header">
     <div class="container">
-      <a href="Accueil.html" class="mobile-logo-wrap">
+      <a href="accueil.html" class="mobile-logo-wrap">
+        <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
+      </a>
+      <a href="accueil.html" class="header-logo-wrap">
         <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
       </a>
       <nav class="nav-links">
-        <a href="Accueil.html">Accueil</a>
+        <a href="accueil.html">accueil</a>
         <a href="categories.html">Catégories</a>
-        <a href="Accueil.html" class="header-logo-wrap">
-          <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
-        </a>
         <a href="playlist.html">Playlist</a>
         <a href="construction.html">La Cérémonie</a>
         <a href="login.html">Mon compte</a>
@@ -322,8 +323,8 @@
 
   <!-- MOBILE NAV -->
   <nav class="mobile-nav">
-    <a href="Accueil.html">Accueil</a>
-    <a href="Accueil.html#about">À Propos</a>
+    <a href="accueil.html">accueil</a>
+    <a href="accueil.html#about">À Propos</a>
     <a href="categories.html">Catégories</a>
     <a href="playlist.html">Playlist</a>
     <a href="#">La Cérémonie</a>
@@ -359,6 +360,7 @@
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px; display:block;"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg>
           </span>
         </a>
+      <a href="#nominees" class="detail-criteria" id="btn-nominees-hero" style="display:none;">Les Pré-Nominé(e)s</a>
       </div>
     </div>
   </section>
@@ -389,13 +391,13 @@
     <div class="container">
       <div class="footer-row">
         <div class="footer-social">
-          <a href="#">Instagram</a>
+          <a href="https://www.instagram.com/sikawards" target="_blank">Instagram</a>
           <span class="footer-sep">|</span>
-          <a href="#">Youtube</a>
+          <a href="https://www.youtube.com/@sikaawards" target="_blank">Youtube</a>
           <span class="footer-sep">|</span>
-          <a href="#">Twitter</a>
+          <a href="https://www.facebook.com/sikaawards" target="_blank">Facebook</a>
           <span class="footer-sep">|</span>
-          <a href="#">TikTok</a>
+          <a href="https://www.tiktok.com/@sika.awards" target="_blank">TikTok</a>
         </div>
         <div class="footer-legal">
           <a href="#">CGU</a>
@@ -429,7 +431,7 @@
     </div>
   </div>
 
-  <script src="scripts/main.js" defer></script>
+  <script src="scripts/main.js?v=1.0.2" defer></script>
   <script src="scripts/cookie-consent.js" defer></script>
   <script>
     const CACHE_KEY = 'sika_categories_cache';
@@ -475,8 +477,51 @@
       }
 
       const voteLink = document.getElementById('btn-vote-link');
-      if (voteLink) voteLink.href = `vote.html?cat=${cat.id}`;
-
+      const voteSection = document.getElementById('passer-au-vote');
+      const nomineesSection = document.getElementById('nominees-section');
+      const nomineesTitle = document.getElementById('nominees-title');
+      const voteHeroLink = document.getElementById('btn-vote-hero');
+      const nomineesHeroLink = document.getElementById('btn-nominees-hero');
+      
+      const hasNominees = cat.nominees && cat.nominees.length > 0;
+      
+      if (!hasNominees) {
+        // Cacher tous les éléments liés au vote et aux nominés
+        if (voteSection) voteSection.style.display = 'none';
+        if (nomineesTitle) nomineesTitle.style.display = 'none';
+        if (voteHeroLink) voteHeroLink.style.display = 'none';
+        if (nomineesHeroLink) nomineesHeroLink.style.display = 'none';
+        if (voteLink) voteLink.style.display = 'none';
+        
+        // Afficher un message à la place
+        const grid = document.getElementById('nominees-grid');
+        if (grid) {
+          grid.style.height = '60vh';
+          grid.style.display = 'flex';
+          grid.style.alignItems = 'center';
+          grid.style.justifyContent = 'center';
+          grid.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+              <h3 style="font-family: var(--font-heading); font-size: clamp(1.5rem, 5vw, 3.5rem); font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1.1; margin-bottom: 16px; color: var(--text); padding: 0 20px;">
+                Aucun nominé pour cette catégorie
+              </h3>
+              <p style="font-size: 0.9rem; line-height: 1.6; max-width: 500px;">
+                Cette catégorie n'a pas encore de nominés. Revenez plus tard pour voir les artistes nominés.
+              </p>
+            </div>
+          `;
+        }
+      } else {
+        // Afficher normalement la section de vote, le titre et les liens
+        if (voteSection) voteSection.style.display = 'block';
+        if (nomineesTitle) nomineesTitle.style.display = 'block';
+        if (voteHeroLink) voteHeroLink.style.display = 'inline-flex';
+        if (nomineesHeroLink) nomineesHeroLink.style.display = 'inline-flex';
+        if (voteLink) {
+          voteLink.href = `vote.html?cat=${cat.id}`;
+          voteLink.style.display = 'block';
+        }
+      }
 
       const nextCat = dataCategories[(catIndex + 1) % dataCategories.length];
       const nextLink = document.getElementById('next-cat');
@@ -506,24 +551,28 @@
 
       const grid = document.getElementById('nominees-grid');
       grid.innerHTML = '';
-      const frag = document.createDocumentFragment();
-      (cat.nominees || []).forEach(n => {
-        const card = document.createElement('div');
-        card.className = 'nominee-big-card';
-        const imgHtml = n.img
-          ? `<img src="${n.img}" class="nominee-big-img" alt="${n.name}" loading="lazy" decoding="async">`
-          : `<div class="nominee-big-img" style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;"></div>`;
+      
+      // Afficher les nominés seulement s'il y en a
+      if (hasNominees) {
+        const frag = document.createDocumentFragment();
+        (cat.nominees || []).forEach(n => {
+          const card = document.createElement('div');
+          card.className = 'nominee-big-card';
+          const imgHtml = n.img
+            ? `<img src="${n.img}" class="nominee-big-img" alt="${n.name}" loading="lazy" decoding="async">`
+            : `<div class="nominee-big-img" style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;"></div>`;
 
-        card.innerHTML = `
-          ${imgHtml}
-          <div class="nominee-big-info">
-            <div class="nominee-big-name">${n.name}</div>
-            <div class="nominee-big-sub">${n.sub || ''}</div>
-          </div>
-        `;
-        frag.appendChild(card);
-      });
-      grid.appendChild(frag);
+          card.innerHTML = `
+            ${imgHtml}
+            <div class="nominee-big-info">
+              <div class="nominee-big-name">${n.name}</div>
+              <div class="nominee-big-sub">${n.sub || ''}</div>
+            </div>
+          `;
+          frag.appendChild(card);
+        });
+        grid.appendChild(frag);
+      }
     }
 
     if ('requestIdleCallback' in window) {

@@ -15,9 +15,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
-  <link rel="preload" href="styles/main.css?v=7" as="style">
+  <link rel="preload" href="styles/main.css?v=9" as="style">
   <link rel="preload" href="assets/Logo_SA/SA-logo-Normal.png" as="image">
-  <link rel="stylesheet" href="styles/main.css?v=7">
+  <link rel="stylesheet" href="styles/main.css?v=9">
   <link rel="stylesheet" href="styles/cookie-banner.css">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
 </head>
@@ -27,15 +27,15 @@
   <!-- HEADER -->
   <header class="header" id="header">
     <div class="container">
-      <a href="Accueil.html" class="mobile-logo-wrap">
+      <a href="accueil.html" class="mobile-logo-wrap">
+        <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
+      </a>
+      <a href="accueil.html" class="header-logo-wrap">
         <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
       </a>
       <nav class="nav-links">
-        <a href="Accueil.html">Accueil</a>
+        <a href="accueil.html">accueil</a>
         <a href="categories.html">Catégories</a>
-        <a href="Accueil.html" class="header-logo-wrap">
-          <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
-        </a>
         <a href="playlist.html">Playlist</a>
         <a href="construction.html">La Cérémonie</a>
         <a href="login.html">Mon compte</a>
@@ -48,12 +48,11 @@
 
   <!-- MOBILE NAV -->
   <nav class="mobile-nav">
-    <a href="Accueil.html">Accueil</a>
+    <a href="accueil.html">accueil</a>
     <a href="#about">À Propos</a>
     <a href="categories.html">Catégories</a>
     <a href="playlist.html">Playlist</a>
     <a href="#">La Cérémonie</a>
-    <a href="#contact">Contact</a>
     <a href="login.html">Mon compte</a>
   </nav>
 
@@ -160,33 +159,6 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="section-padding" id="contact">
-    <div class="container">
-      <div class="section-header reveal">
-        <div class="section-label">Contact</div>
-        <h2 class="section-title">Restons en contact</h2>
-        <p class="section-subtitle">Une question, un partenariat ou une suggestion ? Écrivez-nous.</p>
-      </div>
-      <div style="max-width:600px;margin:0 auto;" class="reveal">
-        <form style="display:flex;flex-direction:column;gap:20px;"
-          onsubmit="event.preventDefault();alert('Merci pour votre message !');">
-          <input type="text" placeholder="Votre nom" required
-            style="padding:16px 20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:1rem;font-family:var(--font-body);outline:none;transition:var(--transition);"
-            onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
-          <input type="email" placeholder="Votre email" required
-            style="padding:16px 20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:1rem;font-family:var(--font-body);outline:none;transition:var(--transition);"
-            onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
-          <textarea placeholder="Votre message" rows="5" required
-            style="padding:16px 20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:1rem;font-family:var(--font-body);resize:vertical;outline:none;transition:var(--transition);"
-            onfocus="this.style.borderColor='var(--primary)'"
-            onblur="this.style.borderColor='var(--border)'"></textarea>
-          <button type="submit" class="btn btn-primary" style="align-self:flex-start;">Envoyer le message</button>
-        </form>
-      </div>
-    </div>
-  </section>
-
   <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
@@ -229,7 +201,7 @@
     </div>
   </div>
 
-  <script src="scripts/main.js?v=7" defer></script>
+  <script src="scripts/main.js?v=8" defer></script>
   <script src="scripts/cookie-consent.js" defer></script>
   <script>
     // Affichage immédiat des catégories home depuis le cache

@@ -5,6 +5,56 @@ const url = require('url');
 
 const PORT = 3000;
 const DATA_FILE = path.join(__dirname, 'data.json');
+const VOTES_FILE = path.join(__dirname, 'votes.json');
+
+// Stockage des votes par IP
+let votesByIP = {};
+
+// Charger les votes existants
+if (fs.existsSync(VOTES_FILE)) {
+  try {
+    votesByIP = JSON.parse(fs.readFileSync(VOTES_FILE, 'utf8'));
+  } catch (e) {
+    console.error('Erreur chargement votes:', e);
+    votesByIP = {};
+  }
+}
+
+// Sauvegarder les votes
+function saveVotes() {
+  fs.writeFileSync(VOTES_FILE, JSON.stringify(votesByIP, null, 2), 'utf8');
+}
+
+// Obtenir l'IP du client
+function getClientIP(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  const ip = forwarded ? forwarded.split(',')[0] : req.connection.remoteAddress;
+  return ip === '::1' ? '127.0.0.1' : ip;
+}
+
+// Vérifier si l'IP peut voter aujourd'hui
+function canVoteToday(ip, categoryId) {
+  const today = new Date().toDateString();
+  const key = `${ip}_${categoryId}`;
+  
+  if (!votesByIP[key]) {
+    return true;
+  }
+  
+  const lastVoteDate = new Date(votesByIP[key].timestamp).toDateString();
+  return lastVoteDate !== today;
+}
+
+// Enregistrer un vote
+function recordVote(ip, categoryId, winnerName) {
+  const key = `${ip}_${categoryId}`;
+  votesByIP[key] = {
+    timestamp: new Date().toISOString(),
+    winner: winnerName,
+    categoryId: categoryId
+  };
+  saveVotes();
+}
 
 const MIME = {
   '.html': 'text/html',
@@ -66,13 +116,71 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // API: GET /api/can-vote?categoryId=xxx
+  if (req.method === 'GET' && pathname === '/api/can-vote') {
+    const categoryId = parsedUrl.query.categoryId;
+    const ip = getClientIP(req);
+    const canVote = canVoteToday(ip, categoryId);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ canVote, ip }));
+    return;
+  }
+
+  // API: POST /api/vote
+  if (req.method === 'POST' && pathname === '/api/vote') {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      try {
+        const { categoryId, winnerName } = JSON.parse(body);
+        const ip = getClientIP(req);
+        
+        if (!canVoteToday(ip, categoryId)) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ ok: false, error: 'Vous avez déjà voté aujourd\'hui pour cette catégorie.' }));
+          return;
+        }
+        
+        recordVote(ip, categoryId, winnerName);
+        
+        // Mettre à jour data.json
+        if (fs.existsSync(DATA_FILE)) {
+          const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+          if (data.categories && data.categories[categoryId]) {
+            const nominees = data.categories[categoryId].nominees || [];
+            const nominee = nominees.find(n => n.name === winnerName);
+            if (nominee) {
+              nominee.votes = (nominee.votes || 0) + 1;
+              fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+            }
+          }
+        }
+        
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true }));
+        console.log(`✅ Vote enregistré: IP ${ip} -> ${winnerName} (catégorie: ${categoryId})`);
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: false, error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // API: GET /api/votes-by-ip
+  if (req.method === 'GET' && pathname === '/api/votes-by-ip') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(votesByIP));
+    return;
+  }
+
   // Fichiers statiques
   // Supprimer le ?v=xxx
   pathname = pathname.split('?')[0];
 
   // Routes propres (sans .html)
-  if (pathname === '/') pathname = '/Accueil.html';
-  else if (pathname === '/accueil') pathname = '/Accueil.html';
+  if (pathname === '/') pathname = '/accueil.html';
+  else if (pathname === '/accueil') pathname = '/accueil.html';
   else if (pathname === '/categories') pathname = '/categories.html';
   else if (pathname === '/categorie') pathname = '/categorie.html';
   else if (pathname === '/playlist') pathname = '/playlist.html';

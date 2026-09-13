@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=7">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.1">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
     body {
@@ -335,7 +335,7 @@
       <div class="header-actions-wrapper" style="display: grid; grid-template-columns: auto auto auto; gap: 10px; justify-content: end;">
         <button class="btn-action" onclick="openNomineeModal()" style="grid-column: 1; grid-row: 1; width: 100%;">+ Ajouter Nominé</button>
         <button class="btn-action" id="btn-edit-cat" style="grid-column: 2; grid-row: 1; width: 100%;">Editer Categorie</button>
-        <button class="btn-action btn-primary" onclick="window.location.href='Accueil.html'" style="grid-column: 3; grid-row: 1; width: 100%;">Voir le site</button>
+        <button class="btn-action btn-primary" onclick="window.location.href='accueil.html'" style="grid-column: 3; grid-row: 1; width: 100%;">Voir le site</button>
         
         <button class="btn-action btn-primary" onclick="window.location.href='stats.html'" style="grid-column: 1; grid-row: 2; width: 100%;">Statistique et Vote</button>
         <button class="btn-action" onclick="deleteAllNominees()" style="grid-column: 2; grid-row: 2; width: 100%;">Tout Supprimé</button>
@@ -439,7 +439,7 @@
     document.getElementById('btn-logout').onclick = async () => {
       if (confirm("Voulez-vous vous déconnecter ?")) {
         await signOut(auth);
-        window.location.href = 'Accueil.html';
+        window.location.href = 'accueil.html';
       }
     };
 

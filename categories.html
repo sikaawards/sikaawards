@@ -15,8 +15,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
-  <link rel="preload" href="styles/main.css?v=7" as="style">
-  <link rel="stylesheet" href="styles/main.css?v=7">
+  <link rel="preload" href="styles/main.css?v=9" as="style">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.1">
   <link rel="stylesheet" href="styles/cookie-banner.css">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
@@ -63,6 +63,7 @@
       margin-bottom: 32px;
       position: relative;
       z-index: 1;
+      padding: 0 20px;
     }
 
     .hero-sub {
@@ -85,15 +86,15 @@
 
   <header class="header" id="header">
     <div class="container">
-      <a href="Accueil.html" class="mobile-logo-wrap">
+      <a href="accueil.html" class="mobile-logo-wrap">
+        <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
+      </a>
+      <a href="accueil.html" class="header-logo-wrap">
         <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
       </a>
       <nav class="nav-links">
-        <a href="Accueil.html">Accueil</a>
+        <a href="accueil.html">accueil</a>
         <a href="categories.html" style="color:var(--text)">Catégories</a>
-        <a href="Accueil.html" class="header-logo-wrap">
-          <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
-        </a>
         <a href="playlist.html">Playlist</a>
         <a href="construction.html">La Cérémonie</a>
         <a href="login.html">Mon compte</a>
@@ -106,12 +107,11 @@
 
   <!-- MOBILE NAV -->
   <nav class="mobile-nav">
-    <a href="Accueil.html">Accueil</a>
-    <a href="Accueil.html#about">A Propos</a>
+    <a href="accueil.html">accueil</a>
+    <a href="accueil.html#about">A Propos</a>
     <a href="categories.html" style="color:var(--primary)">Catégories</a>
     <a href="playlist.html">Playlist</a>
     <a href="#">La Cérémonie</a>
-    <a href="Accueil.html#contact">Contact</a>
     <a href="login.html">Mon compte</a>
   </nav>
 
@@ -135,13 +135,13 @@
     <div class="container">
       <div class="footer-row">
         <div class="footer-social">
-          <a href="#">Instagram</a>
+          <a href="https://www.instagram.com/sikawards" target="_blank">Instagram</a>
           <span class="footer-sep">|</span>
-          <a href="#">Youtube</a>
+          <a href="https://www.youtube.com/@sikaawards" target="_blank">Youtube</a>
           <span class="footer-sep">|</span>
-          <a href="#">Twitter</a>
+          <a href="https://www.facebook.com/sikaawards" target="_blank">Facebook</a>
           <span class="footer-sep">|</span>
-          <a href="#">TikTok</a>
+          <a href="https://www.tiktok.com/@sika.awards" target="_blank">TikTok</a>
         </div>
         <div class="footer-legal">
           <a href="#">CGU</a>
@@ -175,7 +175,7 @@
     </div>
   </div>
 
-  <script src="scripts/main.js" defer></script>
+  <script src="scripts/main.js?v=1.0.2" defer></script>
   <script src="scripts/cookie-consent.js" defer></script>
   <script>
     const CACHE_KEY = 'sika_categories_cache';

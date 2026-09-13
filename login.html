@@ -13,7 +13,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=7">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.1">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
     .login-container {
@@ -25,82 +25,83 @@
       padding: 20px;
       position: relative;
       overflow: hidden;
-    }
-
-    .login-bg-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: var(--font-heading);
-      font-size: 30vw;
-      font-weight: 900;
-      color: rgba(255, 255, 255, 0.02);
-      pointer-events: none;
-      white-space: nowrap;
-      z-index: 0;
+      background: #050505;
+      padding-top: 60px;
     }
 
     .login-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 60px 40px;
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 25px 35px;
       width: 100%;
-      max-width: 480px;
+      max-width: 450px;
       text-align: center;
       position: relative;
       z-index: 10;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      border-radius: 0;
     }
 
     .login-logo {
-      height: 60px;
-      margin-bottom: 40px;
+      height: 35px;
+      margin-bottom: 15px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      object-fit: contain;
     }
 
     .login-title {
       font-family: var(--font-heading);
-      font-size: 2.5rem;
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
       font-weight: 900;
       font-style: italic;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 6px;
+      color: #FFFFFF;
     }
 
     .login-subtitle {
       color: var(--text-muted);
-      margin-bottom: 40px;
-      font-size: 0.9rem;
-      line-height: 1.5;
+      margin-bottom: 20px;
+      font-size: 0.8rem;
+      line-height: 1.4;
     }
 
     .btn-google {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
       width: 100%;
       background: #fff;
       color: #000;
       border: none;
-      padding: 16px;
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
+      padding: 10px 16px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 0;
     }
 
     .btn-google:hover {
-      background: #e6e6e6;
+      background: #f5f5f5;
       transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .btn-google img {
-      width: 24px;
-      height: 24px;
+    .btn-google:active {
+      transform: translateY(0);
+    }
+
+    .btn-google svg {
+      width: 20px;
+      height: 20px;
     }
 
     .login-error {
@@ -108,34 +109,94 @@
       margin-top: 20px;
       font-size: 0.85rem;
       display: none;
+      padding: 12px;
+      background: rgba(255, 51, 0, 0.1);
+      border: 1px solid rgba(255, 51, 0, 0.3);
+      border-radius: 0;
     }
 
     .back-link {
       position: absolute;
-      top: 40px;
-      left: 40px;
+      top: 30px;
+      left: 30px;
       color: var(--text-muted);
       text-decoration: none;
       text-transform: uppercase;
       font-size: 0.75rem;
       letter-spacing: 2px;
-      font-weight: 700;
+      font-weight: 600;
       z-index: 10;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+
     .back-link:hover {
-      color: #fff;
+      color: var(--primary);
+      transform: translateX(-5px);
+    }
+
+    input {
+      transition: all 0.3s ease;
+      border-radius: 0;
+    }
+
+    input:focus {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 3px rgba(255, 51, 0, 0.1);
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        padding-top: 40px;
+        padding: 15px;
+      }
+
+      .login-box {
+        padding: 20px 20px;
+        max-width: 100%;
+      }
+
+      .login-logo {
+        height: 30px;
+        margin-bottom: 12px;
+      }
+
+      .login-title {
+        font-size: 1.5rem;
+        margin-bottom: 4px;
+      }
+
+      .login-subtitle {
+        font-size: 0.75rem;
+        margin-bottom: 15px;
+        line-height: 1.3;
+      }
+
+      .btn-google {
+        padding: 10px 14px;
+        font-size: 0.75rem;
+      }
+
+      .back-link {
+        top: 15px;
+        left: 15px;
+        font-size: 0.65rem;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <a href="Accueil.html" class="back-link">← Retour à l'accueil</a>
+  <a href="accueil.html" class="back-link">← Retour à l'accueil</a>
 
   <div class="login-container">
-    <div class="login-bg-text">SIKA</div>
-    
     <div class="login-box">
       <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards" class="login-logo">
       <h1 class="login-title">Connexion</h1>
@@ -151,27 +212,27 @@
         Continuer avec Google
       </button>
 
-      <div style="margin: 30px 0; display: flex; align-items: center; gap: 15px; opacity: 0.3;">
+      <div style="margin: 15px 0; display: flex; align-items: center; gap: 12px; opacity: 0.3;">
         <div style="flex:1; height:1px; background:#fff;"></div>
-        <span style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">OU</span>
+        <span style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px;">OU</span>
         <div style="flex:1; height:1px; background:#fff;"></div>
       </div>
 
       <form id="email-login-form" style="text-align: left;">
-        <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 12px;">
           <input type="email" id="login-email" placeholder="Email" required 
-                 style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 16px; color: #fff; font-family: 'Inter', sans-serif;">
+                 style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: 'Inter', sans-serif;">
         </div>
-        <div style="margin-bottom: 30px;">
+        <div style="margin-bottom: 15px;">
           <input type="password" id="login-password" placeholder="Mot de passe" required 
-                 style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 16px; color: #fff; font-family: 'Inter', sans-serif;">
+                 style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: 'Inter', sans-serif;">
         </div>
-        <button type="submit" class="btn-google" style="background: var(--primary); color: #fff;">
+        <button type="submit" class="btn-google" style="background: var(--primary); color: #fff; border: none;">
           Se connecter
         </button>
       </form>
 
-      <p style="margin-top: 20px; font-size: 0.85rem; color: var(--text-muted);">
+      <p style="margin-top: 12px; font-size: 0.75rem; color: var(--text-muted;">
         <a href="#" id="toggle-auth" style="color: var(--primary); text-decoration: none; font-weight: 600;">Pas encore de compte ? S'inscrire</a>
       </p>
 
@@ -193,7 +254,7 @@
     let isLoginMode = true;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = urlParams.get('redirect') || 'Accueil.html';
+    const redirectUrl = urlParams.get('redirect') || 'accueil.html';
 
     async function handleAuthSuccess(user) {
       if (redirectUrl.includes('admin.html')) {

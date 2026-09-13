@@ -76,13 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Countdown timer ---
   const countdownEl = document.getElementById('countdown');
   if (countdownEl) {
-    // Date de fermeture des votes (a modifier)
-    const deadline = new Date('2026-07-15T23:59:59');
+    // Date d'ouverture des votes - 28 Novembre 2026 à 00:00
+    const deadline = new Date('2026-11-28T00:00:00');
     function updateCountdown() {
       const now = new Date();
       const diff = deadline - now;
       if (diff <= 0) {
-        countdownEl.textContent = 'VOTES CLOS';
+        countdownEl.textContent = 'VOTES OUVERTS';
         return;
       }
       const d = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -114,29 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const gap = parseInt(window.getComputedStyle(track).gap) || 16;
         const scrollAmount = (cardWidth + gap) * (btn.classList.contains('prev') ? -1 : 1);
 
-        // Animation de glissade personnalisée (plus lente et fluide)
-        const start = track.scrollLeft;
-        const target = start + scrollAmount;
-        const duration = 800; // 800ms pour une glissade élégante
-        const startTime = performance.now();
-
-        function easeInOutQuart(t) {
-          return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
-        }
-
-        function animate(currentTime) {
-          const elapsed = currentTime - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          const easedProgress = easeInOutQuart(progress);
-
-          track.scrollLeft = start + (scrollAmount * easedProgress);
-
-          if (progress < 1) {
-            requestAnimationFrame(animate);
-          }
-        }
-
-        requestAnimationFrame(animate);
+        // Scroll instantané sans animation
+        track.scrollLeft += scrollAmount;
       });
     });
   };

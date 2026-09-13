@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=7">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.1">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
@@ -70,12 +70,13 @@
     }
     .intro-title {
       font-family: var(--font-heading);
-      font-size: clamp(2rem, 8vw, 5rem);
+      font-size: clamp(1.5rem, 5vw, 3.5rem);
       font-weight: 900;
       font-style: italic;
       text-transform: uppercase;
       line-height: 1.1;
       margin-bottom: 20px;
+      padding: 0 20px;
     }
     .btn-start {
       background: var(--primary);
@@ -372,10 +373,10 @@
     
     <!-- INTRO -->
     <section class="screen active" id="screen-intro">
-      <div class="hero-label" id="cat-label">SIKA AWARDS 2026</div>
+      <div class="hero-label" id="cat-label" style="display:none;">SIKA AWARDS 2026</div>
       <h1 class="intro-title" id="cat-title">Chargement...</h1>
-      <p class="hero-sub" style="margin-bottom:40px">Selectionnez votre favori a chaque duel pour elire le champion final.</p>
-      <button class="btn-start" id="btn-start-main">Commencer le vote</button>
+      <p class="hero-sub" id="hero-sub" style="margin-bottom:40px; display:none;">Selectionnez votre favori a chaque duel pour elire le champion final.</p>
+      <button class="btn-start" id="btn-start-main" style="display:none;">Commencer le vote</button>
     </section>
 
     <!-- DUEL -->
@@ -464,18 +465,86 @@
         }
 
         categoryData = { ...docSnap.data(), id: docSnap.id };
-        
-        if (!categoryData.nominees || categoryData.nominees.length < 2) {
-          document.getElementById('cat-title').textContent = "Pas assez de nominés (min. 2)";
+
+        document.getElementById('cat-title').textContent = categoryData.title;
+
+        if (!categoryData.nominees || categoryData.nominees.length === 0) {
+          // Cacher le bouton de démarrage et afficher un message
+          if(startBtn) {
+            startBtn.style.display = 'none';
+          }
+          // Masquer l'écran intro et afficher le duel avec le message
+          document.getElementById('screen-intro').style.display = 'none';
+          document.getElementById('screen-duel').style.display = 'block';
+          document.getElementById('screen-duel').classList.add('active');
+          
+          // Afficher un message dans le conteneur du duel
+          const duelContainer = document.querySelector('.duel-container');
+          if(duelContainer) {
+            duelContainer.style.height = '100vh';
+            duelContainer.style.display = 'flex';
+            duelContainer.style.alignItems = 'center';
+            duelContainer.style.justifyContent = 'center';
+            duelContainer.innerHTML = `
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                <h3 style="font-family: var(--font-heading); font-size: clamp(1.5rem, 5vw, 3.5rem); font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1.1; margin-bottom: 16px; color: var(--text); padding: 0 20px;">
+                  Aucun nominé pour cette catégorie
+                </h3>
+                <p style="font-size: 0.9rem; line-height: 1.6; max-width: 500px;">
+                  Cette catégorie n'a pas encore de nominés. Revenez plus tard pour voter.
+                </p>
+                <a href="categories.html" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px; display: block;"><path d="M20 12H4M4 12L10 6M4 12L10 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+                  Retour aux catégories
+                </a>
+              </div>
+            `;
+          }
           return;
         }
-        
-        document.getElementById('cat-title').textContent = categoryData.title;
+
+        if (categoryData.nominees.length < 2) {
+          if(startBtn) {
+            startBtn.style.display = 'none';
+          }
+          // Masquer l'écran intro et afficher le duel avec le message
+          document.getElementById('screen-intro').style.display = 'none';
+          document.getElementById('screen-duel').style.display = 'block';
+          document.getElementById('screen-duel').classList.add('active');
+          
+          const duelContainer = document.querySelector('.duel-container');
+          if(duelContainer) {
+            duelContainer.style.height = '100vh';
+            duelContainer.style.display = 'flex';
+            duelContainer.style.alignItems = 'center';
+            duelContainer.style.justifyContent = 'center';
+            duelContainer.innerHTML = `
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                <h3 style="font-family: var(--font-heading); font-size: clamp(1.5rem, 5vw, 3.5rem); font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1.1; margin-bottom: 16px; color: var(--text); padding: 0 20px;">
+                  Pas assez de nominés
+                </h3>
+                <p style="font-size: 0.9rem; line-height: 1.6; max-width: 500px;">
+                  Il faut au moins 2 nominés pour le vote. Revenez plus tard.
+                </p>
+                <a href="categories.html" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px; display: block;"><path d="M20 12H4M4 12L10 6M4 12L10 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+                  Retour aux catégories
+                </a>
+              </div>
+            `;
+          }
+          return;
+        }
         allCandidates = [...categoryData.nominees];
         // On mélange pour le tournoi
         allCandidates.sort(() => Math.random() - 0.5);
 
         isDataLoaded = true;
+        
+        // Afficher les éléments après le chargement
+        document.getElementById('cat-label').style.display = 'block';
+        document.getElementById('hero-sub').style.display = 'block';
+        
         updateStartButton();
       } catch (err) {
         console.error("Erreur chargement Firebase:", err);
@@ -485,6 +554,12 @@
 
     function updateStartButton() {
       if (!isDataLoaded) return;
+      
+      // Afficher le bouton après le chargement
+      if(startBtn) {
+        startBtn.style.display = 'block';
+      }
+      
       if (!currentUser) {
         if(startBtn) {
           startBtn.textContent = "Se connecter avec Google pour voter";
@@ -519,18 +594,14 @@
 
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
-      if (user) {
-        try {
-          const voteRef = doc(db, "votes", `${catId}_${user.uid}`);
-          const voteSnap = await getDoc(voteRef);
-          if (voteSnap.exists()) {
-            hasVoted = true;
-          } else {
-            hasVoted = false;
-          }
-        } catch (e) {
-          console.error("Erreur vérification vote", e);
-        }
+      // Vérifier si l'IP peut voter aujourd'hui
+      try {
+        const response = await fetch(`/api/can-vote?categoryId=${catId}`);
+        const data = await response.json();
+        hasVoted = !data.canVote;
+      } catch (e) {
+        console.error("Erreur vérification vote IP", e);
+        hasVoted = false;
       }
       updateStartButton();
     });
@@ -650,37 +721,28 @@
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#FF3300', '#FFFFFF', '#FFD700'] });
       }
 
-      // Enregistrement final du vote !
-      if (currentUser && !hasVoted) {
+      // Enregistrement final du vote via API IP
+      if (!hasVoted) {
         hasVoted = true; // Empêcher un double déclenchement
-        const catRef = doc(db, "categories", catId);
-        const voteRef = doc(db, "votes", `${catId}_${currentUser.uid}`);
         
-        runTransaction(db, async (transaction) => {
-          const voteSnap = await transaction.get(voteRef);
-          if (voteSnap.exists()) {
-            throw new Error("Vous avez déjà voté pour cette catégorie.");
+        fetch('/api/vote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            categoryId: catId,
+            winnerName: winner.name
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.ok) {
+            console.log("Vote final enregistré avec succès !");
+          } else {
+            console.error("Erreur vote:", data.error);
+            alert(data.error || "Erreur lors du vote");
           }
-          const catSnap = await transaction.get(catRef);
-          if (!catSnap.exists()) return;
-          
-          const data = catSnap.data();
-          const nominees = [...(data.nominees || [])];
-          const realIdx = nominees.findIndex(n => n.name === winner.name);
-          
-          if (realIdx !== -1) {
-            nominees[realIdx].votes = (nominees[realIdx].votes || 0) + 1;
-            transaction.update(catRef, { nominees });
-            transaction.set(voteRef, { 
-              timestamp: new Date(), 
-              winner: winner.name, 
-              uid: currentUser.uid,
-              categoryId: catId
-            });
-          }
-        }).then(() => {
-          console.log("Vote final enregistré avec succès !");
-        }).catch((e) => {
+        })
+        .catch(e => {
           console.error("Erreur lors de l'enregistrement final du vote :", e);
         });
       }
@@ -696,7 +758,7 @@
     }
 
   </script>
-  <script src="scripts/main.js" defer></script>
+  <script src="scripts/main.js?v=1.0.2" defer></script>
   <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js'),200)}</script>
 </body>
 </html>
