@@ -13,7 +13,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.1">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.4">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
     .login-container {
@@ -241,7 +241,7 @@
   </div>
 
   <script type="module">
-    import { auth, provider, signInWithPopup, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, ADMIN_EMAILS } from './scripts/firebase-config.js?v=3';
+    import { auth, provider, signInWithPopup, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, ADMIN_EMAILS } from './scripts/firebase-config.js?v=4';
 
     const btnGoogle = document.getElementById('btn-login-google');
     const emailForm = document.getElementById('email-login-form');
@@ -255,9 +255,10 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const redirectUrl = urlParams.get('redirect') || 'accueil.html';
+    const isAdminAccess = redirectUrl.includes('admin.html');
 
     async function handleAuthSuccess(user) {
-      if (redirectUrl.includes('admin.html')) {
+      if (isAdminAccess) {
         if (!ADMIN_EMAILS.includes(user.email)) {
           errorMsg.textContent = "Accès refusé : vous n'êtes pas administrateur.";
           errorMsg.style.display = 'block';
@@ -267,6 +268,12 @@
       }
       window.location.href = redirectUrl;
       return true;
+    }
+
+    // Désactiver l'inscription pour l'accès admin
+    if (isAdminAccess) {
+      toggleBtn.style.display = 'none';
+      loginSubtitle.textContent = 'Connectez-vous avec votre compte administrateur pour accéder au panneau d\'administration.';
     }
 
     // Toggle entre login et inscription
@@ -318,6 +325,14 @@
           const result = await signInWithEmailAndPassword(auth, email, pass);
           await handleAuthSuccess(result.user);
         } else {
+          // Empêcher l'inscription pour l'accès admin
+          if (isAdminAccess) {
+            errorMsg.textContent = "L'inscription n'est pas autorisée pour l'accès administrateur. Contactez l'administrateur du système.";
+            errorMsg.style.display = 'block';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            return;
+          }
           const result = await createUserWithEmailAndPassword(auth, email, pass);
           await handleAuthSuccess(result.user);
         }

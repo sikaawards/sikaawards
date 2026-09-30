@@ -132,7 +132,7 @@
     }
 
     .main-header {
-      padding: 30px 48px;
+      padding: 16px 24px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -141,26 +141,95 @@
 
     .header-info h1 {
       font-family: var(--font-heading);
-      font-size: 2.5rem;
+      font-size: 1.5rem;
       font-weight: 900;
       font-style: italic;
       text-transform: uppercase;
       line-height: 1;
     }
 
-    .header-actions {
+    .header-actions-wrapper {
+      position: relative;
+    }
+
+    .btn-menu {
+      background: var(--primary);
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
       display: flex;
-      gap: 15px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-menu:hover {
+      background: var(--primary-dark);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: #0A0A0A;
+      border: 1px solid var(--border);
+      min-width: 200px;
+      display: none;
+      flex-direction: column;
+      z-index: 100;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .dropdown-menu.active {
+      display: flex;
+    }
+
+    .dropdown-item {
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: #fff;
+      text-align: left;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(255, 51, 0, 0.1);
+      color: var(--primary);
+    }
+
+    .dropdown-item.danger {
+      color: #ff4444;
+    }
+
+    .dropdown-item.danger:hover {
+      background: rgba(255, 68, 68, 0.1);
     }
 
     .btn-action {
       background: transparent;
       border: 1px solid var(--border);
       color: #fff;
-      padding: 10px 20px;
+      padding: 6px 12px;
       text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 1px;
+      font-size: 0.65rem;
+      letter-spacing: 0.5px;
       font-weight: 700;
       cursor: pointer;
       transition: 0.2s;
@@ -183,21 +252,21 @@
 
     .content-scroll {
       flex: 1;
-      padding: 48px;
+      padding: 24px;
       overflow-y: auto;
     }
 
     /* Nominees Grid */
     .nominees-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
 
     .admin-card {
       background: #080808;
       border: 1px solid var(--border);
-      padding: 20px;
+      padding: 12px;
       position: relative;
     }
 
@@ -206,20 +275,22 @@
       aspect-ratio: 1;
       object-fit: cover;
       background: #111;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     .admin-card h3 {
       font-family: var(--font-heading);
-      font-size: 1.2rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
+      line-height: 1.2;
     }
 
     .admin-card p {
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
-      margin-bottom: 15px;
+      margin-bottom: 10px;
+      line-height: 1.3;
     }
 
     .card-actions {
@@ -228,8 +299,8 @@
     }
 
     .btn-small {
-      padding: 6px 12px;
-      font-size: 0.65rem;
+      padding: 4px 8px;
+      font-size: 0.6rem;
     }
 
 
@@ -347,30 +418,28 @@
       }
 
       .main-header {
-        padding: 20px 16px;
+        padding: 12px 16px;
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
+        gap: 12px;
       }
 
       .header-info h1 {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
       }
 
       .header-actions-wrapper {
-        display: flex !important;
-        flex-direction: column !important;
-        grid-template-columns: none !important;
-        width: 100%;
-        gap: 8px !important;
+        position: relative;
       }
 
-      .header-actions-wrapper button {
-        width: 100% !important;
-        grid-column: auto !important;
-        grid-row: auto !important;
-        padding: 12px 16px !important;
-        font-size: 0.7rem !important;
+      .dropdown-menu {
+        right: 0;
+        min-width: 180px;
+      }
+
+      .dropdown-item {
+        padding: 10px 12px;
+        font-size: 0.7rem;
       }
 
       .content-scroll {
@@ -378,20 +447,20 @@
       }
 
       .nominees-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
       }
 
       .admin-card {
-        padding: 12px;
+        padding: 10px;
       }
 
       .admin-card h3 {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
       }
 
       .admin-card p {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
       }
 
       .card-actions {
@@ -429,6 +498,12 @@
 
       .sidebar-btn-move {
         padding: 6px 10px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .nominees-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
@@ -477,14 +552,18 @@
         <h1 id="active-cat-title">Chargement...</h1>
         <p id="active-cat-desc" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;"></p>
       </div>
-      <div class="header-actions-wrapper" style="display: grid; grid-template-columns: auto auto auto; gap: 10px; justify-content: end;">
-        <button class="btn-action" onclick="openNomineeModal()" style="grid-column: 1; grid-row: 1; width: 100%;">+ Ajouter Nominé</button>
-        <button class="btn-action" id="btn-edit-cat" style="grid-column: 2; grid-row: 1; width: 100%;">Editer Categorie</button>
-        <button class="btn-action btn-primary" onclick="window.location.href='accueil.html'" style="grid-column: 3; grid-row: 1; width: 100%;">Voir le site</button>
-        
-        <button class="btn-action btn-primary" onclick="window.location.href='stats.html'" style="grid-column: 1; grid-row: 2; width: 100%;">Statistique et Vote</button>
-        <button class="btn-action" onclick="deleteAllNominees()" style="grid-column: 2; grid-row: 2; width: 100%;">Tout Supprimé</button>
-        <button class="btn-action" onclick="addTenPlaceholders()" style="grid-column: 3; grid-row: 2; width: 100%;">Rajouter 10</button>
+      <div class="header-actions-wrapper">
+        <button class="btn-menu" onclick="toggleDropdown()">
+          ⚙️ Actions
+        </button>
+        <div class="dropdown-menu" id="dropdown-menu">
+          <button class="dropdown-item" onclick="openNomineeModal(); document.getElementById('dropdown-menu').classList.remove('active');">+ Ajouter Nominé</button>
+          <button class="dropdown-item" id="btn-edit-cat">Editer Catégorie</button>
+          <button class="dropdown-item" onclick="window.location.href='accueil.html'">🌐 Voir le site</button>
+          <button class="dropdown-item" onclick="window.location.href='stats.html'">📊 Statistique et Vote</button>
+          <button class="dropdown-item" onclick="addTenPlaceholders(); document.getElementById('dropdown-menu').classList.remove('active');">➕ Rajouter 10</button>
+          <button class="dropdown-item danger" onclick="deleteAllNominees(); document.getElementById('dropdown-menu').classList.remove('active');">🗑️ Tout Supprimer</button>
+        </div>
       </div>
     </div>
 
@@ -672,7 +751,7 @@
       
       const grid = document.getElementById('nominees-grid');
       if (!cat.nominees || cat.nominees.length === 0) {
-        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.3; padding: 100px 0;">Aucun nominé dans cette catégorie.</p>';
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.3; padding: 40px 0; font-size: 0.9rem;">Aucun nominé dans cette catégorie.</p>';
       } else {
         grid.innerHTML = cat.nominees.map((n, i) => `
           <div class="admin-card">
@@ -687,7 +766,11 @@
         `).join('');
       }
 
-      document.getElementById('btn-edit-cat').onclick = () => openCategoryModal(cat);
+      const editCatBtn = document.getElementById('btn-edit-cat');
+      editCatBtn.onclick = () => {
+        openCategoryModal(cat);
+        document.getElementById('dropdown-menu').classList.remove('active');
+      };
     }
 
     // Modal Logic
@@ -944,6 +1027,23 @@
       if (window.innerWidth <= 768 && sidebar.classList.contains('active')) {
         if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
           sidebar.classList.remove('active');
+        }
+      }
+    });
+
+    // Dropdown menu toggle
+    window.toggleDropdown = function() {
+      const dropdown = document.getElementById('dropdown-menu');
+      dropdown.classList.toggle('active');
+    };
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('dropdown-menu');
+      const menuBtn = document.querySelector('.btn-menu');
+      if (dropdown.classList.contains('active')) {
+        if (!dropdown.contains(e.target) && !menuBtn.contains(e.target)) {
+          dropdown.classList.remove('active');
         }
       }
     });
