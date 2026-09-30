@@ -23,6 +23,10 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
+      user-select: text;
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
     }
 
     /* Sidebar */
@@ -37,11 +41,6 @@
     .sidebar-header {
       padding: 30px 20px;
       border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-logo {
-      height: 30px;
-      margin-bottom: 20px;
     }
 
     .sidebar-title {
@@ -132,31 +131,93 @@
     }
 
     .main-header {
-      padding: 16px 24px;
+      padding: 24px 32px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: linear-gradient(180deg, rgba(10, 10, 10, 0.95) 0%, rgba(5, 5, 5, 0.9) 100%);
+      position: relative;
+      flex-wrap: nowrap;
+      gap: 16px;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px var(--primary-glow);
+      border: 2px solid rgba(255, 51, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8px;
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
     }
 
     .header-info h1 {
       font-family: var(--font-heading);
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: 900;
       font-style: italic;
       text-transform: uppercase;
       line-height: 1;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, #FFFFFF 0%, var(--text-muted) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-info p {
+      font-size: 0.85rem;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .cat-number {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
     }
 
     .header-actions-wrapper {
       position: relative;
+      z-index: 10;
     }
 
     .btn-menu {
       background: var(--primary);
       border: none;
       color: #fff;
-      padding: 8px 16px;
+      padding: 8px 20px;
       text-transform: uppercase;
       font-size: 0.7rem;
       letter-spacing: 1px;
@@ -166,6 +227,9 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      min-width: 120px;
+      justify-content: center;
+      white-space: nowrap;
     }
 
     .btn-menu:hover {
@@ -174,15 +238,14 @@
 
     .dropdown-menu {
       position: absolute;
-      top: 100%;
+      top: calc(100% + 8px);
       right: 0;
-      margin-top: 8px;
       background: #0A0A0A;
       border: 1px solid var(--border);
       min-width: 200px;
       display: none;
       flex-direction: column;
-      z-index: 100;
+      z-index: 1000;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     }
 
@@ -375,16 +438,34 @@
     .mobile-menu-toggle {
       display: none;
       position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1001;
-      background: var(--primary);
+      top: 8px;
+      left: 8px;
+      z-index: 1000;
+      background: transparent;
       border: none;
-      color: #fff;
-      padding: 12px;
-      border-radius: 4px;
+      padding: 4px 8px;
       cursor: pointer;
-      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      width: auto;
+      height: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mobile-menu-toggle span {
+      display: block;
+      width: 16px;
+      height: 2px;
+      background: var(--text);
+      margin: 2px 0;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .mobile-menu-toggle:hover span {
+      background: var(--primary);
     }
 
     /* Responsive - Mobile */
@@ -395,6 +476,12 @@
 
       .mobile-menu-toggle {
         display: block;
+        top: 12px;
+        left: 12px;
+        padding: 8px 14px;
+        font-size: 0.7rem;
+        background: rgba(255, 51, 0, 0.15);
+        border: 1px solid var(--primary);
       }
 
       .sidebar {
@@ -402,7 +489,7 @@
         left: -100%;
         top: 0;
         height: 100vh;
-        width: 280px;
+        width: 260px;
         z-index: 1000;
         transition: left 0.3s ease;
         border-right: 1px solid var(--border);
@@ -414,106 +501,209 @@
 
       .main-content {
         width: 100%;
-        padding-top: 60px;
+        padding-top: 50px;
       }
 
       .main-header {
         padding: 12px 16px;
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
         gap: 12px;
       }
 
+      .header-info {
+        gap: 10px;
+      }
+
+      .header-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+      }
+
+      .header-icon img {
+        padding: 6px;
+      }
+
       .header-info h1 {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        line-height: 1.2;
+      }
+
+      .header-info p {
+        font-size: 0.65rem;
+        letter-spacing: 1px;
       }
 
       .header-actions-wrapper {
         position: relative;
+        width: 100%;
+      }
+
+      .btn-menu {
+        padding: 6px 12px;
+        font-size: 0.65rem;
+        width: 100%;
       }
 
       .dropdown-menu {
         right: 0;
-        min-width: 180px;
+        min-width: 160px;
+        max-width: 200px;
       }
 
       .dropdown-item {
-        padding: 10px 12px;
-        font-size: 0.7rem;
+        padding: 8px 10px;
+        font-size: 0.65rem;
+        line-height: 1.3;
       }
 
       .content-scroll {
-        padding: 20px 16px;
+        padding: 12px 10px;
       }
 
       .nominees-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 8px;
       }
 
       .admin-card {
-        padding: 10px;
+        padding: 8px;
+      }
+
+      .admin-card img {
+        margin-bottom: 6px;
       }
 
       .admin-card h3 {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        margin-bottom: 3px;
       }
 
       .admin-card p {
         font-size: 0.65rem;
+        line-height: 1.2;
+        margin-bottom: 8px;
       }
 
       .card-actions {
         flex-direction: column;
+        gap: 4px;
       }
 
       .btn-small {
         width: 100%;
-        padding: 8px;
+        padding: 6px 8px;
+        font-size: 0.6rem;
       }
 
       .modal {
         width: 95%;
         max-width: none;
-        padding: 24px;
+        padding: 16px;
         margin: 10px;
       }
 
       .modal h2 {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
+        margin-bottom: 16px;
+      }
+
+      .modal p {
+        font-size: 0.8rem;
+        margin-bottom: 16px;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      .form-group label {
+        font-size: 0.65rem;
+        margin-bottom: 6px;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        padding: 8px;
+        font-size: 0.8rem;
+      }
+
+      .modal-actions {
+        gap: 8px;
       }
 
       .sidebar-header {
-        padding: 20px 16px;
+        padding: 16px 12px;
+      }
+
+      .sidebar-title {
+        font-size: 0.7rem;
       }
 
       .sidebar-search {
-        padding: 0 16px 16px;
+        padding: 0 12px 12px;
+      }
+
+      .sidebar-search input {
+        padding: 8px;
+        font-size: 0.8rem;
       }
 
       .sidebar-item {
-        padding: 12px 16px;
-        font-size: 0.85rem;
+        padding: 10px 12px;
+        font-size: 0.75rem;
       }
 
       .sidebar-btn-move {
-        padding: 6px 10px;
+        padding: 4px 8px;
+        font-size: 0.65rem;
+      }
+
+      .sidebar-item-actions {
+        gap: 3px;
       }
     }
 
     @media (max-width: 1024px) {
       .nominees-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
     }
 
     @media (max-width: 480px) {
       .nominees-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .admin-card img {
         aspect-ratio: 16/9;
+      }
+
+      .main-header {
+        padding: 10px 12px;
+      }
+
+      .header-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .header-icon img {
+        padding: 5px;
+      }
+
+      .header-info h1 {
+        font-size: 0.9rem;
+      }
+
+      .header-info p {
+        font-size: 0.6rem;
+      }
+
+      .content-scroll {
+        padding: 10px 8px;
       }
     }
   </style>
@@ -523,12 +713,15 @@
   <div class="loading-overlay" id="loading">SIKA ADMIN...</div>
 
   <!-- Mobile Menu Toggle -->
-  <button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+  <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-header">
-      <img src="assets/Logo_SA/SA-logo-Normal.png" alt="" class="sidebar-logo">
       <div class="sidebar-title">Categories</div>
     </div>
     <div class="sidebar-search">
@@ -539,7 +732,7 @@
     </div>
     <div style="padding: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px;">
       <button class="btn-action" style="width: 100%" onclick="openCategoryModal()">+ Nouvelle Catégorie</button>
-      <button class="btn-action btn-primary" style="width: 100%" onclick="openStreamConfig()">⚙️ Config Live Stream</button>
+      <button class="btn-action btn-primary" style="width: 100%" onclick="openStreamConfig()">Config Live Stream</button>
       <button class="btn-action" style="width: 100%" onclick="exportToJSON()">Backup JSON</button>
       <button class="btn-action" style="width: 100%; border-color: rgba(255,0,0,0.3); color: #ff4444;" id="btn-logout">Déconnexion</button>
     </div>
@@ -549,20 +742,23 @@
   <main class="main-content">
     <div class="main-header" id="main-header">
       <div class="header-info">
-        <h1 id="active-cat-title">Chargement...</h1>
-        <p id="active-cat-desc" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;"></p>
+        <div class="header-text">
+          <h1 id="active-cat-title">Chargement...</h1>
+          <p id="active-cat-desc">Admin</p>
+        </div>
       </div>
       <div class="header-actions-wrapper">
         <button class="btn-menu" onclick="toggleDropdown()">
-          ⚙️ Actions
+          Actions
         </button>
         <div class="dropdown-menu" id="dropdown-menu">
           <button class="dropdown-item" onclick="openNomineeModal(); document.getElementById('dropdown-menu').classList.remove('active');">+ Ajouter Nominé</button>
           <button class="dropdown-item" id="btn-edit-cat">Editer Catégorie</button>
-          <button class="dropdown-item" onclick="window.location.href='accueil.html'">🌐 Voir le site</button>
-          <button class="dropdown-item" onclick="window.location.href='stats.html'">📊 Statistique et Vote</button>
-          <button class="dropdown-item" onclick="addTenPlaceholders(); document.getElementById('dropdown-menu').classList.remove('active');">➕ Rajouter 10</button>
-          <button class="dropdown-item danger" onclick="deleteAllNominees(); document.getElementById('dropdown-menu').classList.remove('active');">🗑️ Tout Supprimer</button>
+          <button class="dropdown-item" onclick="window.location.href='monitoring.html'">Monitoring Votes</button>
+          <button class="dropdown-item" onclick="window.location.href='accueil.html'">Voir le site</button>
+          <button class="dropdown-item" onclick="window.location.href='stats.html'">Statistique et Vote</button>
+          <button class="dropdown-item" onclick="addTenPlaceholders(); document.getElementById('dropdown-menu').classList.remove('active');">Rajouter 10</button>
+          <button class="dropdown-item danger" onclick="deleteAllNominees(); document.getElementById('dropdown-menu').classList.remove('active');">Tout Supprimer</button>
         </div>
       </div>
     </div>
@@ -641,30 +837,64 @@
       </div>
     </div>
 
+    <div class="modal hidden" id="logout-modal">
+      <h2>Déconnexion</h2>
+      <p>Êtes-vous sûr de vouloir vous déconnecter du panneau d'administration ?</p>
+      <div class="modal-actions">
+        <button class="btn-action" onclick="closeLogoutModal()">Annuler</button>
+        <button class="btn-action btn-primary" id="btn-confirm-logout" style="background: var(--primary);">Se déconnecter</button>
+      </div>
+    </div>
+
   </div>
 
   <script type="module">
-    import { auth, db, signOut, ADMIN_EMAILS, onAuthStateChanged, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, query, where } from './scripts/firebase-config.js?v=4';
+    import { auth, db, signOut, ADMIN_EMAILS, onAuthStateChanged, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs, query, where, loadAdminEmails, adminEmailsLoaded } from './scripts/firebase-config.js?v=4';
 
     let categories = [];
-    let activeCatId = null;
+    let activeCatId = localStorage.getItem('admin_active_cat_id') || null;
     let editingCatId = null;
     let editingNomineeIdx = null;
 
     // 1. Auth check
-    onAuthStateChanged(auth, (user) => {
-      if (!user || !ADMIN_EMAILS.includes(user.email)) {
-        window.location.href = 'login.html?redirect=admin.html';
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = 'admin-login.html';
+        return;
+      }
+
+      // Attendre que les emails admin soient chargés
+      let attempts = 0;
+      while (!adminEmailsLoaded && attempts < 20) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+      }
+
+      if (!adminEmailsLoaded) {
+        window.location.href = 'admin-login.html';
+        return;
+      }
+
+      if (!ADMIN_EMAILS.includes(user.email)) {
+        window.location.href = 'admin-login.html';
       } else {
         init();
       }
     });
 
-    document.getElementById('btn-logout').onclick = async () => {
-      if (confirm("Voulez-vous vous déconnecter ?")) {
-        await signOut(auth);
-        window.location.href = 'accueil.html';
-      }
+    document.getElementById('btn-logout').onclick = () => {
+      overlay.classList.add('active');
+      logoutModal.classList.remove('hidden');
+    };
+
+    window.closeLogoutModal = function() {
+      overlay.classList.remove('active');
+      logoutModal.classList.add('hidden');
+    };
+
+    document.getElementById('btn-confirm-logout').onclick = async () => {
+      await signOut(auth);
+      window.location.href = 'admin-login.html';
     };
 
     async function init() {
@@ -703,8 +933,8 @@
               <span class="item-num">${c.num}</span>
             </div>
             <div class="sidebar-item-actions" onclick="event.stopPropagation()">
-              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, -1)" title="Monter">↑</button>
-              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, 1)" title="Descendre">↓</button>
+              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, -1)" title="Monter">^</button>
+              <button class="sidebar-btn-move" onclick="moveCategory(${fullIdx}, 1)" title="Descendre">v</button>
             </div>
           </div>
         `;
@@ -738,6 +968,7 @@
 
     window.selectCategory = function(id) {
       activeCatId = id;
+      localStorage.setItem('admin_active_cat_id', id);
       renderSidebar();
       renderActiveCategory();
     };
@@ -778,6 +1009,7 @@
     const catModal = document.getElementById('cat-modal');
     const nomineeModal = document.getElementById('nominee-modal');
     const streamModal = document.getElementById('stream-modal');
+    const logoutModal = document.getElementById('logout-modal');
     window.addTenPlaceholders = async function() {
       if(!confirm("Voulez-vous vraiment rajouter 10 nominés vides ?")) return;
       const cat = categories.find(c => c.id === activeCatId);
@@ -829,6 +1061,7 @@
       overlay.classList.add('active');
       catModal.classList.remove('hidden');
       nomineeModal.classList.add('hidden');
+      logoutModal.classList.add('hidden');
       
       if (cat) {
         document.getElementById('cat-modal-title').textContent = "Editer Categorie";
@@ -855,6 +1088,7 @@
       overlay.classList.add('active');
       nomineeModal.classList.remove('hidden');
       catModal.classList.add('hidden');
+      logoutModal.classList.add('hidden');
       
       const cat = categories.find(c => c.id === activeCatId);
       
@@ -880,6 +1114,7 @@
 
     window.closeModals = function() {
       overlay.classList.remove('active');
+      logoutModal.classList.add('hidden');
     };
 
     document.getElementById('btn-save-cat').onclick = async () => {
@@ -988,6 +1223,7 @@
       overlay.classList.add('active');
       catModal.classList.add('hidden');
       nomineeModal.classList.add('hidden');
+      logoutModal.classList.add('hidden');
       streamModal.classList.remove('hidden');
 
       // Charger l'URL existante

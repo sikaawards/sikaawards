@@ -241,7 +241,7 @@
   </div>
 
   <script type="module">
-    import { auth, provider, signInWithPopup, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, ADMIN_EMAILS } from './scripts/firebase-config.js?v=4';
+    import { auth, provider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, db, collection, addDoc, setDoc, doc, getDoc } from './scripts/firebase-config.js?v=4';
 
     const btnGoogle = document.getElementById('btn-login-google');
     const emailForm = document.getElementById('email-login-form');
@@ -253,27 +253,26 @@
 
     let isLoginMode = true;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = urlParams.get('redirect') || 'accueil.html';
-    const isAdminAccess = redirectUrl.includes('admin.html');
-
-    async function handleAuthSuccess(user) {
-      if (isAdminAccess) {
-        if (!ADMIN_EMAILS.includes(user.email)) {
-          errorMsg.textContent = "Accès refusé : vous n'êtes pas administrateur.";
-          errorMsg.style.display = 'block';
-          await signOut(auth);
-          return false;
+    async function saveUserEmail(user) {
+      try {
+        const userRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userRef);
+        
+        if (!userDoc.exists()) {
+          await setDoc(userRef, {
+            email: user.email,
+            createdAt: new Date().toISOString()
+          });
         }
+      } catch (error) {
+        console.error('Erreur sauvegarde email:', error);
       }
-      window.location.href = redirectUrl;
-      return true;
     }
 
-    // Désactiver l'inscription pour l'accès admin
-    if (isAdminAccess) {
-      toggleBtn.style.display = 'none';
-      loginSubtitle.textContent = 'Connectez-vous avec votre compte administrateur pour accéder au panneau d\'administration.';
+    async function handleAuthSuccess(user) {
+      await saveUserEmail(user);
+      window.location.href = 'accueil.html';
+      return true;
     }
 
     // Toggle entre login et inscription
@@ -281,7 +280,7 @@
       isLoginMode = !isLoginMode;
       if (isLoginMode) {
         loginTitle.textContent = 'Connexion';
-        loginSubtitle.textContent = 'Connectez-vous pour voter pour vos artistes préférés ou accéder à l\'administration.';
+        loginSubtitle.textContent = 'Connectez-vous pour voter pour vos artistes préférés.';
         submitBtn.textContent = 'Se connecter';
         toggleBtn.textContent = 'Pas encore de compte ? S\'inscrire';
       } else {
@@ -301,7 +300,6 @@
         const result = await signInWithPopup(auth, provider);
         await handleAuthSuccess(result.user);
       } catch (error) {
-        console.error(error);
         errorMsg.textContent = "Erreur de connexion Google.";
         errorMsg.style.display = 'block';
         btnGoogle.disabled = false;
@@ -325,19 +323,10 @@
           const result = await signInWithEmailAndPassword(auth, email, pass);
           await handleAuthSuccess(result.user);
         } else {
-          // Empêcher l'inscription pour l'accès admin
-          if (isAdminAccess) {
-            errorMsg.textContent = "L'inscription n'est pas autorisée pour l'accès administrateur. Contactez l'administrateur du système.";
-            errorMsg.style.display = 'block';
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            return;
-          }
           const result = await createUserWithEmailAndPassword(auth, email, pass);
           await handleAuthSuccess(result.user);
         }
       } catch (error) {
-        console.error(error);
         if (isLoginMode) {
           errorMsg.textContent = "Email ou mot de passe incorrect. Assurez-vous d'avoir activé ce mode dans Firebase.";
         } else {

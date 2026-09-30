@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (hamburger && mobileNav) {
     hamburger.addEventListener('click', () => {
       hamburger.classList.toggle('active');
-      mobileNav.classList.toggle('open');
-      document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+      mobileNav.classList.toggle('active');
+      document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
     });
     mobileNav.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         hamburger.classList.remove('active');
-        mobileNav.classList.remove('open');
+        mobileNav.classList.remove('active');
         document.body.style.overflow = '';
       });
     });
@@ -85,15 +85,22 @@ document.addEventListener('DOMContentLoaded', () => {
         countdownEl.textContent = 'VOTES OUVERTS';
         return;
       }
+      
       const d = Math.floor(diff / (1000 * 60 * 60 * 24));
       const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const m = Math.floor((diff / (1000 * 60)) % 60);
       const s = Math.floor((diff / 1000) % 60);
-      countdownEl.textContent =
-        String(d).padStart(2, '0') + ':' +
-        String(h).padStart(2, '0') + ':' +
-        String(m).padStart(2, '0') + ':' +
-        String(s).padStart(2, '0');
+      
+      // Si plus de 24h, afficher seulement les jours
+      if (d > 0) {
+        countdownEl.innerHTML = d + ' <strong>JOUR' + (d > 1 ? 'S' : '') + '</strong>';
+      } else {
+        // Si moins de 24h (jour J), afficher heures:minutes:secondes
+        countdownEl.textContent =
+          String(h).padStart(2, '0') + ':' +
+          String(m).padStart(2, '0') + ':' +
+          String(s).padStart(2, '0');
+      }
     }
     updateCountdown();
     setInterval(updateCountdown, 1000);

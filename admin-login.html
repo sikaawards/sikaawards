@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion Admin -- SIKA AWARDS</title>
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.4">
+  <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      background: #050505;
+      padding-top: 60px;
+    }
+
+    .login-box {
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 25px 35px;
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      border-radius: 0;
+    }
+
+    .login-logo {
+      height: 35px;
+      margin-bottom: 15px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      object-fit: contain;
+    }
+
+    .login-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: #FFFFFF;
+    }
+
+    .login-subtitle {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .login-error {
+      color: var(--primary);
+      margin-top: 20px;
+      font-size: 0.85rem;
+      display: none;
+      padding: 12px;
+      background: rgba(255, 51, 0, 0.1);
+      border: 1px solid rgba(255, 51, 0, 0.3);
+      border-radius: 0;
+    }
+
+    .back-link {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      color: var(--text-muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      font-weight: 600;
+      z-index: 10;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-link:hover {
+      color: var(--primary);
+      transform: translateX(-5px);
+    }
+
+    input {
+      transition: all 0.3s ease;
+      border-radius: 0;
+    }
+
+    input:focus {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 3px rgba(255, 51, 0, 0.1);
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        padding-top: 40px;
+        padding: 15px;
+      }
+
+      .login-box {
+        padding: 20px 20px;
+        max-width: 100%;
+      }
+
+      .login-logo {
+        height: 30px;
+        margin-bottom: 12px;
+      }
+
+      .login-title {
+        font-size: 1.5rem;
+        margin-bottom: 4px;
+      }
+
+      .login-subtitle {
+        font-size: 0.75rem;
+        margin-bottom: 15px;
+        line-height: 1.3;
+      }
+
+      .back-link {
+        top: 15px;
+        left: 15px;
+        font-size: 0.65rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="accueil.html" class="back-link">← Retour à l'accueil</a>
+
+  <div class="login-container">
+    <div class="login-box">
+      <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards" class="login-logo">
+      <h1 class="login-title">Connexion Admin</h1>
+      <p class="login-subtitle">Connectez-vous avec votre compte administrateur pour accéder au panneau d'administration.</p>
+
+      <form id="email-login-form" style="text-align: left;">
+        <div style="margin-bottom: 12px;">
+          <input type="email" id="login-email" placeholder="Email" required 
+                 style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: 'Inter', sans-serif;">
+        </div>
+        <div style="margin-bottom: 15px;">
+          <input type="password" id="login-password" placeholder="Mot de passe" required 
+                 style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: 'Inter', sans-serif;">
+        </div>
+        <button type="submit" class="btn-google" style="background: var(--primary); color: #fff; border: none; width: 100%; padding: 10px 16px; font-family: var(--font-body); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0;">
+          Se connecter
+        </button>
+      </form>
+
+      <p class="login-error" id="error-msg"></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, signInWithEmailAndPassword, signOut, ADMIN_EMAILS, loadAdminEmails, adminEmailsLoaded } from './scripts/firebase-config.js?v=4';
+
+    const emailForm = document.getElementById('email-login-form');
+    const errorMsg = document.getElementById('error-msg');
+
+    async function handleAuthSuccess(user) {
+      // Attendre que les emails admin soient chargés
+      let attempts = 0;
+      while (!adminEmailsLoaded && attempts < 20) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+      }
+
+      if (!ADMIN_EMAILS.includes(user.email)) {
+        errorMsg.textContent = "Accès refusé : vous n'êtes pas administrateur.";
+        errorMsg.style.display = 'block';
+        await signOut(auth);
+        return false;
+      }
+
+      window.location.href = 'admin.html';
+      return true;
+    }
+
+    // Login Email
+    emailForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-password').value;
+      const btn = emailForm.querySelector('button');
+
+      try {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        errorMsg.style.display = 'none';
+
+        const result = await signInWithEmailAndPassword(auth, email, pass);
+        await handleAuthSuccess(result.user);
+      } catch (error) {
+        errorMsg.textContent = "Email ou mot de passe incorrect.";
+        errorMsg.style.display = 'block';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
+    });
+  </script>
+</body>
+</html>
