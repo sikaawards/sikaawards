@@ -154,6 +154,23 @@
       background: var(--primary-light);
     }
 
+    .reset-btn {
+      background: #dc3545;
+      border: none;
+      color: #fff;
+      padding: 12px 24px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-left: 10px;
+    }
+
+    .reset-btn:hover {
+      background: #c82333;
+    }
+
     .last-updated {
       color: var(--text-muted);
       font-size: 0.8rem;
@@ -248,6 +265,12 @@
         margin-bottom: 16px;
       }
 
+      .reset-btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        margin-left: 8px;
+      }
+
       .last-updated {
         font-size: 0.7rem;
       }
@@ -324,6 +347,7 @@
 
   <button class="refresh-btn" onclick="window.location.reload()">Rafraîchir</button>
   <button class="refresh-btn" onclick="window.downloadUsersCSV()" style="background: #4CAF50; margin-left: 10px;">Télécharger Emails</button>
+  <button class="reset-btn" onclick="window.resetAllVotes()" style="margin-left: 10px;">Réinitialiser tous les votes</button>
   <p class="last-updated" id="last-updated">Dernière mise à jour: --</p>
 
   <div class="stats-grid">
@@ -417,6 +441,41 @@
       
       row.classList.toggle('expanded');
       detail.classList.toggle('show');
+    }
+
+    async function resetAllVotes() {
+      if (!confirm('⚠️ ATTENTION : Cette action va réinitialiser TOUS les votes.\n\nÊtes-vous sûr de vouloir continuer ?')) {
+        return;
+      }
+
+      if (!confirm('CONFIRMATION FINALE : Tous les votes seront supprimés définitivement.\n\nCette action est irréversible !')) {
+        return;
+      }
+
+      try {
+        const { auth } = await import('./scripts/firebase-config.js?v=6');
+        const token = await auth.currentUser.getIdToken();
+
+        const response = await fetch('/api/reset-votes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+          alert('✅ ' + data.message);
+          window.location.reload();
+        } else {
+          alert('❌ Erreur: ' + data.error);
+        }
+      } catch (error) {
+        console.error('Erreur réinitialisation:', error);
+        alert('❌ Erreur lors de la réinitialisation des votes');
+      }
     }
 
     async function downloadUsersCSV() {
