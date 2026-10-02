@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.8">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.9">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
     body {
@@ -188,10 +188,77 @@
       background: #f57c00;
     }
 
+    .export-btn {
+      background: #2196F3;
+      border: none;
+      color: #fff;
+      padding: 12px 24px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-left: 10px;
+    }
+
+    .export-btn:hover {
+      background: #1976D2;
+    }
+
     .last-updated {
       color: var(--text-muted);
       font-size: 0.8rem;
       margin-top: 10px;
+    }
+
+    .users-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .users-section h2 {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .users-table th,
+    .users-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .users-table th {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    .users-table tr:hover {
+      background: rgba(255, 126, 95, 0.05);
+    }
+
+    .vote-tag {
+      display: inline-block;
+      background: rgba(255, 51, 0, 0.2);
+      color: var(--primary);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin: 2px;
     }
 
     @media (max-width: 768px) {
@@ -369,7 +436,7 @@
   </div>
 
   <button class="refresh-btn" onclick="window.location.reload()">Rafraîchir</button>
-  <button class="refresh-btn" onclick="window.downloadUsersCSV()" style="background: #4CAF50; margin-left: 10px;">Télécharger Emails</button>
+  <button class="export-btn" onclick="window.exportDatabase()">Exporter la base de données</button>
   <button class="reset-btn" onclick="window.resetAllVotes()" style="margin-left: 10px;">Réinitialiser votes</button>
   <button class="reset-limits-btn" onclick="window.resetVoteLimits()" style="margin-left: 10px;">Réinitialiser limites</button>
   <p class="last-updated" id="last-updated">Dernière mise à jour: --</p>
@@ -392,10 +459,21 @@
     </div>
   </div>
 
+  <div class="users-section">
+    <h2>Utilisateurs et Votes</h2>
+    <div style="margin-bottom: 16px;">
+      <span style="color: var(--text-muted); font-size: 0.85rem;">Total utilisateurs: </span>
+      <span id="total-users" style="font-weight: 700; color: var(--primary);">0</span>
+    </div>
+    <div id="users-list">
+      <p style="color: var(--text-muted);">Chargement...</p>
+    </div>
+  </div>
+
 
 
   <script type="module">
-    import { db, collection, getDocs, doc, getDoc } from './scripts/firebase-config.js?v=6';
+    import { db, collection, getDocs, doc, getDoc, query, where } from './scripts/firebase-config.js?v=6';
 
     async function loadMonitoringData() {
       try {
@@ -451,11 +529,76 @@
       }
     }
 
+    async function loadUsersData() {
+      try {
+        // Charger tous les utilisateurs
+        const usersSnap = await getDocs(collection(db, "users"));
+        const users = usersSnap.docs.map(d => ({ ...d.data(), id: d.id }));
+
+        // Charger tous les votes
+        const votesSnap = await getDocs(collection(db, "votes"));
+        const votes = votesSnap.docs.map(d => d.data());
+
+        // Organiser les votes par utilisateur
+        const votesByUser = {};
+        votes.forEach(vote => {
+          if (!votesByUser[vote.uid]) {
+            votesByUser[vote.uid] = [];
+          }
+          votesByUser[vote.uid].push(vote);
+        });
+
+        // Charger les catégories pour avoir les noms
+        const categoriesSnap = await getDocs(collection(db, "categories"));
+        const categoriesMap = {};
+        categoriesSnap.docs.forEach(d => {
+          categoriesMap[d.id] = d.data().title;
+        });
+
+        // Construire le tableau HTML
+        const tableHtml = `
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Catégories votées</th>
+                <th>Nominés choisis</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${users.map(user => {
+                const userVotes = votesByUser[user.id] || [];
+                const categoriesVoted = userVotes.map(v => categoriesMap[v.categoryId] || v.categoryId).join(', ');
+                const nomineesChosen = userVotes.map(v => v.nominee).join(', ');
+                return `
+                  <tr>
+                    <td>${user.email || 'N/A'}</td>
+                    <td>${categoriesVoted || '-'}</td>
+                    <td>${nomineesChosen || '-'}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        `;
+
+        document.getElementById('users-list').innerHTML = tableHtml;
+        document.getElementById('total-users').textContent = users.length;
+      } catch (error) {
+        console.error('Erreur chargement utilisateurs:', error);
+        document.getElementById('users-list').innerHTML = '<p style="color: #ff4444;">Erreur de chargement</p>';
+      }
+    }
+
     // Charger au démarrage
     loadMonitoringData();
+    loadUsersData();
 
     // Rafraîchir automatiquement toutes les 30 secondes
-    setInterval(loadMonitoringData, 30000);
+    setInterval(() => {
+      loadMonitoringData();
+      loadUsersData();
+    }, 30000);
   </script>
 
   <script>
@@ -549,6 +692,61 @@
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'utilisateurs_sikaawards.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error('Erreur téléchargement CSV:', error);
+        alert('❌ Erreur lors du téléchargement');
+      }
+    }
+
+    async function exportDatabase() {
+      try {
+        const { db, collection, getDocs } = await import('./scripts/firebase-config.js?v=6');
+
+        // Charger toutes les collections
+        const categoriesSnap = await getDocs(collection(db, "categories"));
+        const votesSnap = await getDocs(collection(db, "votes"));
+        const usersSnap = await getDocs(collection(db, "users"));
+
+        const categories = categoriesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const votes = votesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const users = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // Créer l'objet JSON
+        const databaseExport = {
+          exportDate: new Date().toISOString(),
+          categories: categories,
+          votes: votes,
+          users: users,
+          summary: {
+            totalCategories: categories.length,
+            totalVotes: votes.length,
+            totalUsers: users.length
+          }
+        };
+
+        // Créer le blob et le télécharger
+        const blob = new Blob([JSON.stringify(databaseExport, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `sikaawards_export_${new Date().toISOString().split('T')[0]}.json`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        alert('✅ Export réussi !');
+      } catch (error) {
+        console.error('Erreur export base de données:', error);
+        alert('❌ Erreur lors de l\'export');
+      }
+    }
         
         link.setAttribute('href', url);
         link.setAttribute('download', `utilisateurs_${new Date().toISOString().split('T')[0]}.csv`);
