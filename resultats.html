@@ -214,7 +214,7 @@
   </footer>
 
   <script src="scripts/main.js?v=1.0.2" defer></script>
-  <script type="module" src="scripts/auth-ui.js" defer></script>
+  <script type="module" src="scripts/auth-ui.js?v=2" defer></script>
   <script type="module">
     import { db, collection, getDocs } from './scripts/firebase-config.js?v=6';
 
@@ -268,6 +268,6 @@
 
     loadResults();
   </script>
-  <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js'),200)}</script>
+  <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js?v=2'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js?v=2'),200)}</script>
 </body>
 </html>
