@@ -639,8 +639,8 @@ button {
    NOMINEE CARDS (scroll categories.html)
    ======================================== */
 .nominee-card {
-  flex: 0 0 calc((100% - (16px * 6)) / 7);
-  /* Affiche exactement 7 items avec les gaps */
+  flex: 0 0 calc((100% - (10px * 6)) / 7);
+  /* Affiche exactement 7 items avec les gaps de 10px */
   min-width: 150px;
   /* Taille minimale pour rester lisible sur petit écran */
   cursor: pointer;
