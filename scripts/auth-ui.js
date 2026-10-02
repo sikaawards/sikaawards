@@ -1,6 +1,6 @@
 import { auth, signOut, onAuthStateChanged } from './firebase-config.js';
 
-onAuthStateChanged(auth, (user) => {
+function updateAuthUI(user) {
     const desktopNav = document.querySelector('.nav-links');
     const mobileNav = document.querySelector('.mobile-nav');
 
@@ -22,14 +22,20 @@ onAuthStateChanged(auth, (user) => {
     });
 
     if (user) {
-        // Desktop — positionné à droite du header, hors du nav centré
-        const headerContainer = document.querySelector('.header .container');
-        if (headerContainer) {
+        // Desktop — ajouter après "Mon compte" dans la navigation
+        if (desktopNav) {
             const logoutLink = document.createElement('a');
             logoutLink.href = '#';
             logoutLink.className = 'btn-logout-global';
-            logoutLink.style.cssText = 'position:absolute; right:24px; color:var(--primary); font-family:var(--font-heading); font-size:0.75rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;';
             logoutLink.textContent = 'Déconnexion';
+            logoutLink.style.marginLeft = '20px';
+            logoutLink.style.color = 'var(--primary)';
+            logoutLink.style.fontFamily = 'var(--font-heading)';
+            logoutLink.style.fontSize = '0.85rem';
+            logoutLink.style.fontWeight = '700';
+            logoutLink.style.letterSpacing = '1.5px';
+            logoutLink.style.textTransform = 'uppercase';
+            logoutLink.style.cursor = 'pointer';
             logoutLink.onclick = async (e) => {
                 e.preventDefault();
                 if (confirm('Se déconnecter ?')) {
@@ -37,7 +43,7 @@ onAuthStateChanged(auth, (user) => {
                     window.location.reload();
                 }
             };
-            headerContainer.appendChild(logoutLink);
+            desktopNav.appendChild(logoutLink);
         }
 
         // Mobile
@@ -45,8 +51,13 @@ onAuthStateChanged(auth, (user) => {
             const logoutLink = document.createElement('a');
             logoutLink.href = '#';
             logoutLink.className = 'btn-logout-global';
-            logoutLink.style.color = 'var(--primary)';
             logoutLink.textContent = 'Déconnexion';
+            logoutLink.style.color = 'var(--primary)';
+            logoutLink.style.fontWeight = '700';
+            logoutLink.style.display = 'block';
+            logoutLink.style.padding = '15px';
+            logoutLink.style.borderTop = '1px solid var(--border)';
+            logoutLink.style.cursor = 'pointer';
             logoutLink.onclick = async (e) => {
                 e.preventDefault();
                 if (confirm('Se déconnecter ?')) {
@@ -57,4 +68,13 @@ onAuthStateChanged(auth, (user) => {
             mobileNav.appendChild(logoutLink);
         }
     }
-});
+}
+
+// Exécuter directement quand le DOM est prêt
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        onAuthStateChanged(auth, updateAuthUI);
+    });
+} else {
+    onAuthStateChanged(auth, updateAuthUI);
+}
