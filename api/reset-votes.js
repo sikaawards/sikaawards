@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    // 1. Réinitialiser les votes de tous les nominés dans toutes les catégories
+    // Réinitialiser UNIQUEMENT les votes des nominés à 0 dans toutes les catégories
     const categoriesSnap = await db.collection('categories').get();
     const batch = db.batch();
 
@@ -44,27 +44,9 @@ module.exports = async (req, res) => {
 
     await batch.commit();
 
-    // 2. Supprimer tous les documents de votes
-    const votesSnap = await db.collection('votes').get();
-    const deleteBatch = db.batch();
-    votesSnap.forEach(doc => deleteBatch.delete(doc.ref));
-    if (!votesSnap.empty) await deleteBatch.commit();
-
-    // 3. Supprimer toutes les limites de vote
-    const limitsSnap = await db.collection('voteLimits').get();
-    const limitsBatch = db.batch();
-    limitsSnap.forEach(doc => limitsBatch.delete(doc.ref));
-    if (!limitsSnap.empty) await limitsBatch.commit();
-
-    // 4. Réinitialiser voted_categories pour tous les utilisateurs
-    const usersSnap = await db.collection('users').get();
-    const usersBatch = db.batch();
-    usersSnap.forEach(doc => usersBatch.update(doc.ref, { voted_categories: [] }));
-    if (!usersSnap.empty) await usersBatch.commit();
-
-    return res.status(200).json({ 
-      ok: true, 
-      message: `Votes réinitialisés avec succès. ${categoriesSnap.size} catégories, ${votesSnap.size} votes, ${limitsSnap.size} limites, ${usersSnap.size} utilisateurs.` 
+    return res.status(200).json({
+      ok: true,
+      message: `Votes réinitialisés avec succès. ${categoriesSnap.size} catégories mises à jour.`
     });
   } catch (err) {
     console.error('Erreur réinitialisation votes:', err);
