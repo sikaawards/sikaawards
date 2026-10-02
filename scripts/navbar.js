@@ -1,5 +1,5 @@
 // Charger et inclure la navbar dans toutes les pages
-document.addEventListener('DOMContentLoaded', function() {
+(function() {
   fetch('navbar.html')
     .then(response => response.text())
     .then(html => {
@@ -8,4 +8,4 @@ document.addEventListener('DOMContentLoaded', function() {
       document.dispatchEvent(new CustomEvent('navbarLoaded'));
     })
     .catch(error => console.error('Erreur lors du chargement de la navbar:', error));
-});
+})();
