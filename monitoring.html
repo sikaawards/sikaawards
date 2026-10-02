@@ -171,6 +171,23 @@
       background: #c82333;
     }
 
+    .reset-limits-btn {
+      background: #ff9800;
+      border: none;
+      color: #fff;
+      padding: 12px 24px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-left: 10px;
+    }
+
+    .reset-limits-btn:hover {
+      background: #f57c00;
+    }
+
     .last-updated {
       color: var(--text-muted);
       font-size: 0.8rem;
@@ -271,6 +288,12 @@
         margin-left: 8px;
       }
 
+      .reset-limits-btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        margin-left: 8px;
+      }
+
       .last-updated {
         font-size: 0.7rem;
       }
@@ -347,7 +370,8 @@
 
   <button class="refresh-btn" onclick="window.location.reload()">Rafraîchir</button>
   <button class="refresh-btn" onclick="window.downloadUsersCSV()" style="background: #4CAF50; margin-left: 10px;">Télécharger Emails</button>
-  <button class="reset-btn" onclick="window.resetAllVotes()" style="margin-left: 10px;">Réinitialiser tous les votes</button>
+  <button class="reset-btn" onclick="window.resetAllVotes()" style="margin-left: 10px;">Réinitialiser votes</button>
+  <button class="reset-limits-btn" onclick="window.resetVoteLimits()" style="margin-left: 10px;">Réinitialiser limites</button>
   <p class="last-updated" id="last-updated">Dernière mise à jour: --</p>
 
   <div class="stats-grid">
@@ -444,11 +468,11 @@
     }
 
     async function resetAllVotes() {
-      if (!confirm('⚠️ ATTENTION : Cette action va réinitialiser TOUS les votes.\n\nÊtes-vous sûr de vouloir continuer ?')) {
+      if (!confirm('⚠️ ATTENTION : Cette action va réinitialiser TOUS les votes à 0.\n\nÊtes-vous sûr de vouloir continuer ?')) {
         return;
       }
 
-      if (!confirm('CONFIRMATION FINALE : Tous les votes seront supprimés définitivement.\n\nCette action est irréversible !')) {
+      if (!confirm('CONFIRMATION FINALE : Tous les votes seront remis à 0.\n\nCette action est irréversible !')) {
         return;
       }
 
@@ -475,6 +499,37 @@
       } catch (error) {
         console.error('Erreur réinitialisation:', error);
         alert('❌ Erreur lors de la réinitialisation des votes');
+      }
+    }
+
+    async function resetVoteLimits() {
+      if (!confirm('⚠️ ATTENTION : Cette action va réinitialiser TOUTES les limites de vote.\n\nLes utilisateurs pourront revoter même s\'ils ont déjà voté aujourd\'hui.\n\nÊtes-vous sûr de vouloir continuer ?')) {
+        return;
+      }
+
+      try {
+        const { auth } = await import('./scripts/firebase-config.js?v=6');
+        const token = await auth.currentUser.getIdToken();
+
+        const response = await fetch('/api/reset-limits', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+          alert('✅ ' + data.message);
+          window.location.reload();
+        } else {
+          alert('❌ Erreur: ' + data.error);
+        }
+      } catch (error) {
+        console.error('Erreur réinitialisation limites:', error);
+        alert('❌ Erreur lors de la réinitialisation des limites');
       }
     }
 
