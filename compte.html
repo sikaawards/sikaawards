@@ -781,6 +781,37 @@
 
 <body>
 
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="accueil.html" class="mobile-logo-wrap">
+        <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
+      </a>
+      <a href="accueil.html" class="header-logo-wrap">
+        <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
+      </a>
+      <nav class="nav-links">
+        <a href="accueil.html">accueil</a>
+        <a href="categories.html">Catégories</a>
+        <a href="playlist.html">Playlist</a>
+        <a href="construction.html">La Cérémonie</a>
+        <a href="login.html">Mon compte</a>
+      </nav>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <a href="accueil.html">accueil</a>
+    <a href="#about">À Propos</a>
+    <a href="categories.html">Catégories</a>
+    <a href="playlist.html">Playlist</a>
+    <a href="#">La Cérémonie</a>
+    <a href="login.html">Mon compte</a>
+  </nav>
 
   <!-- ACCOUNT CONTAINER -->
   <div class="account-container">
@@ -889,7 +920,6 @@
   </footer>
 
   <script src="scripts/main.js?v=1.0.2" defer></script>
-  <script src="scripts/navbar.js?v=1.0.1" defer></script>
   <script type="module" src="scripts/auth-ui.js" defer></script>
   <script type="module">
     import { auth, signOut, onAuthStateChanged, db, collection, getDocs, doc, getDoc, setDoc, addDoc, onSnapshot, query, orderBy, limit } from './scripts/firebase-config.js?v=6';
