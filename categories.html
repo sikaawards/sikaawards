@@ -15,8 +15,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
-  <link rel="preload" href="styles/main.css?v=1.0.10" as="style">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.10">
+  <link rel="preload" href="styles/main.css?v=1.0.11" as="style">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.11">
   <link rel="stylesheet" href="styles/cookie-banner.css">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
@@ -287,17 +287,17 @@
             </a>
           </div>
           <div class="cat-scroll">
-            ${(cat.nominees || []).length > 7 ? `
-              <button class="cat-arrow prev" aria-label="Précédent"><span class="icon-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(180deg)"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></button>
-            ` : ''}
             <div class="cat-viewport">
+              ${(cat.nominees || []).length > 7 ? `
+                <button class="cat-arrow prev" aria-label="Précédent"><span class="icon-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(180deg)"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></button>
+              ` : ''}
               <div class="cat-track">
                 ${nomineesHtml || '<div style="color:var(--text-subtle);padding:20px 48px;font-size:0.8rem;">Aucun nomine pour le moment</div>'}
               </div>
+              ${(cat.nominees || []).length > 7 ? `
+                <button class="cat-arrow next" aria-label="Suivant"><span class="icon-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></button>
+              ` : ''}
             </div>
-            ${(cat.nominees || []).length > 7 ? `
-              <button class="cat-arrow next" aria-label="Suivant"><span class="icon-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></button>
-            ` : ''}
           </div>
         `;
         container.appendChild(section);

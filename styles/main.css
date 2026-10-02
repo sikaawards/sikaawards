@@ -578,8 +578,6 @@ button {
 .cat-viewport {
   flex: 1;
   overflow: hidden;
-  margin: 0 55px;
-  /* Crée l'espace vide pour les flèches */
   position: relative;
 }
 
@@ -1318,13 +1316,13 @@ button {
 }
 
 .cat-arrow.prev {
-  left: 10px;
-  /* Espace depuis la gauche de l'écran */
+  left: 0;
+  /* Position par rapport au viewport (contient les photos) */
 }
 
 .cat-arrow.next {
-  right: 10px;
-  /* Espace depuis la droite de l'écran */
+  right: 0;
+  /* Position par rapport au viewport (contient les photos) */
 }
 
 .cat-arrow:hover {
