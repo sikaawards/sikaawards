@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
   }
 
   // 2. Validation des entrées
-  const { categoryId, winnerName, deviceId } = req.body || {};
+  const { categoryId, winnerName, deviceId, tournamentHistory } = req.body || {};
   if (typeof categoryId !== 'string' || !/^[A-Za-z0-9_-]{1,80}$/.test(categoryId) ||
       typeof winnerName !== 'string' || !winnerName || winnerName.length > 200) {
     return res.status(400).json({ ok: false, error: 'Requête invalide.' });
@@ -80,7 +80,14 @@ module.exports = async (req, res) => {
 
       nominees[idx] = { ...nominees[idx], votes: (nominees[idx].votes || 0) + 1 };
       tx.update(catRef, { nominees });
-      tx.set(voteRef, { uid, categoryId, nominee: winnerName, day, createdAt: FieldValue.serverTimestamp() });
+      tx.set(voteRef, {
+        uid,
+        categoryId,
+        nominee: winnerName,
+        day,
+        tournamentHistory: tournamentHistory || [],
+        createdAt: FieldValue.serverTimestamp()
+      });
       tx.set(ipRef, { count: FieldValue.increment(1), day }, { merge: true });
       if (deviceRef) tx.set(deviceRef, { count: FieldValue.increment(1), day }, { merge: true });
       tx.set(db.doc(`users/${uid}`), { voted_categories: FieldValue.arrayUnion(categoryId) }, { merge: true });

@@ -226,7 +226,20 @@
       width: 100%;
       margin-bottom: 40px;
     }
+    .survivor-card { position: relative; }
     .survivor-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border: 1px solid var(--border); }
+    .survivor-placeholder {
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border: 1px solid var(--border);
+    }
+    .survivor-name {
+      font-size: 0.7rem;
+      margin-top: 8px;
+      color: var(--text-muted);
+      text-align: center;
+    }
 
     /* ---- WINNER SCREEN ---- */
     .winner-label { 
@@ -462,18 +475,22 @@
   <script type="module">
     import { auth, db, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs, query, where, runTransaction, onAuthStateChanged, signInWithRedirect, getRedirectResult, provider } from './scripts/firebase-config.js?v=6';
 
-    // ---- SURVIVOR ENGINE ----
+    // ---- BRACKET TOURNAMENT ENGINE ----
     let allCandidates = [];
+    let currentRoundCandidates = [];  // Candidats du tour actuel
+    let currentPairs = [];            // Paires du tour actuel
+    let currentPairIndex = 0;         // Position dans le tour
+    let winners = [];                 // Vainqueurs du tour actuel
     let leftCandidate = null;
     let rightCandidate = null;
-    let nextCandidateIdx = 0;
     let isTransitioning = false;
     let categoryData = null;
     let currentUser = null;
     let hasVoted = false;
     let isDataLoaded = false;
     let deviceId = null;
-    let deviceSignature = null;
+    let roundNumber = 0;              // Numéro du tour (0 = barrages, 1 = huitièmes, etc.)
+    let tournamentHistory = [];       // Historique du parcours du gagnant
 
     // Gestion du device_id
     function getOrCreateDeviceId() {
@@ -605,6 +622,7 @@
         allCandidates = [...categoryData.nominees];
         // On mélange pour le tournoi
         allCandidates.sort(() => Math.random() - 0.5);
+        currentRoundCandidates = [...allCandidates];
 
         isDataLoaded = true;
         
@@ -728,10 +746,48 @@
 
     window.startTournament = function() {
       if (allCandidates.length < 2) return;
-      leftCandidate = allCandidates[0];
-      rightCandidate = allCandidates[1];
-      nextCandidateIdx = 2;
+      roundNumber = 0;
+      tournamentHistory = [];
+      currentRoundCandidates = [...allCandidates];
+      startRound();
+    }
+
+    function startRound() {
+      winners = [];
+      currentPairIndex = 0;
+
+      // Calculer combien de duels ce tour
+      const numCandidates = currentRoundCandidates.length;
+      const numDuels = Math.floor(numCandidates / 2);
+
+      // Créer les paires
+      currentPairs = [];
+      for (let i = 0; i < numDuels; i++) {
+        currentPairs.push([
+          currentRoundCandidates[i * 2],
+          currentRoundCandidates[i * 2 + 1]
+        ]);
+      }
+
+      // S'il y a un nombre impair, le dernier est qualifié d'office
+      if (numCandidates % 2 === 1) {
+        winners.push(currentRoundCandidates[numCandidates - 1]);
+      }
+
       updateProgress();
+      showCurrentDuel();
+    }
+
+    function showCurrentDuel() {
+      if (currentPairIndex >= currentPairs.length) {
+        // Tous les duels du tour sont faits
+        endRound();
+        return;
+      }
+
+      const pair = currentPairs[currentPairIndex];
+      leftCandidate = pair[0];
+      rightCandidate = pair[1];
       showDuel();
     }
 
@@ -788,30 +844,63 @@
       isTransitioning = true;
 
       const winner = idx === 0 ? leftCandidate : rightCandidate;
-      const winnerIdxInFullList = allCandidates.indexOf(winner);
-      const loserIdx = idx === 0 ? 1 : 0;
-      
+      const loser = idx === 0 ? rightCandidate : leftCandidate;
+
       // Feedback visuel
       document.getElementById(`cand-${idx}`).classList.add('winner');
-      document.getElementById(`cand-${loserIdx}`).classList.add('loser');
+      document.getElementById(`cand-${idx === 0 ? 1 : 0}`).classList.add('loser');
       document.getElementById('feedback').classList.add('active');
 
-      // Le vote réel sera sauvegardé uniquement à la fin du tournoi, pour le gagnant final.
-      
+      // Enregistrer le vainqueur du duel
+      winners.push(winner);
+
+      // Enregistrer l'historique du parcours
+      tournamentHistory.push({
+        round: roundNumber,
+        pairIndex: currentPairIndex,
+        winner: winner.name,
+        loser: loser.name
+      });
+
       setTimeout(() => {
-        if (nextCandidateIdx >= allCandidates.length) {
-          showWinner(winner);
-          return;
-        }
-
-        const newCandidate = allCandidates[nextCandidateIdx];
-        if (loserIdx === 0) leftCandidate = newCandidate;
-        else rightCandidate = newCandidate;
-
-        nextCandidateIdx++;
+        currentPairIndex++;
         updateProgress();
-        showDuel();
+        showCurrentDuel();
       }, 550);
+    }
+
+    function endRound() {
+      // Préparer le tour suivant
+      currentRoundCandidates = [...winners];
+      roundNumber++;
+
+      if (currentRoundCandidates.length === 1) {
+        // Un seul candidat reste → Fin du tournoi
+        showWinner(currentRoundCandidates[0]);
+      } else {
+        // Afficher un résumé du tour
+        showRoundSummary();
+      }
+    }
+
+    function showRoundSummary() {
+      const roundNames = ["Barrages", "Huitièmes", "Quarts", "Demi-finales", "Finale"];
+      const roundName = roundNames[Math.min(roundNumber, roundNames.length - 1)];
+
+      const survivorsDiv = document.getElementById('survivors');
+      survivorsDiv.innerHTML = winners.map(w => `
+        <div class="survivor-card">
+          ${w.img ? `<img src="${w.img}" alt="${w.name}">` : `<div class="survivor-placeholder"></div>`}
+          <div class="survivor-name">${w.name}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('sum-round-name').textContent = `${roundName} TERMINÉ`;
+      showScreen('screen-summary');
+    }
+
+    window.nextRound = function() {
+      startRound();
     }
 
     function showWinner(winner) {
@@ -838,7 +927,8 @@
             body: JSON.stringify({
               categoryId: catId,
               winnerName: winner.name,
-              deviceId: deviceId
+              deviceId: deviceId,
+              tournamentHistory: tournamentHistory
             })
           })
         )
@@ -860,7 +950,12 @@
     }
 
     function updateProgress() {
-      const progress = (nextCandidateIdx / allCandidates.length) * 100;
+      // Calculer le progrès total basé sur le nombre total de duels
+      const totalDuels = allCandidates.length - 1; // Pour éliminer N-1 candidats
+      const completedDuels = tournamentHistory.length;
+      const progress = (completedDuels / totalDuels) * 100;
+      document.getElementById('pb').style.width = progress + '%';
+    }
       document.getElementById('pb').style.width = Math.min(100, progress) + '%';
     }
 
