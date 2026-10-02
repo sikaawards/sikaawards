@@ -243,7 +243,8 @@ button {
   height: 20px;
   position: absolute;
   right: 24px;
-  z-index: 1001;
+  z-index: 1005;
+  cursor: pointer;
 }
 
 .hamburger span {
@@ -1075,9 +1076,9 @@ button {
 
   .header .btn-logout-global {
     display: block;
-    right: 60px;
+    right: 80px;
     font-size: 0.65rem;
-    z-index: 1003;
+    z-index: 1002;
   }
 
   .header .container {
