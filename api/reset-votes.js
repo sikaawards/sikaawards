@@ -24,8 +24,15 @@ module.exports = async (req, res) => {
     return res.status(401).json({ ok: false, error: 'Session invalide.' });
   }
 
-  // Vérifier que c'est un admin
-  const ADMIN_EMAILS = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(',') : [];
+  // Vérifier que c'est un admin en chargeant depuis Firestore
+  const adminsSnap = await db.collection('admins').get();
+  const ADMIN_EMAILS = [];
+  adminsSnap.forEach(doc => {
+    const data = doc.data();
+    const email = data.email || data.email1 || data.email2 || data.email3 || data.email4;
+    if (email) ADMIN_EMAILS.push(email);
+  });
+
   const userDoc = await admin.auth().getUser(uid);
   if (!ADMIN_EMAILS.includes(userDoc.email)) {
     return res.status(403).json({ ok: false, error: 'Accès refusé. Admin uniquement.' });
