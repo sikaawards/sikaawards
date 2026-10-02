@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="styles/main.css?v=1.0.4">
   <link rel="stylesheet" href="styles/cookie-banner.css">
   <link rel="icon" type="image/png" href="assets/Logo_SA/SA-logo-Normal.png">
+  <script src="scripts/navbar.js?v=1.0.1" defer></script>
   <style>
     @media (max-width: 768px) {
       /* Augmenter la taille du countdown sur mobile */
@@ -328,13 +329,7 @@
       if (cached) renderHomeCategories(JSON.parse(cached));
     } catch (e) { /* ignore */ }
 
-    // Charger la navbar
-    const navbarScript = document.createElement('script');
-    navbarScript.src = 'scripts/navbar.js?v=1.0.1';
-    navbarScript.defer = true;
-    document.head.appendChild(navbarScript);
-
-    // Charger auth-ui.js après la navbar
+    // Charger auth-ui.js
     const authScript = document.createElement('script');
     authScript.type = 'module';
     authScript.src = 'scripts/auth-ui.js';
