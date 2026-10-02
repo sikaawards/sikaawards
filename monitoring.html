@@ -473,7 +473,7 @@
 
 
   <script type="module">
-    import { db, collection, getDocs, doc, getDoc, query, where } from './scripts/firebase-config.js?v=6';
+    import { db, collection, getDocs, doc, getDoc, query, where, auth, onAuthStateChanged } from './scripts/firebase-config.js?v=6';
 
     async function loadMonitoringData() {
       try {
@@ -525,7 +525,7 @@
         document.getElementById('last-updated').textContent = `Dernière mise à jour: ${now.toLocaleTimeString('fr-FR')}`;
       } catch (error) {
         console.error('Erreur chargement monitoring:', error);
-        document.getElementById('category-votes-list').innerHTML = '<p style="color: #ff4444;">Erreur de chargement</p>';
+        document.getElementById('category-votes-list').innerHTML = `<p style="color: #ff4444;">Erreur de chargement: ${error.message}</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">Vérifiez que vous êtes connecté et que Firestore est accessible.</p>`;
       }
     }
 
@@ -586,18 +586,29 @@
         document.getElementById('total-users').textContent = users.length;
       } catch (error) {
         console.error('Erreur chargement utilisateurs:', error);
-        document.getElementById('users-list').innerHTML = '<p style="color: #ff4444;">Erreur de chargement</p>';
+        document.getElementById('users-list').innerHTML = `<p style="color: #ff4444;">Erreur de chargement: ${error.message}</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">Vérifiez que vous êtes connecté et que Firestore est accessible.</p>`;
       }
     }
 
-    // Charger au démarrage
-    loadMonitoringData();
-    loadUsersData();
+    // Vérifier l'authentification avant de charger les données
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loadMonitoringData();
+        loadUsersData();
+      } else {
+        document.getElementById('category-votes-list').innerHTML = '<p style="color: #ff4444;">Vous devez être connecté pour voir les données de monitoring.</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;"><a href="login.html" style="color: var(--primary);">Se connecter</a></p>';
+        document.getElementById('users-list').innerHTML = '<p style="color: #ff4444;">Vous devez être connecté pour voir les données de monitoring.</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;"><a href="login.html" style="color: var(--primary);">Se connecter</a></p>';
+      }
+    });
 
     // Rafraîchir automatiquement toutes les 30 secondes
     setInterval(() => {
-      loadMonitoringData();
-      loadUsersData();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          loadMonitoringData();
+          loadUsersData();
+        }
+      });
     }, 30000);
   </script>
 
