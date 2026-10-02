@@ -1,38 +1,23 @@
+const { db, collection, getDocs, doc, getDoc } = require('../scripts/firebase-config.js');
+const { auth } = require('../scripts/firebase-config.js');
+const { verifyIdToken } = require('firebase-admin/auth');
 const admin = require('firebase-admin');
-const { getFirestore, collection, getDocs } = require('firebase-admin/firestore');
 
-// Initialiser Firebase Admin avec les variables d'environnement Vercel
-let db;
-
+// Initialiser Firebase Admin pour la vérification des tokens uniquement
 try {
-  const serviceAccount = {
-    type: "service_account",
-    project_id: process.env.FIREBASE_PROJECT_ID || "sika-awards",
-    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-    private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    client_email: process.env.FIREBASE_CLIENT_EMAIL
-  };
-
-  if (serviceAccount.private_key && serviceAccount.client_email) {
+  if (!admin.apps.length) {
     admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
+      credential: admin.credential.applicationDefault()
     });
-    db = getFirestore();
-  } else {
-    console.log('Firebase Admin SDK non configuré via variables d\'environnement');
   }
 } catch (error) {
-  console.error('Erreur initialisation Firebase Admin:', error);
+  console.log('Firebase Admin non initialisé, utilisation du SDK client');
 }
 
 module.exports = async (req, res) => {
   // Vérifier la méthode
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  if (!db) {
-    return res.status(500).json({ error: 'Firebase Admin SDK non configuré. Configurez les variables d\'environnement FIREBASE_PRIVATE_KEY et FIREBASE_CLIENT_EMAIL.' });
   }
 
   try {
@@ -43,7 +28,7 @@ module.exports = async (req, res) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const decodedToken = await admin.auth().verifyIdToken(token);
+    const decodedToken = await verifyIdToken(token);
     const uid = decodedToken.uid;
 
     // Charger les emails admin depuis Firestore
@@ -55,18 +40,18 @@ module.exports = async (req, res) => {
       if (email) ADMIN_EMAILS.push(email);
     });
 
-    // Récupérer l'email de l'utilisateur
-    const userRecord = await admin.auth().getUser(uid);
-    const userEmail = userRecord.email;
+    // Récupérer l'email de l'utilisateur depuis Firestore
+    const userDoc = await getDoc(doc(db, 'users', uid));
+    const userEmail = userDoc.exists() ? userDoc.data().email : null;
 
     // Vérifier si l'utilisateur est admin
-    if (!ADMIN_EMAILS.includes(userEmail)) {
+    if (!userEmail || !ADMIN_EMAILS.includes(userEmail)) {
       return res.status(403).json({ error: 'Access denied. Admin only.' });
     }
 
-    // Charger tous les utilisateurs
+    // Charger tous les utilisateurs (limité aux données essentielles pour éviter les permissions)
     const usersSnap = await getDocs(collection(db, 'users'));
-    const users = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const users = usersSnap.docs.map(d => ({ id: d.id, email: d.data().email }));
 
     // Charger tous les votes
     const votesSnap = await getDocs(collection(db, 'votes'));
