@@ -1299,7 +1299,8 @@ button {
 /* --- NAVIGATION ARROWS (RECTANGLE STYLE) --- */
 .cat-arrow {
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   width: 44px;
   height: 162px;
   background: rgba(255, 255, 255, 0.03);
@@ -1314,8 +1315,6 @@ button {
   cursor: pointer;
   z-index: 100;
   transition: 0.3s;
-  transform: none;
-  /* Désactive tout décalage parasite */
 }
 
 .cat-arrow.prev {
