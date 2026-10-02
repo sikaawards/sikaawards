@@ -8,6 +8,12 @@
   <meta name="description"
     content="Sika Awards est la ceremonie qui celebre et recompense les talents des cultures populaires. Decouvrez les categories, les nomines et les laureats.">
   <meta name="theme-color" content="#0A0A0A">
+  <style>
+    body {
+      background: #050505 !important;
+      min-height: 100vh;
+    }
+  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
@@ -132,7 +138,7 @@
   </style>
 </head>
 
-<body>
+<body style="background: #050505; min-height: 100vh;">
 
   <!-- HERO -->
   <section class="hero" id="hero">
@@ -338,7 +344,7 @@
     // Lazy-load Firebase pendant le temps d'inactivité du navigateur
     const lazyInit = async () => {
       try {
-        const { db, collection, getDocs } = await import('./scripts/firebase-config.js?v=4');
+        const { db, collection, getDocs } = await import('./scripts/firebase-config.js?v=5');
         const snap = await getDocs(collection(db, 'categories'));
         const categories = snap.docs.map(d => ({ ...d.data(), id: d.id }));
         categories.sort((a, b) => parseInt(a.num) - parseInt(b.num));
