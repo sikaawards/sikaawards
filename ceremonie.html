@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Cérémonie | SIKA AWARDS 2026</title>
+  <meta name="description" content="Sika Dwa Kofi Awards, 2ème édition : la cérémonie de récompenses du hip-hop ivoirien. Samedi 9 janvier 2027, Abidjan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.9">
+  <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      padding-top: 80px;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 90px 0; }
+
+    h1, h2 {
+      font-family: var(--font-heading);
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+      line-height: .95;
+      margin: 0 0 28px;
+    }
+    h2 { font-size: clamp(2rem, 7vw, 4.5rem); color: var(--primary); }
+    p { line-height: 1.6; font-size: 1.05rem; margin: 0 0 16px; font-weight: 300; max-width: 70ch; color: var(--text-muted); }
+    .tag {
+      display: inline-block; background: var(--primary); color: #fff;
+      font-weight: 600; font-size: .85rem; padding: 6px 14px; margin-bottom: 24px;
+    }
+    .orange { color: var(--primary); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; align-items: flex-end;
+      padding: 140px 0 70px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.35) 40%, #000 100%),
+        url('assets/ceremonie/hero.jpg') center/cover no-repeat;
+    }
+    .hero h1 { font-size: clamp(2.6rem, 12vw, 9rem); margin-bottom: 20px; animation: rise .9s ease both; }
+    .hero .sub { font-size: clamp(1.1rem, 3vw, 1.6rem); margin-bottom: 30px; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-meta span {
+      border: 1px solid rgba(255,255,255,.35); padding: 10px 18px; font-weight: 600; font-size: .95rem;
+    }
+    .hero-meta span.hl { background: var(--primary-light); color: #000; border-color: var(--primary-light); }
+    @keyframes rise { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+
+    /* MANIFESTE */
+    .quote { font-size: clamp(1.4rem, 4vw, 2.4rem); font-style: italic; font-weight: 300; margin-bottom: 30px; max-width: 24ch; line-height: 1.15; }
+    .punch { font-weight: 900; font-size: 1.2rem; color: var(--primary); }
+
+    /* OBJECTIFS */
+    .goals { list-style: none; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+    .goals li { border-left: 4px solid var(--primary); padding: 6px 0 6px 16px; line-height: 1.45; font-weight: 400; }
+
+    /* CHIFFRES 2025 */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin: 32px 0; }
+    .stat { background: var(--bg-card); border-top: 4px solid var(--primary); padding: 24px 20px; border: 1px solid var(--border); }
+    .stat b { display: block; font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 900; font-style: italic; color: var(--primary); line-height: 1; }
+    .stat span { display: block; margin-top: 10px; font-size: .95rem; font-weight: 300; line-height: 1.4; color: var(--text-muted); }
+
+    /* ÉQUIPE */
+    .team { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+    .member { background: var(--bg-card); border: 1px solid var(--border); border-radius: 0; overflow: hidden; display: flex; flex-direction: column; }
+    .member img { width: 100%; aspect-ratio: 4/5; object-fit: cover; object-position: top; display: block; background: #222; }
+    .member .info { padding: 18px 20px 24px; }
+    .member h3 { margin: 0 0 4px; font-size: 1.4rem; font-weight: 900; letter-spacing: -.5px; font-family: var(--font-heading); }
+    .member .role { font-style: italic; font-weight: 600; font-size: .85rem; margin-bottom: 12px; line-height: 1.3; color: var(--primary); }
+    .member p { font-size: .9rem; margin: 0; font-weight: 400; line-height: 1.45; color: var(--text-muted); }
+
+    /* CALENDRIER */
+    .timeline { list-style: none; padding: 0; margin: 0; border-left: 2px dashed rgba(255,255,255,.35); }
+    .timeline li { display: grid; grid-template-columns: 190px 1fr; gap: 20px; padding: 14px 0 14px 24px; position: relative; }
+    .timeline li::before { content: ''; position: absolute; left: -7px; top: 22px; width: 12px; height: 12px; background: #000; border: 2px solid var(--primary); border-radius: 50%; }
+    .timeline li.key::before { background: var(--primary); }
+    .timeline li.day::before { background: var(--primary-light); border-color: var(--primary-light); }
+    .timeline .d { font-weight: 900; font-style: italic; color: var(--primary); }
+    .timeline li.day .d, .timeline li.day .t { color: var(--primary-light); font-weight: 900; }
+    .timeline .t { font-weight: 300; line-height: 1.45; }
+    .note { font-size: .85rem; opacity: .6; margin-top: 18px; }
+
+    /* INFOS */
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3px; background: #fff; border: 3px solid #fff; }
+    .fact { background: rgba(255, 51, 0, 0.1); color: var(--primary); padding: 22px; font-weight: 600; text-align: center; }
+    .fact.dark { background: #000; color: #fff; }
+    .fact small { display: block; font-weight: 300; opacity: .8; margin-bottom: 4px; font-size: .8rem; }
+
+    /* VOTES */
+    .phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 24px; }
+    .phase { border: 1px solid var(--border); padding: 26px; background: var(--bg-card); }
+    .phase h3 { margin: 0 0 10px; font-size: 1.3rem; font-weight: 900; font-style: italic; text-transform: uppercase; color: var(--primary); font-family: var(--font-heading); }
+    .phase p { margin: 0; }
+
+    /* CATÉGORIES */
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .chip { background: var(--primary); color: #fff; font-weight: 900; padding: 8px 14px; font-size: .95rem; letter-spacing: -.3px; }
+    .chip:nth-child(even) { background: rgba(255, 51, 0, 0.2); color: var(--primary); }
+    .chip.legend { background: var(--primary-light); color: #000; }
+
+    .cta { text-align: center; padding: 60px 0 100px; }
+    .btn-back {
+      display: inline-block; padding: 15px 40px; border: 1px solid rgba(255,255,255,.3);
+      color: #fff; text-decoration: none; font-size: .8rem; text-transform: uppercase; letter-spacing: 2px; transition: .3s;
+    }
+    .btn-back:hover, .btn-back:focus-visible { background: #fff; color: #000; }
+
+    @media (max-width: 640px) {
+      section { padding: 60px 0; }
+      .timeline li { grid-template-columns: 1fr; gap: 2px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero h1 { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="accueil.html" class="mobile-logo-wrap"><img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards"></a>
+      <a href="accueil.html" class="header-logo-wrap"><img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards"></a>
+      <nav class="nav-links">
+        <a href="accueil.html">accueil</a>
+        <a href="categories.html">Catégories</a>
+        <a href="playlist.html">Playlist</a>
+        <a href="ceremonie.html">La Cérémonie</a>
+        <a href="login.html">Mon compte</a>
+      </nav>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <nav class="mobile-nav">
+    <a href="accueil.html">accueil</a>
+    <a href="categories.html">Catégories</a>
+    <a href="playlist.html">Playlist</a>
+    <a href="ceremonie.html">La Cérémonie</a>
+    <a href="login.html">Mon compte</a>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <header class="hero">
+      <div class="wrap">
+        <div class="tag">2ème édition : 2026</div>
+        <h1>Sika Dwa Kofi<br>Awards</h1>
+        <p class="sub">La cérémonie de récompenses du Hip-Hop ivoirien</p>
+        <div class="hero-meta">
+          <span class="hl">Samedi 9 janvier 2027</span>
+          <span>Abidjan</span>
+          <span>29 récompenses</span>
+          <span>Live YouTube</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- MANIFESTE -->
+    <section>
+      <div class="wrap">
+        <h2>Une culture<br>sans cérémonie</h2>
+        <p class="quote">« Le hip-hop ivoirien célèbre ses 40 ans. »</p>
+        <p>C'est l'un des moteurs culturels les plus puissants du pays. Il est exporté en France, en Afrique de l'Ouest, dans la diaspora. Il façonne l'imaginaire d'une génération entière.</p>
+        <p>Et pourtant, aucune cérémonie nationale ne lui rend hommage à la hauteur de son influence.</p>
+        <p class="punch">Les artistes le demandent. Les fans l'attendent. Personne ne l'a fait.</p>
+      </div>
+    </section>
+
+    <!-- POURQUOI -->
+    <section>
+      <div class="wrap">
+        <h2>Pourquoi<br>« Sika Dwa Kofi » ?</h2>
+        <p>Le nom vient du symbole Akan/Ashanti <strong class="orange">Sika Dwa Kofi</strong> (le trône d'or), signe de royauté, d'unité et de prestige.</p>
+        <p>Les SIKA AWARDS sont une cérémonie de récompenses dédiée à la culture urbaine ivoirienne et africaine. Objectif : honorer les artistes, producteurs, beatmakers, managers et acteurs qui font vibrer la scène hip-hop ivoirienne & afro-urbaine.</p>
+        <ul class="goals">
+          <li>Donner de la visibilité et valoriser les talents émergents et confirmés.</li>
+          <li>Créer une plateforme de reconnaissance crédible.</li>
+          <li>Inspirer la jeunesse, porter un message positif à travers la culture urbaine et la fédérer.</li>
+          <li>Créer un événement inédit en Côte d'Ivoire pour la culture hip-hop.</li>
+          <li>Donner aux acteurs de l'industrie musicale une réelle plateforme de reconnaissance.</li>
+          <li>Mettre la Côte d'Ivoire au centre de la scène hip-hop africaine et internationale.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 2025 -->
+    <section>
+      <div class="wrap">
+        <h2>En 2025,<br>on l'a prouvé</h2>
+        <p>Édition pilote, 100% digitale. Sans salle. Sans tickets. Sans budget communication.</p>
+        <div class="stats">
+          <div class="stat"><b>13 000+</b><span>participants au vote</span></div>
+          <div class="stat"><b>50+</b><span>vidéos d'appel au vote spontanées (fans & artistes)</span></div>
+          <div class="stat"><b>5 000+</b><span>interactions organiques sur les réseaux</span></div>
+          <div class="stat"><b>1 000+</b><span>spectateurs sur le live de révélation</span></div>
+        </div>
+        <p class="punch">Personne n'a été payé. Personne n'a été briefé. Le besoin était là.</p>
+      </div>
+    </section>
+
+    <!-- ÉQUIPE -->
+    <section>
+      <div class="wrap">
+        <h2>Une équipe forte</h2>
+        <div class="team">
+          <article class="member">
+            <img src="assets/ceremonie/gbayoro.jpg" alt="Gbayoro Pabelo" loading="lazy">
+            <div class="info">
+              <h3>Gbayoro Pabelo</h3>
+              <div class="role">Directeur Général · Président de l'association</div>
+              <p>Vision globale, stratégie, relations institutionnelles, supervision artistique, représentation publique.</p>
+            </div>
+          </article>
+          <article class="member">
+            <img src="assets/ceremonie/yassi.jpg" alt="Yassi Ambeu" loading="lazy">
+            <div class="info">
+              <h3>Yassi Ambeu</h3>
+              <div class="role">Direction Communication, Régie & Tech · Vice-Président</div>
+              <p>Stratégie communication, captation, régie technique, plateforme de vote, réseaux sociaux. Réalisateur du live 2025 (1 000+ spectateurs).</p>
+            </div>
+          </article>
+          <article class="member">
+            <img src="assets/ceremonie/ndia.jpg" alt="N'dia Ornélia-Ivana" loading="lazy">
+            <div class="info">
+              <h3>N'dia Ornélia-Ivana</h3>
+              <div class="role">Direction Artistique · Secrétaire Générale</div>
+              <p>Identité visuelle, scénographie, choix artistiques, dramaturgie de la cérémonie, casting des présentateurs.</p>
+            </div>
+          </article>
+          <article class="member">
+            <img src="assets/ceremonie/kone.jpg" alt="Koné Isaac" loading="lazy">
+            <div class="info">
+              <h3>Koné Isaac</h3>
+              <div class="role">Direction Partenariats & Développement Commercial · Trésorier</div>
+              <p>Démarchage sponsors, négociation contrats, partenariats médias, billetterie, suivi financier.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- INFOS -->
+    <section>
+      <div class="wrap">
+        <h2>Ce qu'on construit<br>en 2026</h2>
+        <div class="facts">
+          <div class="fact"><small>Date</small>Samedi 9 janvier 2027</div>
+          <div class="fact dark"><small>Lieu</small>Salle abidjanaise (1 000 – 2 000 places)</div>
+          <div class="fact"><small>Format</small>Tapis rouge + cérémonie 21h – 00h30 + after</div>
+          <div class="fact"><small>Diffusion</small>Live + YouTube Live</div>
+          <div class="fact"><small>Catégories</small>29 récompenses</div>
+          <div class="fact"><small>Mobilisation</small>4 mois consécutifs</div>
+        </div>
+        <p class="note">Première édition physique. Coïncide avec les 40 ans du rap ivoirien.</p>
+      </div>
+    </section>
+
+    <!-- VOTES -->
+    <section>
+      <div class="wrap">
+        <h2>Votes &<br>nominations</h2>
+        <p>Une liste d'artistes et de projets est proposée par le comité d'organisation. Les pré-nominés (8 à 10 par catégorie) sont désignés par un collège de juges composé de médias et de professionnels de la musique.</p>
+        <div class="phases">
+          <div class="phase">
+            <h3>Phase 1 · Nomination publique</h3>
+            <p>Le public vote gratuitement en ligne pour réduire les pré-nominés à 3 finalistes par catégorie.</p>
+          </div>
+          <div class="phase">
+            <h3>Phase 2 · Vote final</h3>
+            <p>Le comité choisit le vainqueur parmi les 3 finalistes. Le résultat est dévoilé en direct lors de la cérémonie.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATÉGORIES -->
+    <section>
+      <div class="wrap">
+        <h2>Catégories<br>des votes</h2>
+        <div class="chips">
+          <span class="chip">SIKA DWA KOFI 26</span>
+          <span class="chip">Meilleure Collaboration 2K26</span>
+          <span class="chip">Meilleur Parolier</span>
+          <span class="chip">Meilleur Cover Artist</span>
+          <span class="chip legend">SIKA HIP-HOP LEGEND</span>
+          <span class="chip">Meilleur artiste rap Masculin 2K26</span>
+          <span class="chip">Meilleur artiste AFRO URBAIN</span>
+          <span class="chip">Meilleur Slameur</span>
+          <span class="chip">Concert de l'année</span>
+          <span class="chip">Meilleure artiste rap Féminin 2K26</span>
+          <span class="chip">Meilleur Rappeur New Wave</span>
+          <span class="chip">Meilleur Producer</span>
+          <span class="chip">Label Hip-Hop 2K26</span>
+          <span class="chip">Révélation 2K26</span>
+          <span class="chip">Meilleur Artiste Gospel</span>
+          <span class="chip">Meilleur Réalisateur</span>
+          <span class="chip">Meilleur créateur de contenus</span>
+          <span class="chip">Hit de l'année 2K26</span>
+          <span class="chip">Meilleur artiste diaspora</span>
+          <span class="chip">Meilleur Photographe</span>
+          <span class="chip">Meilleur média rap</span>
+          <span class="chip">Album Rap 2K26</span>
+          <span class="chip">Hit Biama 2K26</span>
+          <span class="chip">Meilleure performance scénique</span>
+          <span class="chip">Meilleur contenu/émission 2K26</span>
+          <span class="chip">Meilleur Clip Vidéo 2K26</span>
+          <span class="chip">Meilleur Battle MC</span>
+          <span class="chip">Meilleure Pochette Album</span>
+          <span class="chip">Meilleur fanbase 2K26</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDRIER -->
+    <section>
+      <div class="wrap">
+        <h2>Dates<br>importantes</h2>
+        <ul class="timeline">
+          <li><span class="d">8 sept. – 15 oct.</span><span class="t">Période d'accréditation des médias (clôture le 15 octobre)</span></li>
+          <li><span class="d">31 octobre, 21h</span><span class="t">Réunion d'information en visioconférence (heure de France)</span></li>
+          <li><span class="d">5 novembre</span><span class="t">Lancement de la campagne de communication : cérémonie, jury, critères de vote, catégories</span></li>
+          <li><span class="d">20 novembre</span><span class="t">Annonce de la date, du lieu et des tarifs des billets</span></li>
+          <li><span class="d">21 novembre</span><span class="t">Annonce du live et du prix du pass digital</span></li>
+          <li><span class="d">22 – 27 novembre</span><span class="t">Annonce des pré-nominations par catégorie</span></li>
+          <li class="key"><span class="d">28 novembre</span><span class="t">Ouverture des votes et de la billetterie en ligne</span></li>
+          <li><span class="d">30 décembre</span><span class="t">Fin des votes</span></li>
+          <li><span class="d">5 janvier 2027</span><span class="t">Vote du jury</span></li>
+          <li><span class="d">7 janvier 2027</span><span class="t">Vote définitif du jury</span></li>
+          <li><span class="d">8 janvier 2027</span><span class="t">Dernière vente de billets, fermeture de la billetterie</span></li>
+          <li class="day"><span class="d">9 janvier 2027, 21h GMT</span><span class="t">JOUR-J : la Cérémonie (Studio ABS Motion, à confirmer), diffusion en direct sur le site officiel</span></li>
+          <li><span class="d">12 janvier 2027</span><span class="t">Bilan de fin de cérémonie avec les partenaires</span></li>
+        </ul>
+        <p class="note">4 mois d'exposition. Pas un événement d'une soirée.</p>
+      </div>
+    </section>
+
+    <div class="cta"><a href="accueil.html" class="btn-back">Retour à l'accueil</a></div>
+  </main>
+
+  <script src="scripts/main.js?v=1.0.2" defer></script>
+</body>
+</html>
