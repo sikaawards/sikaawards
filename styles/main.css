@@ -1339,6 +1339,14 @@ button {
   height: 18px;
 }
 
+/* Hauteur des flèches = hauteur exacte d'une photo (carré = largeur d'une carte).
+   Largeur d'une carte = (largeur du bloc - 2 x 55px de marge - 6 gaps de 10px) / 7 */
+@supports (width: 1cqw) {
+  .cat-arrow {
+    height: max(150px, calc((100cqw - 110px - 60px) / 7));
+  }
+}
+
 /* Bouton Voter Discret */
 .btn-vote-now {
   background: transparent;
