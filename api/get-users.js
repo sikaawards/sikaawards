@@ -1,23 +1,33 @@
-const { db, collection, getDocs, doc, getDoc } = require('../scripts/firebase-config.js');
-const { auth } = require('../scripts/firebase-config.js');
-const { verifyIdToken } = require('firebase-admin/auth');
 const admin = require('firebase-admin');
+const { getFirestore, collection, getDocs, doc, getDoc } = require('firebase-admin/firestore');
 
-// Initialiser Firebase Admin pour la vérification des tokens uniquement
+// Initialiser Firebase Admin
+let db;
 try {
-  if (!admin.apps.length) {
-    admin.initializeApp({
-      credential: admin.credential.applicationDefault()
-    });
-  }
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID || "sika-awards",
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+    })
+  });
+  db = getFirestore();
+  console.log('Firebase Admin initialisé');
 } catch (error) {
-  console.log('Firebase Admin non initialisé, utilisation du SDK client');
+  console.error('Erreur initialisation Firebase Admin:', error);
 }
 
 module.exports = async (req, res) => {
   // Vérifier la méthode
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  if (!db) {
+    return res.status(500).json({ 
+      error: 'Firebase Admin SDK non configuré',
+      message: 'Configurez FIREBASE_PRIVATE_KEY et FIREBASE_CLIENT_EMAIL dans Vercel Environment Variables'
+    });
   }
 
   try {
@@ -28,7 +38,7 @@ module.exports = async (req, res) => {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const decodedToken = await verifyIdToken(token);
+    const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
 
     // Charger les emails admin depuis Firestore
@@ -49,7 +59,7 @@ module.exports = async (req, res) => {
       return res.status(403).json({ error: 'Access denied. Admin only.' });
     }
 
-    // Charger tous les utilisateurs (limité aux données essentielles pour éviter les permissions)
+    // Charger tous les utilisateurs
     const usersSnap = await getDocs(collection(db, 'users'));
     const users = usersSnap.docs.map(d => ({ id: d.id, email: d.data().email }));
 
