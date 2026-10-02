@@ -8,7 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.13">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.14">
+  <link rel="stylesheet" href="styles/cookie-banner.css">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
     html { scroll-behavior: smooth; }
@@ -47,7 +48,9 @@
       padding: 140px 0 70px;
       background:
         linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.35) 40%, #000 100%),
-        url('assets/ceremonie/hero.jpg') center/cover no-repeat;
+        url('assets/ceremonie/hero.jpg') center/cover no-repeat,
+        url('assets/nominees/Fond-Rideaux1.jpeg') center/cover no-repeat,
+        #000;
     }
     .hero h1 { font-size: clamp(2.6rem, 12vw, 9rem); margin-bottom: 20px; animation: rise .9s ease both; }
     .hero .sub { font-size: clamp(1.1rem, 3vw, 1.6rem); margin-bottom: 30px; }
@@ -117,6 +120,23 @@
     }
     .btn-back:hover, .btn-back:focus-visible { background: #fff; color: #000; }
 
+
+    section { scroll-margin-top: 80px; }
+    /* Barre d'ancres */
+    .subnav { background: #0a0a0a; border-bottom: 1px solid var(--border); border-top: 1px solid var(--border); position: sticky; top: 0; z-index: 5; }
+    .subnav .wrap { display: flex; gap: 8px; overflow-x: auto; padding-top: 12px; padding-bottom: 12px; scrollbar-width: none; }
+    .subnav .wrap::-webkit-scrollbar { display: none; }
+    .subnav a { flex: 0 0 auto; padding: 8px 16px; border: 1px solid var(--border); font-size: .8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
+    .subnav a:hover, .subnav a:focus-visible { color: #fff; border-color: var(--primary); }
+    /* Photo d'équipe absente : initiales */
+    .member .avatar { aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #141414, #2a0d05); color: var(--primary); font: 900 italic clamp(3rem, 12vw, 4.5rem)/1 var(--font-heading); }
+    /* Calendrier : étapes passées / prochaine étape */
+    .timeline li.past { opacity: .4; }
+    .timeline li.next .d::after { content: '  ← prochaine étape'; font-size: .75rem; font-weight: 600; font-style: normal; color: #fff; opacity: .75; }
+    .votes-cta { margin-top: 28px; }
+    .cta { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+    .cta .btn { text-decoration: none; }
+    @media (max-width: 640px) { .subnav { top: 0; } }
     @media (max-width: 640px) {
       section { padding: 60px 0; }
       .timeline li { grid-template-columns: 1fr; gap: 2px; }
@@ -134,28 +154,29 @@
     <div class="container">
       <a href="accueil.html" class="mobile-logo-wrap"><img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards"></a>
       <a href="accueil.html" class="header-logo-wrap"><img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards"></a>
-      <nav class="nav-links">
-        <a href="accueil.html">accueil</a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="accueil.html">Accueil</a>
         <a href="categories.html">Catégories</a>
         <a href="playlist.html">Playlist</a>
-        <a href="ceremonie.html">La Cérémonie</a>
+        <a href="ceremonie.html" class="active" aria-current="page">La Cérémonie</a>
         <a href="login.html">Mon compte</a>
       </nav>
-      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+      <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-nav" type="button"><span></span><span></span><span></span></button>
     </div>
   </header>
 
-  <nav class="mobile-nav">
-    <a href="accueil.html">accueil</a>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu mobile">
+    <a href="accueil.html">Accueil</a>
+    <a href="accueil.html#about">À Propos</a>
     <a href="categories.html">Catégories</a>
     <a href="playlist.html">Playlist</a>
-    <a href="ceremonie.html">La Cérémonie</a>
+    <a href="ceremonie.html" class="active" aria-current="page">La Cérémonie</a>
     <a href="login.html">Mon compte</a>
   </nav>
 
   <main>
     <!-- HERO -->
-    <header class="hero">
+    <div class="hero">
       <div class="wrap">
         <div class="tag">2ème édition : 2026</div>
         <h1>Sika Dwa Kofi<br>Awards</h1>
@@ -167,7 +188,13 @@
           <span>Live YouTube</span>
         </div>
       </div>
-    </header>
+    </div>
+
+    <nav class="subnav" aria-label="Sections de la page">
+      <div class="wrap">
+        <a href="#pourquoi">Pourquoi</a><a href="#annee-2025">2025</a><a href="#equipe">Équipe</a><a href="#infos">Infos</a><a href="#votes">Votes</a><a href="#categories">Catégories</a><a href="#dates">Dates</a>
+      </div>
+    </nav>
 
     <!-- MANIFESTE -->
     <section>
@@ -181,7 +208,7 @@
     </section>
 
     <!-- POURQUOI -->
-    <section>
+    <section id="pourquoi">
       <div class="wrap">
         <h2>Pourquoi<br>« Sika Dwa Kofi » ?</h2>
         <p>Le nom vient du symbole Akan/Ashanti <strong class="orange">Sika Dwa Kofi</strong> (le trône d'or), signe de royauté, d'unité et de prestige.</p>
@@ -198,7 +225,7 @@
     </section>
 
     <!-- 2025 -->
-    <section>
+    <section id="annee-2025">
       <div class="wrap">
         <h2>En 2025,<br>on l'a prouvé</h2>
         <p>Édition pilote, 100% digitale. Sans salle. Sans tickets. Sans budget communication.</p>
@@ -213,7 +240,7 @@
     </section>
 
     <!-- ÉQUIPE -->
-    <section>
+    <section id="equipe">
       <div class="wrap">
         <h2>Une équipe forte</h2>
         <div class="team">
@@ -254,7 +281,7 @@
     </section>
 
     <!-- INFOS -->
-    <section>
+    <section id="infos">
       <div class="wrap">
         <h2>Ce qu'on construit<br>en 2026</h2>
         <div class="facts">
@@ -270,7 +297,7 @@
     </section>
 
     <!-- VOTES -->
-    <section>
+    <section id="votes">
       <div class="wrap">
         <h2>Votes &<br>nominations</h2>
         <p>Une liste d'artistes et de projets est proposée par le comité d'organisation. Les pré-nominés (8 à 10 par catégorie) sont désignés par un collège de juges composé de médias et de professionnels de la musique.</p>
@@ -284,11 +311,13 @@
             <p>Le comité choisit le vainqueur parmi les 3 finalistes. Le résultat est dévoilé en direct lors de la cérémonie.</p>
           </div>
         </div>
+        <p class="votes-cta"><a href="categories.html" class="btn btn-primary">Découvrir les catégories</a></p>
+        <p class="note">Ouverture des votes le 28 novembre · fin des votes le 30 décembre.</p>
       </div>
     </section>
 
     <!-- CATÉGORIES -->
-    <section>
+    <section id="categories">
       <div class="wrap">
         <h2>Catégories<br>des votes</h2>
         <div class="chips">
@@ -326,31 +355,103 @@
     </section>
 
     <!-- CALENDRIER -->
-    <section>
+    <section id="dates">
       <div class="wrap">
         <h2>Dates<br>importantes</h2>
         <ul class="timeline">
-          <li><span class="d">8 sept. – 15 oct.</span><span class="t">Période d'accréditation des médias (clôture le 15 octobre)</span></li>
-          <li><span class="d">31 octobre, 21h</span><span class="t">Réunion d'information en visioconférence (heure de France)</span></li>
-          <li><span class="d">5 novembre</span><span class="t">Lancement de la campagne de communication : cérémonie, jury, critères de vote, catégories</span></li>
-          <li><span class="d">20 novembre</span><span class="t">Annonce de la date, du lieu et des tarifs des billets</span></li>
-          <li><span class="d">21 novembre</span><span class="t">Annonce du live et du prix du pass digital</span></li>
-          <li><span class="d">22 – 27 novembre</span><span class="t">Annonce des pré-nominations par catégorie</span></li>
-          <li class="key"><span class="d">28 novembre</span><span class="t">Ouverture des votes et de la billetterie en ligne</span></li>
-          <li><span class="d">30 décembre</span><span class="t">Fin des votes</span></li>
-          <li><span class="d">5 janvier 2027</span><span class="t">Vote du jury</span></li>
-          <li><span class="d">7 janvier 2027</span><span class="t">Vote définitif du jury</span></li>
-          <li><span class="d">8 janvier 2027</span><span class="t">Dernière vente de billets, fermeture de la billetterie</span></li>
-          <li class="day"><span class="d">9 janvier 2027, 21h GMT</span><span class="t">JOUR-J : la Cérémonie (Studio ABS Motion, à confirmer), diffusion en direct sur le site officiel</span></li>
-          <li><span class="d">12 janvier 2027</span><span class="t">Bilan de fin de cérémonie avec les partenaires</span></li>
+          <li data-date="2026-10-15"><span class="d">8 sept. – 15 oct.</span><span class="t">Période d'accréditation des médias (clôture le 15 octobre)</span></li>
+          <li data-date="2026-10-31"><span class="d">31 octobre, 21h</span><span class="t">Réunion d'information en visioconférence (heure de France)</span></li>
+          <li data-date="2026-11-05"><span class="d">5 novembre</span><span class="t">Lancement de la campagne de communication : cérémonie, jury, critères de vote, catégories</span></li>
+          <li data-date="2026-11-20"><span class="d">20 novembre</span><span class="t">Annonce de la date, du lieu et des tarifs des billets</span></li>
+          <li data-date="2026-11-21"><span class="d">21 novembre</span><span class="t">Annonce du live et du prix du pass digital</span></li>
+          <li data-date="2026-11-27"><span class="d">22 – 27 novembre</span><span class="t">Annonce des pré-nominations par catégorie</span></li>
+          <li data-date="2026-11-28" class="key"><span class="d">28 novembre</span><span class="t">Ouverture des votes et de la billetterie en ligne</span></li>
+          <li data-date="2026-12-30"><span class="d">30 décembre</span><span class="t">Fin des votes</span></li>
+          <li data-date="2027-01-05"><span class="d">5 janvier 2027</span><span class="t">Vote du jury</span></li>
+          <li data-date="2027-01-07"><span class="d">7 janvier 2027</span><span class="t">Vote définitif du jury</span></li>
+          <li data-date="2027-01-08"><span class="d">8 janvier 2027</span><span class="t">Dernière vente de billets, fermeture de la billetterie</span></li>
+          <li data-date="2027-01-09" class="day"><span class="d">9 janvier 2027, 21h GMT</span><span class="t">JOUR-J : la Cérémonie (Studio ABS Motion, à confirmer), diffusion en direct sur le site officiel</span></li>
+          <li data-date="2027-01-12"><span class="d">12 janvier 2027</span><span class="t">Bilan de fin de cérémonie avec les partenaires</span></li>
         </ul>
         <p class="note">4 mois d'exposition. Pas un événement d'une soirée.</p>
       </div>
     </section>
 
-    <div class="cta"><a href="accueil.html" class="btn-back">Retour à l'accueil</a></div>
+    <div class="cta">
+      <a href="categories.html" class="btn btn-primary">Voir les catégories</a>
+      <a href="accueil.html" class="btn-back">Retour à l'accueil</a>
+    </div>
   </main>
 
-  <script src="scripts/main.js?v=1.0.2" defer></script>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-row">
+        <div class="footer-social">
+          <a href="https://www.instagram.com/sikawards" target="_blank">Instagram</a>
+          <span class="footer-sep">|</span>
+          <a href="https://www.youtube.com/@sikaawards" target="_blank">Youtube</a>
+          <span class="footer-sep">|</span>
+          <a href="https://www.facebook.com/sikaawards" target="_blank">Facebook</a>
+          <span class="footer-sep">|</span>
+          <a href="https://www.tiktok.com/@sika.awards" target="_blank">TikTok</a>
+        </div>
+        <div class="footer-legal">
+          <a href="cgu.html">CGU</a>
+          <span class="footer-sep">|</span>
+          <a href="confidentialite.html#cookies">Cookies</a>
+          <span class="footer-sep">|</span>
+          <a href="mentions-legales.html">Mentions légales</a>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <p>&copy; 2025 Sika Awards. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- COOKIE CONSENT BANNER -->
+  <div id="cookie-banner" class="cookie-banner">
+    <div class="container">
+      <div class="cookie-content">
+        <h3 class="cookie-title">🍪 Cookies</h3>
+        <p class="cookie-text">
+          Nous utilisons des cookies pour améliorer votre expérience. En continuant à naviguer, vous acceptez notre 
+          <a href="confidentialite.html" class="cookie-link">politique de confidentialité</a>.
+        </p>
+      </div>
+      <div class="cookie-buttons">
+        <button id="cookie-accept" class="cookie-btn cookie-btn-accept">Accepter tout</button>
+        <button id="cookie-reject" class="cookie-btn cookie-btn-reject">Refuser</button>
+        <button id="cookie-settings" class="cookie-btn cookie-btn-settings">Paramètres</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts/main.js?v=1.0.3" defer></script>
+  <script src="scripts/cookie-consent.js" defer></script>
+  <script type="module" src="scripts/auth-ui.js?v=3" defer></script>
+  <script>
+    // Calendrier : grise les étapes passées et signale la prochaine
+    (function () {
+      var today = new Date(); today.setHours(0, 0, 0, 0);
+      var next = false;
+      document.querySelectorAll('.timeline li[data-date]').forEach(function (li) {
+        var d = new Date(li.dataset.date + 'T23:59:59');
+        if (d < today) li.classList.add('past');
+        else if (!next) { li.classList.add('next'); next = true; }
+      });
+    })();
+    // Photos d'équipe absentes : initiales à la place
+    document.querySelectorAll('.member img').forEach(function (img) {
+      var swap = function () {
+        var d = document.createElement('div');
+        d.className = 'avatar'; d.setAttribute('aria-hidden', 'true');
+        d.textContent = img.alt.split(/[\s']+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase();
+        img.replaceWith(d);
+      };
+      img.addEventListener('error', swap);
+      if (img.complete && img.naturalWidth === 0) swap();
+    });
+  </script>
 </body>
 </html>

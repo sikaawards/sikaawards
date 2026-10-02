@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live - SIKA AWARDS</title>
-  <link rel="stylesheet" href="styles/main.css?v=1.0.13">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.14">
   <style>
     * {
       margin: 0;
@@ -452,23 +452,23 @@
       <a href="accueil.html" class="header-logo-wrap">
         <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
       </a>
-      <nav class="nav-links">
-        <a href="accueil.html">accueil</a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="accueil.html">Accueil</a>
         <a href="categories.html">Catégories</a>
         <a href="playlist.html">Playlist</a>
         <a href="ceremonie.html">La Cérémonie</a>
         <a href="login.html">Mon compte</a>
       </nav>
-      <button class="hamburger" aria-label="Menu">
+      <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-nav" type="button">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
   <!-- MOBILE NAV -->
-  <nav class="mobile-nav">
-    <a href="accueil.html">accueil</a>
-    <a href="#about">À Propos</a>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu mobile">
+    <a href="accueil.html">Accueil</a>
+    <a href="accueil.html#about">À Propos</a>
     <a href="categories.html">Catégories</a>
     <a href="playlist.html">Playlist</a>
     <a href="ceremonie.html">La Cérémonie</a>
@@ -551,7 +551,7 @@
     </div>
   </div>
 
-  <script src="scripts/main.js?v=1.0.2" defer></script>
+  <script src="scripts/main.js?v=1.0.3" defer></script>
   <script type="module" src="scripts/auth-ui.js?v=3" defer></script>
 
   <script type="module">

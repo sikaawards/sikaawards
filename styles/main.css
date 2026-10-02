@@ -1366,3 +1366,23 @@ button {
   border-color: var(--primary);
   color: #fff;
 }
+
+/* ========================================
+   NAVBAR — états actif / scroll / mobile
+   ======================================== */
+.header { transition: background .3s ease, box-shadow .3s ease, padding .3s ease; }
+.header.scrolled { background: rgba(5, 5, 5, 0.96); box-shadow: 0 6px 24px rgba(0, 0, 0, .45); }
+.nav-links a.active { color: var(--text); }
+.nav-links a.active::after { width: 100%; }
+.nav-links a:focus-visible, .mobile-nav a:focus-visible, .hamburger:focus-visible {
+  outline: 2px solid var(--primary); outline-offset: 4px;
+}
+.hamburger { background: none; border: 0; padding: 0; }
+.hamburger::after { content: ''; position: absolute; inset: -14px; } /* zone de tap agrandie */
+body.nav-open { overflow: hidden; }
+.mobile-nav { padding: 80px 24px calc(40px + env(safe-area-inset-bottom)); overflow-y: auto; }
+.mobile-nav a { font-size: clamp(1.4rem, 7vw, 2rem); padding: 8px 0; text-align: center; }
+.mobile-nav a.active { color: var(--primary); }
+@media (min-width: 769px) { .mobile-nav { display: none; } }
+@media (prefers-reduced-motion: reduce) { .header, .mobile-nav { transition: none; } }
+body.nav-open .cookie-banner { display: none; } /* la bannière ne doit pas masquer le menu mobile */

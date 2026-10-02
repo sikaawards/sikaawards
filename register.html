@@ -13,7 +13,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.13">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.14">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
     .login-container {
@@ -203,27 +203,27 @@
       <a href="accueil.html" class="header-logo-wrap">
         <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
       </a>
-      <nav class="nav-links">
-        <a href="accueil.html">accueil</a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="accueil.html">Accueil</a>
         <a href="categories.html">Catégories</a>
         <a href="playlist.html">Playlist</a>
         <a href="ceremonie.html">La Cérémonie</a>
-        <a href="login.html">Mon compte</a>
+        <a href="login.html" class="active" aria-current="page">Mon compte</a>
       </nav>
-      <button class="hamburger" aria-label="Menu">
+      <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-nav" type="button">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
   <!-- MOBILE NAV -->
-  <nav class="mobile-nav">
-    <a href="accueil.html">accueil</a>
-    <a href="#about">À Propos</a>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu mobile">
+    <a href="accueil.html">Accueil</a>
+    <a href="accueil.html#about">À Propos</a>
     <a href="categories.html">Catégories</a>
     <a href="playlist.html">Playlist</a>
     <a href="ceremonie.html">La Cérémonie</a>
-    <a href="login.html">Mon compte</a>
+    <a href="login.html" class="active" aria-current="page">Mon compte</a>
   </nav>
 
   <a href="accueil.html" class="back-link">← Retour à l'accueil</a>
@@ -355,6 +355,6 @@
       }
     });
   </script>
-  <script src="scripts/main.js?v=1.0.2" defer></script>
+  <script src="scripts/main.js?v=1.0.3" defer></script>
 </body>
 </html>

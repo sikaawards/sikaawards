@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.13">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.14">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
@@ -856,27 +856,27 @@
       <a href="accueil.html" class="header-logo-wrap">
         <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards">
       </a>
-      <nav class="nav-links">
-        <a href="accueil.html">accueil</a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="accueil.html">Accueil</a>
         <a href="categories.html">Catégories</a>
         <a href="playlist.html">Playlist</a>
         <a href="ceremonie.html">La Cérémonie</a>
-        <a href="login.html">Mon compte</a>
+        <a href="login.html" class="active" aria-current="page">Mon compte</a>
       </nav>
-      <button class="hamburger" aria-label="Menu">
+      <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-nav" type="button">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
   <!-- MOBILE NAV -->
-  <nav class="mobile-nav">
-    <a href="accueil.html">accueil</a>
-    <a href="#about">À Propos</a>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu mobile">
+    <a href="accueil.html">Accueil</a>
+    <a href="accueil.html#about">À Propos</a>
     <a href="categories.html">Catégories</a>
     <a href="playlist.html">Playlist</a>
     <a href="ceremonie.html">La Cérémonie</a>
-    <a href="login.html">Mon compte</a>
+    <a href="login.html" class="active" aria-current="page">Mon compte</a>
   </nav>
 
   <!-- ACCOUNT CONTAINER -->
@@ -975,17 +975,17 @@
           <a href="https://www.tiktok.com/@sika.awards" target="_blank">TikTok</a>
         </div>
         <div class="footer-legal">
-          <a href="#">CGU</a>
+          <a href="cgu.html">CGU</a>
           <span class="footer-sep">|</span>
-          <a href="#">Cookies</a>
+          <a href="confidentialite.html#cookies">Cookies</a>
           <span class="footer-sep">|</span>
-          <a href="#">Legal</a>
+          <a href="mentions-legales.html">Legal</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <script src="scripts/main.js?v=1.0.2" defer></script>
+  <script src="scripts/main.js?v=1.0.3" defer></script>
   <script type="module" src="scripts/auth-ui.js?v=3" defer></script>
   <script type="module">
     import { auth, signOut, onAuthStateChanged, db, collection, getDocs, doc, getDoc, setDoc, addDoc, onSnapshot, query, orderBy, limit } from './scripts/firebase-config.js?v=6';

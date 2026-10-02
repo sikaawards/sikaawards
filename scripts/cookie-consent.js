@@ -58,7 +58,7 @@
 
   // Handle custom settings (for future implementation)
   function showSettings() {
-    alert('Paramètres des cookies - À implémenter');
+    window.location.href = 'confidentialite.html#cookies';
   }
 
   // Initialize cookie consent
