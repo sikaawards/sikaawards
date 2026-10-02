@@ -38,18 +38,26 @@ module.exports = async (req, res) => {
   }
 
   try {
-    // Supprimer uniquement les limites de vote
+    // 1. Supprimer les limites de vote
     const limitsSnap = await db.collection('voteLimits').get();
     const batch = db.batch();
     limitsSnap.forEach(doc => batch.delete(doc.ref));
 
-    if (!limitsSnap.empty) {
+    // 2. Supprimer les documents de votes
+    const votesSnap = await db.collection('votes').get();
+    votesSnap.forEach(doc => batch.delete(doc.ref));
+
+    // 3. Réinitialiser voted_categories pour tous les utilisateurs
+    const usersSnap = await db.collection('users').get();
+    usersSnap.forEach(doc => batch.update(doc.ref, { voted_categories: [] }));
+
+    if (!limitsSnap.empty || !votesSnap.empty || !usersSnap.empty) {
       await batch.commit();
     }
 
     return res.status(200).json({
       ok: true,
-      message: `Limites de vote réinitialisées avec succès. ${limitsSnap.size} limites supprimées.`
+      message: `Limites réinitialisées avec succès. ${limitsSnap.size} limites, ${votesSnap.size} votes, ${usersSnap.size} utilisateurs.`
     });
   } catch (err) {
     console.error('Erreur réinitialisation limites:', err);

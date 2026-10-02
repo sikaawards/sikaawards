@@ -503,7 +503,7 @@
     }
 
     async function resetVoteLimits() {
-      if (!confirm('⚠️ ATTENTION : Cette action va réinitialiser TOUTES les limites de vote.\n\nLes utilisateurs pourront revoter même s\'ils ont déjà voté aujourd\'hui.\n\nÊtes-vous sûr de vouloir continuer ?')) {
+      if (!confirm('⚠️ ATTENTION : Cette action va réinitialiser TOUTES les limites de vote.\n\nLes utilisateurs pourront revoter même s\'ils ont déjà voté aujourd\'hui.\n\nCela supprimera aussi les documents de votes et réinitialisera voted_categories.\n\nÊtes-vous sûr de vouloir continuer ?')) {
         return;
       }
 
