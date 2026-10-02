@@ -1,5 +1,4 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-import { initializeAppCheck, ReCaptchaV3Provider, getToken as getAppCheckToken } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app-check.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, inMemoryPersistence, browserLocalPersistence, setPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, increment, updateDoc, deleteDoc, runTransaction, arrayRemove, arrayUnion, addDoc, onSnapshot, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
@@ -15,27 +14,6 @@ const firebaseConfig = {
 
 // Initialisation
 const app = initializeApp(firebaseConfig);
-
-// ---- App Check : vérifie que les requêtes viennent bien de ton site ----
-// Colle ici la clé de SITE reCAPTCHA v3 (la clé publique, pas la clé secrète)
-const APP_CHECK_SITE_KEY = "6Lc-p9otAAAAADElJd8ZrPO32N3Rx6yOhAS0cH1Q";
-
-// En local (localhost), App Check utilise un jeton de débogage affiché dans la console
-if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-  self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-}
-
-let appCheck = null;
-if (APP_CHECK_SITE_KEY && !APP_CHECK_SITE_KEY.startsWith("COLLE_ICI")) {
-  try {
-    appCheck = initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider(APP_CHECK_SITE_KEY),
-      isTokenAutoRefreshEnabled: true
-    });
-  } catch (error) {
-    console.error("Erreur App Check:", error);
-  }
-}
 const auth = getAuth(app);
 
 // Activer la persistance de session pour que la connexion persiste après redirection
@@ -81,8 +59,6 @@ async function loadAdminEmails() {
 loadAdminEmails();
 
 export {
-  appCheck,
-  getAppCheckToken,
   auth,
   db,
   provider,

@@ -314,7 +314,7 @@
 
 
   <script type="module">
-    import { db, collection, getDocs, doc, getDoc } from './scripts/firebase-config.js?v=5';
+    import { db, collection, getDocs, doc, getDoc } from './scripts/firebase-config.js?v=6';
 
     async function loadMonitoringData() {
       try {
@@ -388,7 +388,7 @@
 
     async function downloadUsersCSV() {
       try {
-        const { db, collection, getDocs } = await import('./scripts/firebase-config.js?v=5');
+        const { db, collection, getDocs } = await import('./scripts/firebase-config.js?v=6');
         const snap = await getDocs(collection(db, "users"));
         const usersList = snap.docs.map(d => ({ ...d.data(), id: d.id }));
 
