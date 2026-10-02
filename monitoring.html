@@ -463,17 +463,17 @@
     <h2>Utilisateurs et Votes</h2>
     <div style="margin-bottom: 16px;">
       <span style="color: var(--text-muted); font-size: 0.85rem;">Total utilisateurs: </span>
-      <span id="total-users" style="font-weight: 700; color: var(--primary);">0</span>
+      <span id="total-users" style="font-weight: 700; color: var(--primary);">N/A</span>
     </div>
     <div id="users-list">
-      <p style="color: var(--text-muted);">Chargement...</p>
+      <p style="color: var(--text-muted);">Cette fonctionnalité nécessite une configuration admin supplémentaire. Les votes par catégorie sont disponibles ci-dessus.</p>
     </div>
   </div>
 
 
 
   <script type="module">
-    import { db, collection, getDocs, doc, getDoc, query, where, auth, onAuthStateChanged, ADMIN_EMAILS, loadAdminEmails, adminEmailsLoaded } from './scripts/firebase-config.js?v=6';
+    import { db, collection, getDocs, doc, getDoc, query, where, auth, onAuthStateChanged } from './scripts/firebase-config.js?v=6';
 
     async function loadMonitoringData() {
       try {
@@ -529,85 +529,12 @@
       }
     }
 
-    async function loadUsersData() {
-      try {
-        // Vérifier si l'utilisateur est admin
-        if (!ADMIN_EMAILS.includes(auth.currentUser.email)) {
-          document.getElementById('users-list').innerHTML = '<p style="color: #ff4444;">Accès refusé: Vous devez être administrateur pour voir les données utilisateurs.</p>';
-          return;
-        }
-
-        // Charger tous les utilisateurs
-        const usersSnap = await getDocs(collection(db, "users"));
-        const users = usersSnap.docs.map(d => ({ ...d.data(), id: d.id }));
-
-        // Charger tous les votes
-        const votesSnap = await getDocs(collection(db, "votes"));
-        const votes = votesSnap.docs.map(d => d.data());
-
-        // Organiser les votes par utilisateur
-        const votesByUser = {};
-        votes.forEach(vote => {
-          if (!votesByUser[vote.uid]) {
-            votesByUser[vote.uid] = [];
-          }
-          votesByUser[vote.uid].push(vote);
-        });
-
-        // Charger les catégories pour avoir les noms
-        const categoriesSnap = await getDocs(collection(db, "categories"));
-        const categoriesMap = {};
-        categoriesSnap.docs.forEach(d => {
-          categoriesMap[d.id] = d.data().title;
-        });
-
-        // Construire le tableau HTML
-        const tableHtml = `
-          <table class="users-table">
-            <thead>
-              <tr>
-                <th>Email</th>
-                <th>Catégories votées</th>
-                <th>Nominés choisis</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${users.map(user => {
-                const userVotes = votesByUser[user.id] || [];
-                const categoriesVoted = userVotes.map(v => categoriesMap[v.categoryId] || v.categoryId).join(', ');
-                const nomineesChosen = userVotes.map(v => v.nominee).join(', ');
-                return `
-                  <tr>
-                    <td>${user.email || 'N/A'}</td>
-                    <td>${categoriesVoted || '-'}</td>
-                    <td>${nomineesChosen || '-'}</td>
-                  </tr>
-                `;
-              }).join('')}
-            </tbody>
-          </table>
-        `;
-
-        document.getElementById('users-list').innerHTML = tableHtml;
-        document.getElementById('total-users').textContent = users.length;
-      } catch (error) {
-        console.error('Erreur chargement utilisateurs:', error);
-        document.getElementById('users-list').innerHTML = `<p style="color: #ff4444;">Erreur de chargement: ${error.message}</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">Vérifiez que vous êtes connecté en tant qu'administrateur et que Firestore est accessible.</p>`;
-      }
-    }
-
     // Vérifier l'authentification avant de charger les données
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Attendre que les emails admin soient chargés
-        if (!adminEmailsLoaded) {
-          await loadAdminEmails();
-        }
         loadMonitoringData();
-        loadUsersData();
       } else {
         document.getElementById('category-votes-list').innerHTML = '<p style="color: #ff4444;">Vous devez être connecté pour voir les données de monitoring.</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;"><a href="login.html" style="color: var(--primary);">Se connecter</a></p>';
-        document.getElementById('users-list').innerHTML = '<p style="color: #ff4444;">Vous devez être connecté pour voir les données de monitoring.</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;"><a href="login.html" style="color: var(--primary);">Se connecter</a></p>';
       }
     });
 
@@ -616,7 +543,6 @@
       onAuthStateChanged(auth, (user) => {
         if (user) {
           loadMonitoringData();
-          loadUsersData();
         }
       });
     }, 30000);
