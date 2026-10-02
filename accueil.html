@@ -360,13 +360,6 @@
       if (cached) renderHomeCategories(JSON.parse(cached));
     } catch (e) { /* ignore */ }
 
-    // Charger auth-ui.js
-    const authScript = document.createElement('script');
-    authScript.type = 'module';
-    authScript.src = 'scripts/auth-ui.js';
-    authScript.defer = true;
-    document.head.appendChild(authScript);
-
     // Lazy-load Firebase pendant le temps d'inactivité du navigateur
     const lazyInit = async () => {
       try {
@@ -390,6 +383,7 @@
       setTimeout(lazyInit, 200);
     }
   </script>
+  <script type="module" src="scripts/auth-ui.js" defer></script>
 </body>
 
 </html>
