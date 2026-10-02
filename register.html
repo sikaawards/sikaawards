@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connexion -- SIKA AWARDS</title>
+  <title>Inscription -- SIKA AWARDS</title>
   <meta name="theme-color" content="#0A0A0A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -231,17 +231,17 @@
   <div class="login-container">
     <div class="login-box">
       <img src="assets/Logo_SA/SA-logo-Normal.png" alt="Sika Awards" class="login-logo">
-      <h1 class="login-title">Connexion</h1>
-      <p class="login-subtitle">Connectez-vous pour voter pour vos artistes préférés ou accéder à l'administration.</p>
+      <h1 class="login-title">Inscription</h1>
+      <p class="login-subtitle">Créez un compte pour voter pour vos artistes préférés.</p>
       
-      <button class="btn-google" id="btn-login-google">
+      <button class="btn-google" id="btn-register-google">
         <svg viewBox="0 0 48 48" style="width:24px;height:24px;">
           <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
           <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
           <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
           <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
         </svg>
-        Continuer avec Google
+        S'inscrire avec Google
       </button>
 
       <div style="margin: 15px 0; display: flex; align-items: center; gap: 12px; opacity: 0.3;">
@@ -250,22 +250,26 @@
         <div style="flex:1; height:1px; background:#fff;"></div>
       </div>
 
-      <form id="email-login-form" style="text-align: left;">
+      <form id="register-form" style="text-align: left;">
         <div style="margin-bottom: 12px;">
-          <input type="email" id="login-email" placeholder="Email" required 
+          <input type="email" id="register-email" placeholder="Email" required 
+                 style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: 'Inter', sans-serif;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <input type="password" id="register-password" placeholder="Mot de passe (min. 6 caractères)" required minlength="6"
                  style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: 'Inter', sans-serif;">
         </div>
         <div style="margin-bottom: 15px;">
-          <input type="password" id="login-password" placeholder="Mot de passe" required 
+          <input type="password" id="register-password-confirm" placeholder="Confirmer le mot de passe" required minlength="6"
                  style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 10px; color: #fff; font-family: 'Inter', sans-serif;">
         </div>
         <button type="submit" class="btn-google" style="background: var(--primary); color: #fff; border: none;">
-          Se connecter
+          S'inscrire
         </button>
       </form>
 
       <p style="margin-top: 12px; font-size: 0.75rem; color: var(--text-muted);">
-        <a href="register.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Pas encore de compte ? S'inscrire</a>
+        <a href="login.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Déjà un compte ? Se connecter</a>
       </p>
 
       <p class="login-error" id="error-msg"></p>
@@ -273,10 +277,10 @@
   </div>
 
   <script type="module">
-    import { auth, provider, signInWithPopup, signInWithEmailAndPassword, db, setDoc, doc, getDoc } from './scripts/firebase-config.js?v=6';
+    import { auth, provider, signInWithPopup, createUserWithEmailAndPassword, db, setDoc, doc, getDoc } from './scripts/firebase-config.js?v=6';
 
-    const btnGoogle = document.getElementById('btn-login-google');
-    const emailForm = document.getElementById('email-login-form');
+    const btnGoogle = document.getElementById('btn-register-google');
+    const registerForm = document.getElementById('register-form');
     const errorMsg = document.getElementById('error-msg');
 
     async function saveUserEmail(user) {
@@ -303,7 +307,7 @@
       return true;
     }
 
-    // Login Google
+    // Inscription Google
     btnGoogle.addEventListener('click', async () => {
       try {
         btnGoogle.disabled = true;
@@ -311,29 +315,40 @@
         const result = await signInWithPopup(auth, provider);
         await handleAuthSuccess(result.user);
       } catch (error) {
-        errorMsg.textContent = "Erreur de connexion Google.";
+        errorMsg.textContent = "Erreur lors de l'inscription Google.";
         errorMsg.style.display = 'block';
         btnGoogle.disabled = false;
         btnGoogle.style.opacity = '1';
       }
     });
 
-    // Login Email
-    emailForm.addEventListener('submit', async (e) => {
+    // Inscription Email
+    registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      const pass = document.getElementById('login-password').value;
-      const btn = emailForm.querySelector('button');
+      const email = document.getElementById('register-email').value;
+      const pass = document.getElementById('register-password').value;
+      const passConfirm = document.getElementById('register-password-confirm').value;
+      const btn = registerForm.querySelector('button');
+
+      if (pass !== passConfirm) {
+        errorMsg.textContent = "Les mots de passe ne correspondent pas.";
+        errorMsg.style.display = 'block';
+        return;
+      }
 
       try {
         btn.disabled = true;
         btn.style.opacity = '0.5';
         errorMsg.style.display = 'none';
 
-        const result = await signInWithEmailAndPassword(auth, email, pass);
+        const result = await createUserWithEmailAndPassword(auth, email, pass);
         await handleAuthSuccess(result.user);
       } catch (error) {
-        errorMsg.textContent = "Email ou mot de passe incorrect. Assurez-vous d'avoir activé ce mode dans Firebase.";
+        if (error.code === 'auth/email-already-in-use') {
+          errorMsg.textContent = "Cet email est déjà utilisé. Connectez-vous plutôt.";
+        } else {
+          errorMsg.textContent = "Erreur lors de l'inscription. Veuillez réessayer.";
+        }
         errorMsg.style.display = 'block';
         btn.disabled = false;
         btn.style.opacity = '1';

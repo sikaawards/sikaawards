@@ -391,7 +391,18 @@
   </a>
 
   <div class="vote-app" id="app">
-    
+
+    <!-- AUTH SCREEN -->
+    <section class="screen" id="screen-auth">
+      <div class="hero-label">AUTHENTIFICATION REQUISE</div>
+      <h1 class="intro-title">Pour voter, vous devez être connecté</h1>
+      <p class="hero-sub" style="margin-bottom:40px;">Choisissez une option ci-dessous pour continuer.</p>
+      <div style="display:flex; flex-direction:column; gap:15px; align-items:center;">
+        <button class="btn-start" onclick="window.location.href='login.html?redirect=vote.html?cat=' + new URLSearchParams(location.search).get('cat')">Se connecter (déjà un compte)</button>
+        <button class="btn-start" style="background:transparent; border:1px solid var(--border);" onclick="window.location.href='register.html?redirect=vote.html?cat=' + new URLSearchParams(location.search).get('cat')">S'inscrire (nouveau compte)</button>
+      </div>
+    </section>
+
     <!-- INTRO -->
     <section class="screen active" id="screen-intro">
       <div class="hero-label" id="cat-label" style="display:none;">SIKA AWARDS 2026</div>
@@ -686,10 +697,21 @@
 
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
-      
+
+      // Si l'utilisateur n'est pas connecté, afficher l'écran d'authentification
+      if (!user) {
+        document.getElementById('screen-auth').classList.add('active');
+        document.getElementById('screen-intro').classList.remove('active');
+        return;
+      }
+
+      // Masquer l'écran d'authentification et afficher l'écran d'intro
+      document.getElementById('screen-auth').classList.remove('active');
+      document.getElementById('screen-intro').classList.add('active');
+
       // Obtenir la signature du device_id
       deviceId = getOrCreateDeviceId();
-      
+
       // Vérifier si l'utilisateur peut voter aujourd'hui
       try {
         if (user) {
