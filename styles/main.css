@@ -1020,7 +1020,7 @@ button {
   transition: var(--transition);
 }
 
-.mobile-nav.open {
+.mobile-nav.active {
   opacity: 1;
   pointer-events: all;
 }
@@ -1074,11 +1074,15 @@ button {
   }
 
   .header .btn-logout-global {
-    display: none;
+    display: block;
+    right: 60px;
+    font-size: 0.65rem;
+    z-index: 1003;
   }
 
   .header .container {
     min-height: 36px;
+    padding-right: 80px;
   }
 
   .mobile-logo-wrap {
