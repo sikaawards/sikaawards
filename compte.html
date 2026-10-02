@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.7">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.8">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
@@ -920,7 +920,7 @@
   </footer>
 
   <script src="scripts/main.js?v=1.0.2" defer></script>
-  <script type="module" src="scripts/auth-ui.js?v=2" defer></script>
+  <script type="module" src="scripts/auth-ui.js?v=3" defer></script>
   <script type="module">
     import { auth, signOut, onAuthStateChanged, db, collection, getDocs, doc, getDoc, setDoc, addDoc, onSnapshot, query, orderBy, limit } from './scripts/firebase-config.js?v=6';
 
@@ -990,28 +990,34 @@
             createdAt: new Date().toISOString()
           });
         }
-        document.getElementById('chat-username-display').textContent = username;
+        const chatDisplay = document.getElementById('chat-username-display');
+        if (chatDisplay) chatDisplay.textContent = username;
       } catch (error) {
         console.error('Erreur chargement username:', error);
         username = currentUser.email.split('@')[0];
-        document.getElementById('chat-username-display').textContent = username;
+        const chatDisplay = document.getElementById('chat-username-display');
+        if (chatDisplay) chatDisplay.textContent = username;
       }
     }
 
     // Changer le username
-    document.getElementById('btn-change-username').addEventListener('click', () => {
-      const newUsername = prompt('Entrez votre nouveau nom d\'utilisateur:', username);
-      if (newUsername && newUsername.trim() !== '') {
-        username = newUsername.trim();
-        document.getElementById('chat-username-display').textContent = username;
-        // Sauvegarder dans Firestore
-        setDoc(doc(db, 'users', currentUser.uid), {
-          email: currentUser.email,
-          username: username,
-          updatedAt: new Date().toISOString()
-        }, { merge: true });
-      }
-    });
+    const changeUsernameBtn = document.getElementById('btn-change-username');
+    if (changeUsernameBtn) {
+      changeUsernameBtn.addEventListener('click', () => {
+        const newUsername = prompt('Entrez votre nouveau nom d\'utilisateur:', username);
+        if (newUsername && newUsername.trim() !== '') {
+          username = newUsername.trim();
+          const chatDisplay = document.getElementById('chat-username-display');
+          if (chatDisplay) chatDisplay.textContent = username;
+          // Sauvegarder dans Firestore
+          setDoc(doc(db, 'users', currentUser.uid), {
+            email: currentUser.email,
+            username: username,
+            updatedAt: new Date().toISOString()
+          }, { merge: true });
+        }
+      });
+    }
 
     // Initialiser le chat avec Firestore
     function initChat() {
@@ -1154,12 +1160,14 @@
 
     function renderAccount() {
       // Profile info
-      document.getElementById('user-email').textContent = currentUser.email;
+      const userEmailEl = document.getElementById('user-email');
+      if (userEmailEl) userEmailEl.textContent = currentUser.email;
 
       const userSince = currentUser.metadata.creationTime
         ? new Date(currentUser.metadata.creationTime).toLocaleDateString('fr-FR')
         : 'Inconnu';
-      document.getElementById('user-since').textContent = userSince;
+      const userSinceEl = document.getElementById('user-since');
+      if (userSinceEl) userSinceEl.textContent = userSince;
 
       // Stats
       const totalCategories = categories.length;
@@ -1167,11 +1175,16 @@
       const remainingCount = totalCategories - votedCount;
       const completionRate = totalCategories > 0 ? Math.round((votedCount / totalCategories) * 100) : 0;
 
-      document.getElementById('total-votes').textContent = votedCount;
-      document.getElementById('remaining-votes').textContent = remainingCount;
-      document.getElementById('completion-rate').textContent = completionRate + '%';
-      document.getElementById('vote-progress-text').textContent = `${votedCount}/${totalCategories}`;
-      document.getElementById('vote-progress-bar').style.width = completionRate + '%';
+      const totalVotesEl = document.getElementById('total-votes');
+      if (totalVotesEl) totalVotesEl.textContent = votedCount;
+      const remainingVotesEl = document.getElementById('remaining-votes');
+      if (remainingVotesEl) remainingVotesEl.textContent = remainingCount;
+      const completionRateEl = document.getElementById('completion-rate');
+      if (completionRateEl) completionRateEl.textContent = completionRate + '%';
+      const voteProgressTextEl = document.getElementById('vote-progress-text');
+      if (voteProgressTextEl) voteProgressTextEl.textContent = `${votedCount}/${totalCategories}`;
+      const voteProgressBarEl = document.getElementById('vote-progress-bar');
+      if (voteProgressBarEl) voteProgressBarEl.style.width = completionRate + '%';
 
       // Votes list
       renderVotesList();
@@ -1222,8 +1235,8 @@
 
       console.log('Initialisation du lecteur avec URL:', streamUrl);
 
-      if (!streamUrl) {
-        console.log('Aucun URL de stream fourni');
+      if (!streamUrl || !videoContainer) {
+        console.log('Aucun URL de stream ou conteneur vidéo non trouvé');
         return;
       }
 
@@ -1238,10 +1251,10 @@
       existingIframes.forEach(iframe => iframe.remove());
 
       // Réinitialiser l'interface
-      video.style.display = 'none';
-      placeholder.style.display = 'flex';
-      refreshBtn.style.display = 'none';
-      placeholderText.textContent = 'Chargement du stream...';
+      if (video) video.style.display = 'none';
+      if (placeholder) placeholder.style.display = 'flex';
+      if (refreshBtn) refreshBtn.style.display = 'none';
+      if (placeholderText) placeholderText.textContent = 'Chargement du stream...';
 
       // Détecter si c'est une URL YouTube
       console.log('URL à analyser:', streamUrl);
@@ -1428,7 +1441,7 @@
     document.getElementById('btn-refresh-header').addEventListener('click', refreshStream);
     document.getElementById('btn-refresh-stream').addEventListener('click', refreshStream);
   </script>
-  <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js?v=2'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js?v=2'),200)}</script>
+  <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js?v=3'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js?v=3'),200)}</script>
 </body>
 
 </html>

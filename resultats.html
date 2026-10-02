@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.7">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.8">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <style>
     .categories-hero {
@@ -214,7 +214,7 @@
   </footer>
 
   <script src="scripts/main.js?v=1.0.2" defer></script>
-  <script type="module" src="scripts/auth-ui.js?v=2" defer></script>
+  <script type="module" src="scripts/auth-ui.js?v=3" defer></script>
   <script type="module">
     import { db, collection, getDocs } from './scripts/firebase-config.js?v=6';
 
@@ -268,6 +268,6 @@
 
     loadResults();
   </script>
-  <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js?v=2'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js?v=2'),200)}</script>
+  <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js?v=3'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js?v=3'),200)}</script>
 </body>
 </html>
