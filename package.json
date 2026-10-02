@@ -1,0 +1,7 @@
+{
+  "name": "sikaawards",
+  "private": true,
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}

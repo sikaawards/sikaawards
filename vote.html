@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.1">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.4">
   <link rel="icon" type="image/png" href="assets/Fav Icon/SA-logo-Normal.png">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
@@ -428,7 +428,7 @@
   </div>
 
   <script type="module">
-    import { auth, db, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs, query, where, runTransaction, onAuthStateChanged, signInWithRedirect, getRedirectResult, provider } from './scripts/firebase-config.js?v=3';
+    import { auth, db, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs, query, where, runTransaction, onAuthStateChanged, signInWithRedirect, getRedirectResult, provider } from './scripts/firebase-config.js?v=4';
 
     // ---- SURVIVOR ENGINE ----
     let allCandidates = [];
@@ -440,6 +440,41 @@
     let currentUser = null;
     let hasVoted = false;
     let isDataLoaded = false;
+    let deviceId = null;
+    let deviceSignature = null;
+
+    // Gestion du device_id
+    function getOrCreateDeviceId() {
+      let storedDeviceId = localStorage.getItem('device_id');
+      if (!storedDeviceId) {
+        // Générer un UUID simple
+        storedDeviceId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          const r = Math.random() * 16 | 0;
+          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+        localStorage.setItem('device_id', storedDeviceId);
+      }
+      return storedDeviceId;
+    }
+
+    // Obtenir la signature du device_id depuis le serveur
+    async function getDeviceSignature() {
+      try {
+        deviceId = getOrCreateDeviceId();
+        const response = await fetch('/api/device-id', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ deviceId })
+        });
+        const data = await response.json();
+        deviceSignature = data.signature;
+        return true;
+      } catch (e) {
+        console.error("Erreur récupération signature device:", e);
+        return false;
+      }
+    }
 
     // 1. Initialisation
     const params = new URLSearchParams(location.search);
@@ -549,6 +584,26 @@
       } catch (err) {
         console.error("Erreur chargement Firebase:", err);
         document.getElementById('cat-title').textContent = "Erreur de connexion";
+        
+        // Afficher un message plus détaillé
+        const duelContainer = document.querySelector('.duel-container');
+        if(duelContainer) {
+          duelContainer.style.height = '100vh';
+          duelContainer.style.display = 'flex';
+          duelContainer.style.alignItems = 'center';
+          duelContainer.style.justifyContent = 'center';
+          duelContainer.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+              <h3 style="font-family: var(--font-heading); font-size: clamp(1.5rem, 5vw, 3.5rem); font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1.1; margin-bottom: 16px; color: var(--text); padding: 0 20px;">
+                Erreur de chargement
+              </h3>
+              <p style="font-size: 0.9rem; line-height: 1.6; max-width: 500px;">
+                Impossible de charger les données. Veuillez vérifier votre connexion.
+              </p>
+              <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: var(--primary); color: white; border: none; cursor: pointer; font-family: var(--font-heading); font-weight: 800; text-transform: uppercase;">Réessayer</button>
+            </div>
+          `;
+        }
       }
     }
 
@@ -594,19 +649,32 @@
 
     onAuthStateChanged(auth, async (user) => {
       currentUser = user;
-      // Vérifier si l'IP peut voter aujourd'hui
+      
+      // Obtenir la signature du device_id
+      await getDeviceSignature();
+      
+      // Vérifier si l'utilisateur peut voter aujourd'hui
       try {
-        const response = await fetch(`/api/can-vote?categoryId=${catId}`);
+        const userId = user ? user.uid : 'anonymous';
+        const response = await fetch(`/api/can-vote?categoryId=${catId}&userId=${userId}&deviceId=${deviceId}`);
         const data = await response.json();
         hasVoted = !data.canVote;
       } catch (e) {
-        console.error("Erreur vérification vote IP", e);
+        console.error("Erreur vérification vote", e);
         hasVoted = false;
       }
       updateStartButton();
     });
 
-    getRedirectResult(auth).catch((error) => {
+    // Gérer le redirect après connexion Google
+    getRedirectResult(auth).then((result) => {
+      if (result && result.user) {
+        currentUser = result.user;
+        console.log("Utilisateur connecté:", currentUser.email);
+        // Recharger les données de vote
+        updateStartButton();
+      }
+    }).catch((error) => {
       if (error.code !== 'auth/no-current-user') {
         console.error("Erreur redirect Google:", error);
         alert("Erreur de connexion : " + error.message);
@@ -721,18 +789,21 @@
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#FF3300', '#FFFFFF', '#FFD700'] });
       }
 
-      // Enregistrement final du vote via API IP
+      // Enregistrement final du vote via API
       if (!hasVoted) {
         hasVoted = true; // Empêcher un double déclenchement
-        
-        fetch('/api/vote', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            categoryId: catId,
-            winnerName: winner.name
+
+        currentUser.getIdToken().then(token =>
+          fetch('/api/vote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({
+              categoryId: catId,
+              winnerName: winner.name,
+              deviceId: deviceId
+            })
           })
-        })
+        )
         .then(response => response.json())
         .then(data => {
           if (data.ok) {
@@ -740,10 +811,12 @@
           } else {
             console.error("Erreur vote:", data.error);
             alert(data.error || "Erreur lors du vote");
+            hasVoted = false; // Réactiver si erreur
           }
         })
         .catch(e => {
           console.error("Erreur lors de l'enregistrement final du vote :", e);
+          hasVoted = false; // Réactiver si erreur
         });
       }
     }
@@ -759,6 +832,7 @@
 
   </script>
   <script src="scripts/main.js?v=1.0.2" defer></script>
-  <script>if('requestIdleCallback' in window){requestIdleCallback(()=>import('./scripts/auth-ui.js'),{timeout:2000})}else{setTimeout(()=>import('./scripts/auth-ui.js'),200)}</script>
+  <script src="scripts/navbar.js?v=1.0.1" defer></script>
+  <script type="module" src="scripts/auth-ui.js" defer></script>
 </body>
 </html>
