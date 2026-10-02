@@ -578,10 +578,9 @@ button {
 .cat-viewport {
   flex: 1;
   overflow: hidden;
+  margin: 0 55px;
+  /* Crée l'espace vide pour les flèches */
   position: relative;
-  --cat-gap: 10px;
-  /* Permet aux flèches de connaître la largeur du viewport (unités cqw) */
-  container-type: inline-size;
 }
 
 .cat-track {
@@ -1300,9 +1299,9 @@ button {
 /* --- NAVIGATION ARROWS (RECTANGLE STYLE) --- */
 .cat-arrow {
   position: absolute;
-  top: 0; /* aligné sur le haut des photos */
+  top: 0;
   width: 44px;
-  height: 162px; /* fallback */
+  height: 162px;
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -1315,16 +1314,18 @@ button {
   cursor: pointer;
   z-index: 100;
   transition: 0.3s;
+  transform: none;
+  /* Désactive tout décalage parasite */
 }
 
 .cat-arrow.prev {
-  left: 0;
-  /* Position par rapport au viewport (contient les photos) */
+  left: 10px;
+  /* Espace depuis la gauche de l'écran */
 }
 
 .cat-arrow.next {
-  right: 0;
-  /* Position par rapport au viewport (contient les photos) */
+  right: 10px;
+  /* Espace depuis la droite de l'écran */
 }
 
 .cat-arrow:hover {
@@ -1336,13 +1337,6 @@ button {
 .cat-arrow .icon-arrow {
   width: 18px;
   height: 18px;
-}
-
-/* La flèche fait exactement la hauteur d'une photo (carré = largeur d'une carte) */
-@supports (width: 1cqw) {
-  .cat-arrow {
-    height: max(150px, calc((100cqw - (var(--cat-gap, 10px) * 6)) / 7));
-  }
 }
 
 /* Bouton Voter Discret */
