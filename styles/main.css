@@ -579,6 +579,9 @@ button {
   flex: 1;
   overflow: hidden;
   position: relative;
+  --cat-gap: 10px;
+  /* Permet aux flèches de connaître la largeur du viewport (unités cqw) */
+  container-type: inline-size;
 }
 
 .cat-track {
@@ -1297,10 +1300,9 @@ button {
 /* --- NAVIGATION ARROWS (RECTANGLE STYLE) --- */
 .cat-arrow {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0; /* aligné sur le haut des photos */
   width: 44px;
-  height: 162px;
+  height: 162px; /* fallback */
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -1334,6 +1336,13 @@ button {
 .cat-arrow .icon-arrow {
   width: 18px;
   height: 18px;
+}
+
+/* La flèche fait exactement la hauteur d'une photo (carré = largeur d'une carte) */
+@supports (width: 1cqw) {
+  .cat-arrow {
+    height: max(150px, calc((100cqw - (var(--cat-gap, 10px) * 6)) / 7));
+  }
 }
 
 /* Bouton Voter Discret */
