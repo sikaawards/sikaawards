@@ -463,10 +463,10 @@
     <h2>Utilisateurs et Votes</h2>
     <div style="margin-bottom: 16px;">
       <span style="color: var(--text-muted); font-size: 0.85rem;">Total utilisateurs: </span>
-      <span id="total-users" style="font-weight: 700; color: var(--primary);">N/A</span>
+      <span id="total-users" style="font-weight: 700; color: var(--primary);">Chargement...</span>
     </div>
     <div id="users-list">
-      <p style="color: var(--text-muted);">Cette fonctionnalité nécessite une configuration admin supplémentaire. Les votes par catégorie sont disponibles ci-dessus.</p>
+      <p style="color: var(--text-muted);">Chargement...</p>
     </div>
   </div>
 
@@ -529,12 +529,64 @@
       }
     }
 
+    async function loadUsersData() {
+      try {
+        const { auth } = await import('./scripts/firebase-config.js?v=6');
+        const token = await auth.currentUser.getIdToken();
+
+        const response = await fetch('/api/get-users', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+          const tableHtml = `
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Catégories votées</th>
+                  <th>Nominés choisis</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${data.users.map(user => {
+                  const categoriesVoted = user.votes.map(v => v.categoryName).join(', ');
+                  const nomineesChosen = user.votes.map(v => v.nominee).join(', ');
+                  return `
+                    <tr>
+                      <td>${user.email || 'N/A'}</td>
+                      <td>${categoriesVoted || '-'}</td>
+                      <td>${nomineesChosen || '-'}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          `;
+
+          document.getElementById('users-list').innerHTML = tableHtml;
+          document.getElementById('total-users').textContent = data.totalUsers;
+        } else {
+          document.getElementById('users-list').innerHTML = `<p style="color: #ff4444;">Erreur: ${data.error}</p>`;
+        }
+      } catch (error) {
+        console.error('Erreur chargement utilisateurs:', error);
+        document.getElementById('users-list').innerHTML = `<p style="color: #ff4444;">Erreur de chargement: ${error.message}</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">Vérifiez que vous êtes connecté en tant qu'administrateur.</p>`;
+      }
+    }
+
     // Vérifier l'authentification avant de charger les données
     onAuthStateChanged(auth, (user) => {
       if (user) {
         loadMonitoringData();
+        loadUsersData();
       } else {
         document.getElementById('category-votes-list').innerHTML = '<p style="color: #ff4444;">Vous devez être connecté pour voir les données de monitoring.</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;"><a href="login.html" style="color: var(--primary);">Se connecter</a></p>';
+        document.getElementById('users-list').innerHTML = '<p style="color: #ff4444;">Vous devez être connecté pour voir les données de monitoring.</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;"><a href="login.html" style="color: var(--primary);">Se connecter</a></p>';
       }
     });
 
@@ -543,6 +595,7 @@
       onAuthStateChanged(auth, (user) => {
         if (user) {
           loadMonitoringData();
+          loadUsersData();
         }
       });
     }, 30000);
