@@ -28,14 +28,6 @@ function updateAuthUI(user) {
             logoutLink.href = '#';
             logoutLink.className = 'btn-logout-global';
             logoutLink.textContent = 'Déconnexion';
-            logoutLink.style.marginLeft = '20px';
-            logoutLink.style.color = 'var(--primary)';
-            logoutLink.style.fontFamily = 'var(--font-heading)';
-            logoutLink.style.fontSize = '0.85rem';
-            logoutLink.style.fontWeight = '700';
-            logoutLink.style.letterSpacing = '1.5px';
-            logoutLink.style.textTransform = 'uppercase';
-            logoutLink.style.cursor = 'pointer';
             logoutLink.onclick = async (e) => {
                 e.preventDefault();
                 if (confirm('Se déconnecter ?')) {

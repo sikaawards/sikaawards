@@ -1076,14 +1076,23 @@ button {
 
   .header .btn-logout-global {
     display: block;
-    right: 80px;
-    font-size: 0.65rem;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.7rem;
     z-index: 1002;
+    color: var(--primary);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
   }
 
   .header .container {
     min-height: 36px;
-    padding-right: 80px;
+    padding-right: 60px;
   }
 
   .mobile-logo-wrap {
