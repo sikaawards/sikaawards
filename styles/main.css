@@ -268,18 +268,6 @@ button {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-.btn-logout-global {
-  color: var(--primary);
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  margin-left: 20px;
-}
-
 /* ========================================
    HERO — Les Flammes style
    ======================================== */
