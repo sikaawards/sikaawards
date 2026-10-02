@@ -651,14 +651,20 @@
       currentUser = user;
       
       // Obtenir la signature du device_id
-      await getDeviceSignature();
+      deviceId = getOrCreateDeviceId();
       
       // Vérifier si l'utilisateur peut voter aujourd'hui
       try {
-        const userId = user ? user.uid : 'anonymous';
-        const response = await fetch(`/api/can-vote?categoryId=${catId}&userId=${userId}&deviceId=${deviceId}`);
-        const data = await response.json();
-        hasVoted = !data.canVote;
+        if (user) {
+          const token = await user.getIdToken();
+          const response = await fetch(`/api/can-vote?categoryId=${encodeURIComponent(catId)}&deviceId=${encodeURIComponent(deviceId)}`, {
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+          const data = await response.json();
+          hasVoted = !data.canVote;
+        } else {
+          hasVoted = false;
+        }
       } catch (e) {
         console.error("Erreur vérification vote", e);
         hasVoted = false;
