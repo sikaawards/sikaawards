@@ -473,7 +473,7 @@
 
 
   <script type="module">
-    import { db, collection, getDocs, doc, getDoc, query, where, auth, onAuthStateChanged } from './scripts/firebase-config.js?v=6';
+    import { db, collection, getDocs, doc, getDoc, query, where, auth, onAuthStateChanged, ADMIN_EMAILS, loadAdminEmails, adminEmailsLoaded } from './scripts/firebase-config.js?v=6';
 
     async function loadMonitoringData() {
       try {
@@ -531,6 +531,12 @@
 
     async function loadUsersData() {
       try {
+        // Vérifier si l'utilisateur est admin
+        if (!ADMIN_EMAILS.includes(auth.currentUser.email)) {
+          document.getElementById('users-list').innerHTML = '<p style="color: #ff4444;">Accès refusé: Vous devez être administrateur pour voir les données utilisateurs.</p>';
+          return;
+        }
+
         // Charger tous les utilisateurs
         const usersSnap = await getDocs(collection(db, "users"));
         const users = usersSnap.docs.map(d => ({ ...d.data(), id: d.id }));
@@ -586,13 +592,17 @@
         document.getElementById('total-users').textContent = users.length;
       } catch (error) {
         console.error('Erreur chargement utilisateurs:', error);
-        document.getElementById('users-list').innerHTML = `<p style="color: #ff4444;">Erreur de chargement: ${error.message}</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">Vérifiez que vous êtes connecté et que Firestore est accessible.</p>`;
+        document.getElementById('users-list').innerHTML = `<p style="color: #ff4444;">Erreur de chargement: ${error.message}</p><p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">Vérifiez que vous êtes connecté en tant qu'administrateur et que Firestore est accessible.</p>`;
       }
     }
 
     // Vérifier l'authentification avant de charger les données
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
+        // Attendre que les emails admin soient chargés
+        if (!adminEmailsLoaded) {
+          await loadAdminEmails();
+        }
         loadMonitoringData();
         loadUsersData();
       } else {
@@ -756,18 +766,6 @@
       } catch (error) {
         console.error('Erreur export base de données:', error);
         alert('❌ Erreur lors de l\'export');
-      }
-    }
-        
-        link.setAttribute('href', url);
-        link.setAttribute('download', `utilisateurs_${new Date().toISOString().split('T')[0]}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (error) {
-        console.error('Erreur téléchargement CSV:', error);
-        alert('Erreur lors du téléchargement des emails');
       }
     }
   </script>
