@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css?v=1.0.12">
+  <link rel="stylesheet" href="styles/main.css?v=1.0.13">
   <style>
     body {
       background: #000 url('assets/nominees/Fond-Rideaux1.jpeg') no-repeat center center fixed;
@@ -30,10 +30,16 @@
     .construction-content {
       position: relative;
       z-index: 2;
+      max-width: 100%;
+    }
+
+    @media (min-width: 769px) {
+      .construction-title { font-size: clamp(2.5rem, 15vw, 10rem); }
     }
 
     .construction-title {
-      font-size: clamp(2.5rem, 15vw, 10rem);
+      font-size: clamp(1.6rem, 10vw, 10rem);
+      overflow-wrap: anywhere;
       font-weight: 900;
       text-transform: uppercase;
       font-style: italic;
@@ -48,7 +54,7 @@
     .construction-sub {
       font-size: 1rem;
       text-transform: uppercase;
-      letter-spacing: 5px;
+      letter-spacing: clamp(2px, 1.3vw, 5px);
       color: var(--primary);
       margin-bottom: 40px;
       opacity: 1;
