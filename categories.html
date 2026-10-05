@@ -269,6 +269,7 @@
             <div class="nominee-card">
               <div class="nominee-img-box">${imgHtml}</div>
               <div class="nominee-info">
+                ${n.project ? `<div class="nominee-project-label">${n.project}</div>` : ''}
                 <div class="nominee-name-label">${n.name}</div>
                 <div class="nominee-sub-label">${n.sub || ''}</div>
               </div>

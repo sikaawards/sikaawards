@@ -102,13 +102,14 @@
       justify-content: center;
       width: 100%;
       max-width: 1000px;
-      margin: 0 auto;
+      margin: 100px auto 0;
       position: relative;
     }
     
     .candidate {
-      flex: 0 0 320px;
-      width: 320px;
+      flex: 0 0 250px;
+      width: 250px;
+      height: 320px;
       position: relative;
       cursor: pointer;
       transition: all 0.25s cubic-bezier(0.2, 0, 0.2, 1);
@@ -119,7 +120,7 @@
       transform: translateZ(0);
       background: var(--bg-card);
       border: 1px solid var(--border);
-      padding-bottom: 20px;
+      padding-bottom: 0;
     }
 
     .candidate-img-box {
@@ -128,7 +129,8 @@
       overflow: hidden;
       background: #000;
       position: relative;
-      margin-bottom: 20px;
+      margin-bottom: 0;
+      flex-shrink: 0;
     }
 
     .candidate-img-box img {
@@ -141,34 +143,47 @@
     .candidate:hover img { filter: grayscale(0%); }
 
     .candidate-info {
-      padding: 0;
+      padding: 10px;
       width: 100%;
       text-align: center;
+      height: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
     }
     .cand-name {
       font-family: var(--font-heading);
-      font-size: 1.6rem;
+      font-size: 1.2rem;
       font-weight: 900;
       text-transform: uppercase;
-      line-height: 1;
-      margin-bottom: 8px;
+      line-height: 1.1;
+      margin-bottom: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .cand-project {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+      opacity: 0.9;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .cand-sub {
-      font-size: 0.9rem;
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--text-muted);
       opacity: 0.7;
-    }
-
-    .spotify-embed-container {
-      width: 100%;
-      height: 80px;
-      background: #000;
       overflow: hidden;
-      display: none;
-      border-top: 1px solid var(--border);
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .spotify-embed-container.has-content { display: block; }
 
 
     .vs-badge {
@@ -219,14 +234,14 @@
     /* ---- INFOS DU TOUR ---- */
     .duel-meta {
       position: absolute;
-      top: 84px; left: 0; width: 100%;
+      top: 70px; left: 0; width: 100%;
       text-align: center;
       pointer-events: none;
       z-index: 5;
     }
     .duel-round {
       font-family: var(--font-heading);
-      font-size: 1.1rem;
+      font-size: 4rem;
       font-weight: 900;
       font-style: italic;
       text-transform: uppercase;
@@ -238,7 +253,7 @@
 
     /* ---- ROUND SUMMARY SCREEN ---- */
     .summary-title { font-size: 1rem; color: var(--primary); letter-spacing: 4px; margin-bottom: 12px; }
-    .summary-round { font-family: var(--font-heading); font-size: 3rem; font-weight: 900; font-style: italic; margin-bottom: 40px; }
+    .summary-round { font-family: var(--font-heading); font-size: 4rem; font-weight: 900; font-style: italic; margin-bottom: 40px; }
     .survivors-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -361,23 +376,43 @@
         font-size: 0.6rem;
         padding: 6px 12px;
       }
-      .duel-container { 
-        flex-direction: row; 
-        gap: 10px; 
+      .duel-meta { top: 140px; }
+      .duel-round { font-size: 3rem; }
+      .duel-container {
+        flex-direction: row;
+        gap: 8px;
         width: 100%;
-        padding: 0 40px;
+        padding: 0 20px;
       }
-      .candidate { 
-        flex: 1 1 0; 
+      .candidate {
+        flex: 1 1 0;
         width: auto;
         min-width: 0;
-        padding-bottom: 12px; 
+        padding-bottom: 0;
+        height: 100%;
       }
-      .candidate-img-box { margin-bottom: 8px; }
-      .candidate-name { font-size: 0.8rem; margin-bottom: 4px; }
-      .candidate-info p { font-size: 0.55rem; }
-      .vs-badge { margin: 0 2px; font-size: 1rem; flex-shrink: 0; }
-      .vote-feedback { top: 20px; font-size: 2rem; }
+      .candidate-img-box { margin-bottom: 0; }
+      .candidate-info {
+        padding: 6px;
+        height: 50px;
+      }
+      .cand-name { font-size: 0.85rem; margin-bottom: 2px; }
+      .cand-project { font-size: 0.5rem; margin-bottom: 2px; }
+      .cand-sub { font-size: 0.55rem; }
+      .vs-badge { margin: 0 2px; font-size: 0.9rem; flex-shrink: 0; }
+      .vote-feedback { top: 20px; font-size: 1.5rem; }
+      .summary-round { font-size: 2.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .duel-meta { top: 120px; }
+      .duel-round { font-size: 2.4rem; }
+      .duel-container { gap: 6px; padding: 0 15px; }
+      .candidate-info { height: 45px; padding: 5px; }
+      .cand-name { font-size: 0.75rem; }
+      .cand-project { font-size: 0.45rem; }
+      .cand-sub { font-size: 0.5rem; }
+      .summary-round { font-size: 2rem; }
     }
   </style>
 </head>
@@ -422,10 +457,9 @@
         <div class="candidate" id="cand-0" onclick="vote(0)">
           <div class="candidate-img-box"><img src="" alt="" id="img-0"></div>
           <div class="candidate-info">
+            <div class="cand-project" id="project-0"></div>
             <div class="cand-name" id="name-0">Candidat A</div>
-            <div class="cand-sub">Voter pour lui</div>
           </div>
-          <div class="spotify-embed-container" id="sp-player-0"></div>
         </div>
 
         <div class="vs-badge">VS</div>
@@ -433,10 +467,9 @@
         <div class="candidate" id="cand-1" onclick="vote(1)">
           <div class="candidate-img-box"><img src="" alt="" id="img-1"></div>
           <div class="candidate-info">
+            <div class="cand-project" id="project-1"></div>
             <div class="cand-name" id="name-1">Candidat B</div>
-            <div class="cand-sub">Voter pour lui</div>
           </div>
-          <div class="spotify-embed-container" id="sp-player-1"></div>
         </div>
       </div>
     </section>
@@ -821,31 +854,20 @@
       if (!leftCandidate || !rightCandidate) return;
 
       document.getElementById('name-0').textContent = leftCandidate.name;
+      document.getElementById('project-0').textContent = leftCandidate.project || '';
+      document.getElementById('project-0').style.display = leftCandidate.project ? 'block' : 'none';
       const imgBox0 = document.getElementById('cand-0').querySelector('.candidate-img-box');
-      imgBox0.innerHTML = leftCandidate.img 
-        ? `<img src="${leftCandidate.img}" alt="${leftCandidate.name}" id="img-0">` 
+      imgBox0.innerHTML = leftCandidate.img
+        ? `<img src="${leftCandidate.img}" alt="${leftCandidate.name}" id="img-0">`
         : `<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;" id="img-0"></div>`;
-        
-      document.getElementById('name-1').textContent = rightCandidate.name;
-      const imgBox1 = document.getElementById('cand-1').querySelector('.candidate-img-box');
-      imgBox1.innerHTML = rightCandidate.img 
-        ? `<img src="${rightCandidate.img}" alt="${rightCandidate.name}" id="img-1">` 
-        : `<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;" id="img-1"></div>`;
 
-      [0, 1].forEach(idx => {
-        const cand = idx === 0 ? leftCandidate : rightCandidate;
-        const player = document.getElementById(`sp-player-${idx}`);
-        const potentialUrl = (cand.spotify && cand.spotify.includes('spotify.com')) ? cand.spotify : 
-                             (cand.img && cand.img.includes('spotify.com') ? cand.img : null);
-        const embedUrl = getSpotifyEmbedUrl(potentialUrl);
-        if (embedUrl) {
-          player.innerHTML = `<iframe src="${embedUrl}" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
-          player.classList.add('has-content');
-        } else {
-          player.innerHTML = '';
-          player.classList.remove('has-content');
-        }
-      });
+      document.getElementById('name-1').textContent = rightCandidate.name;
+      document.getElementById('project-1').textContent = rightCandidate.project || '';
+      document.getElementById('project-1').style.display = rightCandidate.project ? 'block' : 'none';
+      const imgBox1 = document.getElementById('cand-1').querySelector('.candidate-img-box');
+      imgBox1.innerHTML = rightCandidate.img
+        ? `<img src="${rightCandidate.img}" alt="${rightCandidate.name}" id="img-1">`
+        : `<div style="background:linear-gradient(135deg,#1a1a2e,#16213e);aspect-ratio:1;width:100%;" id="img-1"></div>`;
 
       document.getElementById('cand-0').classList.remove('winner', 'loser');
       document.getElementById('cand-1').classList.remove('winner', 'loser');

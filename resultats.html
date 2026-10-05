@@ -137,7 +137,17 @@
       text-transform: uppercase;
       font-style: italic;
       color: #fff;
-      margin-bottom: 8px;
+      margin-bottom: 2px;
+    }
+
+    .winner-project {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+      opacity: 0.9;
     }
 
     .winner-sub {
@@ -257,6 +267,7 @@
             <div class="winner-badge">Gagnant 2026</div>
             <div class="winner-img-box">${imgHtml}</div>
             <div class="winner-info">
+              ${winner.project ? `<div class="winner-project">${winner.project}</div>` : ''}
               <div class="winner-name">${winner.name}</div>
               <div class="winner-sub">${winner.sub || ''}</div>
             </div>

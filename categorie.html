@@ -116,6 +116,12 @@
       padding: 0 20px;
     }
 
+    .detail-logo {
+      width: 60px;
+      height: auto;
+      object-fit: contain;
+    }
+
     .detail-desc {
       font-size: 1rem;
       color: var(--text-muted);
@@ -197,6 +203,8 @@
       position: relative;
       cursor: pointer;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .nominee-big-img {
@@ -209,6 +217,7 @@
       transform: scale(1.15);
       /* Cache les bords du flou */
       transition: 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+      flex-shrink: 0;
     }
 
     .nominee-big-card:hover .nominee-big-img {
@@ -242,16 +251,35 @@
 
     .nominee-big-name {
       font-family: var(--font-heading);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 900;
       text-transform: uppercase;
-      margin-bottom: 2px;
-      line-height: 1.2;
+      margin-bottom: 1px;
+      line-height: 1.1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nominee-big-project {
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1px;
+      opacity: 0.9;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .nominee-big-sub {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     /* Responsive */
@@ -469,9 +497,28 @@
 
       if (!cat) return;
 
-      document.getElementById('detail-title').textContent = cat.title;
       document.getElementById('detail-desc').textContent = cat.desc;
       document.title = cat.title + ' -- SIKA AWARDS';
+
+      // Afficher le logo si c'est une catégorie spéciale (contient "BATTLE" ou "RAP CONTENDERS")
+      const detailLogo = document.getElementById('detail-logo');
+      const detailTitle = document.getElementById('detail-title');
+      
+      if (cat.title.includes('BATTLE') || cat.title.includes('RAP CONTENDERS')) {
+        // Afficher le logo à côté du titre
+        if (detailLogo) {
+          detailLogo.src = 'assets/partenaire/RapContenders.png';
+          detailLogo.style.display = 'block';
+        }
+        
+        // Insérer le logo du partenaire entre les mots du titre
+        const logoHtml = '<img src="assets/partenaire/RapContenders.png" alt="RapContenders" style="width:50px; height:auto; display:inline-block; vertical-align:middle; margin:0 8px;">';
+        detailTitle.innerHTML = cat.title.replace('BATTLE', `${logoHtml}BATTLE`).replace('RAP CONTENDERS', `${logoHtml}RAP CONTENDERS`);
+      } else {
+        // Cacher le logo pour les catégories normales
+        if (detailLogo) detailLogo.style.display = 'none';
+        detailTitle.textContent = cat.title;
+      }
 
       const nomineesTitle = document.getElementById('nominees-title');
       if (nomineesTitle) {
@@ -566,6 +613,7 @@
           card.innerHTML = `
             ${imgHtml}
             <div class="nominee-big-info">
+              ${n.project ? `<div class="nominee-big-project">${n.project}</div>` : ''}
               <div class="nominee-big-name">${n.name}</div>
               <div class="nominee-big-sub">${n.sub || ''}</div>
             </div>

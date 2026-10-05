@@ -60,8 +60,9 @@
       display: grid;
       grid-template-columns: repeat(14, 1fr);
       gap: 20px;
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
+      justify-items: center;
     }
 
     .partner-logo-placeholder {
@@ -83,7 +84,7 @@
     .partner-logo-item {
       background: transparent;
       border: none;
-      padding: 0;
+      padding: 10px;
       text-align: center;
       display: flex;
       align-items: center;
@@ -101,7 +102,7 @@
 
     .partner-logo-img {
       max-width: 100%;
-      height: auto;
+      height: 45px;
       max-height: 45px;
       object-fit: contain;
       transition: 0.3s;
@@ -369,7 +370,7 @@
         </div>
         <!-- afrojeune -->
         <div class="partner-logo-item">
-          <img src="assets/partenaire/afrojeune.png" alt="afrojeune" class="partner-logo-img" onerror="this.style.display='none'; this.parentElement.style.display='none';">
+          <img src="assets/partenaire/afrojeune.png" alt="afrojeune" class="partner-logo-img" style="max-height: 35px; max-width: 100%; object-fit: contain;" onerror="this.style.display='none'; this.parentElement.style.display='none';">
         </div>
       </div>
     </div>
