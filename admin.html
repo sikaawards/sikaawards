@@ -902,6 +902,10 @@
         <input type="text" id="nom-sub">
       </div>
       <div class="form-group">
+        <label>Project</label>
+        <input type="text" id="nom-project">
+      </div>
+      <div class="form-group">
         <label>Image URL</label>
         <input type="text" id="nom-img">
       </div>
@@ -1121,6 +1125,7 @@
         cat.nominees.push({
           name: `Nominé ${countActuel + i + 1}`,
           sub: "",
+          project: "",
           img: "",
           spotify: "",
           votes: 0
@@ -1194,6 +1199,7 @@
         document.getElementById('nominee-modal-title').textContent = "Editer Nominé";
         document.getElementById('nom-name').value = n.name;
         document.getElementById('nom-sub').value = n.sub;
+        document.getElementById('nom-project').value = n.project || "";
         document.getElementById('nom-img').value = n.img;
         document.getElementById('nom-spotify').value = n.spotify || "";
         document.getElementById('btn-delete-nominee').style.display = "block";
@@ -1202,6 +1208,7 @@
         document.getElementById('nominee-modal-title').textContent = "Nouveau Nominé";
         document.getElementById('nom-name').value = "";
         document.getElementById('nom-sub').value = "";
+        document.getElementById('nom-project').value = "";
         document.getElementById('nom-img').value = "";
         document.getElementById('nom-spotify').value = "";
         document.getElementById('btn-delete-nominee').style.display = "none";
@@ -1253,6 +1260,7 @@
     document.getElementById('btn-save-nominee').onclick = async () => {
       const name = document.getElementById('nom-name').value;
       const sub = document.getElementById('nom-sub').value;
+      const project = document.getElementById('nom-project').value;
       const img = document.getElementById('nom-img').value;
       const spotify = document.getElementById('nom-spotify').value;
 
@@ -1260,9 +1268,9 @@
       const nominees = [...(cat.nominees || [])];
 
       if (editingNomineeIdx !== null) {
-        nominees[editingNomineeIdx] = { ...nominees[editingNomineeIdx], name, sub, img, spotify };
+        nominees[editingNomineeIdx] = { ...nominees[editingNomineeIdx], name, sub, project, img, spotify };
       } else {
-        nominees.push({ name, sub, img, spotify, votes: 0 });
+        nominees.push({ name, sub, project, img, spotify, votes: 0 });
       }
 
       await updateDoc(doc(db, "categories", activeCatId), { nominees });
