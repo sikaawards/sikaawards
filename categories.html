@@ -280,7 +280,7 @@
           <div class="cat-header">
             <a href="categorie.html?cat=${cat.id}" class="cat-header-link" style="text-decoration:none; color:inherit; flex-grow:1;">
               <span class="cat-num">${cat.num}</span>
-              <h2 class="cat-title">${cat.title}</h2>
+              <h2 class="cat-title">${cat.title.includes('(RAP CONTENDERS)') ? cat.title.replace('(RAP CONTENDERS)', '<img src="assets/partenaire/RapContenders.png" alt="RapContenders" style="width:60px; height:auto; display:inline-block; vertical-align:middle; margin:0 8px;">') : cat.title.includes("(Newav'wrld)") ? cat.title.replace("(Newav'wrld)", '<img src="assets/partenaire/Newavewrld.png" alt="Newavewrld" style="width:230px; height:auto; display:inline-block; vertical-align:middle; margin:0 8px; transform:translateY(-10px);">') : cat.title}</h2>
             </a>
             <a href="vote.html?cat=${cat.id}" class="cat-header-vote-link" style="text-decoration:none; color:var(--text); transition: color 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text)'">
               <h2 class="cat-title" style="font-size: clamp(1.2rem, 3vw, 1.8rem);">VOTER <span class="icon-arrow" style="display:inline-block; vertical-align:middle; margin-left:8px;"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/></svg></span></h2>
